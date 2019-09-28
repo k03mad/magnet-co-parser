@@ -2,9 +2,7 @@ export default {
     tmdb: {
         cover: 'https://image.tmdb.org/t/p/w600_and_h900_bestv2',
         url: 'https://www.themoviedb.org/tv/',
-        cacheDays: {
-            api: 7,
-        },
+        cacheDays: 7,
         timeout: 20000,
     },
     myshows: {

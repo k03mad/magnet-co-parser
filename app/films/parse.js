@@ -147,7 +147,11 @@ export default async proxy => {
 
             for (const {link} of value.rutor) {
                 const filmProxyUrl = proxy + encodeURIComponent(link);
-                const {body} = await utils.request.cache(filmProxyUrl, {timeout: rutor.timeout});
+                const {body} = await utils.request.cache(
+                    filmProxyUrl,
+                    {timeout: rutor.timeout},
+                    {cacheExpireDays: service.kp.cacheDays},
+                );
 
                 const [, id] = body.match(service.kp.re) || ['', ''];
 

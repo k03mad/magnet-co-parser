@@ -97,7 +97,7 @@ export default async proxy => {
             path: 'search/tv',
             params: {query: titleOriginal},
             gotOpts: {timeout: service.tmdb.timeout},
-            cacheExpireDays: service.tmdb.cacheDays.api,
+            cacheExpireDays: service.tmdb.cacheDays,
         });
 
         parsed[i].cover = service.tmdb.cover + data.poster_path;
