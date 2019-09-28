@@ -16,5 +16,5 @@ export default {
         index: (i, additions = '') => `${appRoot}/www/generated/films/page${i}.html${additions}`,
     },
 
-    getRel: path => path.replace(/^.+www\/generated\/films\//, ''),
+    getRel: path => path.replace(/.+www\/generated\/films\//, ''),
 };

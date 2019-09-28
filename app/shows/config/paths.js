@@ -15,5 +15,5 @@ export default {
         pages: `${appRoot}/www/generated/shows/pages`,
     },
 
-    getRel: path => path.replace(/^.+www\/generated\/shows\//, ''),
+    getRel: path => path.replace(/.+www\/generated\/shows\//, ''),
 };

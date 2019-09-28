@@ -2,10 +2,10 @@ export default {
     placeholder: '{{}}',
 
     date: data => `<div id="date">${data}</div>`,
-    paginator: (length, path, add) => `
+    paginator: (length, rel, path, add) => `
         <div id="paginator">
         ${[...new Array(length).keys()].map(elem => ++elem).map(num => `
-            <a href="${path(num, add)}">${num}</a>
+            <a href="${rel(path(num, add))}">${num}</a>
         `).join(' ')}
         </div>
     `,

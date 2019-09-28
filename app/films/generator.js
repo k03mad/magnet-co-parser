@@ -26,6 +26,7 @@ export default async () => {
             html.date(date),
             html.paginator(
                 pages.length,
+                paths.getRel,
                 paths.www.index,
                 `?rnd=${Math.random()}`,
             ),
