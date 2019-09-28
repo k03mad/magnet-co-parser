@@ -1,5 +1,5 @@
 {
-  "name": "magnet-rutor",
+  "name": "magnet-co-parser",
   "script": "http-server",
 
   "exp_backoff_restart_delay": 100,
