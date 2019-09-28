@@ -18,44 +18,48 @@ export default async () => {
         fs.promises.readFile(paths.json.file),
     ]);
 
-    await utils.folder.erase(paths.www.pages);
+    const pasteIndex = [];
+    const pages = utils.array.chunk(JSON.parse(data), paths.www.pageCovers);
 
-    const pasteIndex = [html.date(date)];
-
-    for (const film of JSON.parse(data)) {
-        const {baseSafe, nameSafe} = await utils.request.download({
-            url: film.cover,
-            folder: paths.covers.folder,
-            name: `${film.title}-${film.id}`,
-            ext: 'jpg',
-            replace: false,
-            eraseFolderDays: service.tmdb.cacheDays.cover,
-        });
-
-        const coverRelPath = `${paths.getRel(paths.covers.folder)}/${baseSafe}`;
-        const pageAbsPath = `${paths.www.pages}/${nameSafe}.html`;
-        const pageRelPath = `${paths.getRel(paths.www.pages)}/${nameSafe}.html?rnd=${Math.random()}`;
-
-        pasteIndex.push(html.cover(pageRelPath, coverRelPath));
-
-        const [mainVote] = String(film.rating).split('.').map(Number);
-        const rating = `${film.rating} ${
-            service.tmdb.stars.fill.repeat(mainVote)
-            + service.tmdb.stars.empty.repeat(10 - mainVote)
-        }`;
-
-        const pasteFilm = [
+    for (const filmsArray of pages) {
+        const pageIndex = [
             html.date(date),
-            html.url(film.urls),
-            html.head(rating, film.photos.map(elem => elem.url)),
-            html.info([film.tagline, film.overview, film.genres.join(', ')]),
-            ...film.rutor.map(elem => html.td(elem)),
+            html.paginator(
+                pages.length,
+                paths.www.index,
+                `?rnd=${Math.random()}`,
+            ),
         ];
 
-        const generatedPage = page.toString().replace(html.placeholder, pasteFilm.join('\n'));
-        await fs.promises.writeFile(pageAbsPath, pretty(generatedPage.replace(/\s{2,}/g, '\n')));
+        await Promise.all(filmsArray.map(film => {
+            const pageAbsPath = `${paths.www.pages}/${film.id}.html`;
+            const pageRelPath = `${paths.getRel(paths.www.pages)}/${film.id}.html?rnd=${Math.random()}`;
+
+            pageIndex.push(html.cover(pageRelPath, film.cover));
+
+            const [mainVote] = String(film.rating).split('.').map(Number);
+            const rating = `${film.rating} ${
+                service.tmdb.stars.fill.repeat(mainVote)
+            + service.tmdb.stars.empty.repeat(10 - mainVote)
+            }`;
+
+            const pasteFilm = [
+                html.date(date),
+                html.url(film.urls),
+                html.head(rating, film.photos.map(elem => elem.url)),
+                html.info([film.tagline, film.overview, film.genres.join(', ')]),
+                ...film.rutor.map(elem => html.td(elem)),
+            ];
+
+            const generatedPage = page.toString().replace(html.placeholder, pasteFilm.join('\n'));
+            return fs.promises.writeFile(pageAbsPath, pretty(generatedPage.replace(/\s{2,}/g, '\n')));
+        }));
+
+        pasteIndex.push(pageIndex);
     }
 
-    const generatedIndex = index.toString().replace(html.placeholder, pasteIndex.join('\n'));
-    await fs.promises.writeFile(paths.www.index, pretty(generatedIndex.replace(/\s{2,}/g, '\n')));
+    await Promise.all(pasteIndex.map((pageIndex, i) => {
+        const generatedIndex = index.toString().replace(html.placeholder, pageIndex.join('\n'));
+        return fs.promises.writeFile(paths.www.index(i + 1), pretty(generatedIndex.replace(/\s{2,}/g, '\n')));
+    }));
 };

@@ -17,15 +17,12 @@ export default async () => {
         fs.promises.readFile(paths.json.file),
     ]);
 
-    await utils.folder.erase(paths.www.pages, {force: true});
-
     const pasteIndex = [html.date(date)];
     const notFoundIndex = [];
 
     for (const show of JSON.parse(data)) {
-        const nameSafe = show.titleOriginal.replace(/ /g, '-');
-        const pageAbsPath = `${paths.www.pages}/${nameSafe}.html`;
-        const pageRelPath = `${paths.getRel(paths.www.pages)}/${nameSafe}.html?rnd=${Math.random()}`;
+        const pageAbsPath = `${paths.www.pages}/${show.id}.html`;
+        const pageRelPath = `${paths.getRel(paths.www.pages)}/${show.id}.html?rnd=${Math.random()}`;
 
         show.rutor.length > 0
             ? pasteIndex.push(html.cover.found(pageRelPath, show.cover))

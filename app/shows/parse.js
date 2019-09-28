@@ -57,7 +57,6 @@ export default async proxy => {
                 matched
                 && matched.groups.name
                 && matched.groups.name.match(rutor.episodes)
-                && Number(matched.groups.seed) >= rutor.minSeeds
             ) {
                 matched.groups.magnet = decodeURIComponent(
                     $(elem)
@@ -102,6 +101,7 @@ export default async proxy => {
         });
 
         parsed[i].cover = service.tmdb.cover + data.poster_path;
+        parsed[i].id = id;
         parsed[i].urls = {
             rutor: rutorUrl,
             proxy: rutorProxyUrl,

@@ -5,16 +5,15 @@ export default {
         folder: `${appRoot}/parsed/`,
         file: `${appRoot}/parsed/films.json`,
     },
-    covers: {
-        folder: `${appRoot}/www/generated/films/pic/covers`,
-    },
     templates: {
         index: `${appRoot}/templates/index.html`,
         page: `${appRoot}/templates/page.html`,
     },
     www: {
-        index: `${appRoot}/www/generated/films/films.html`,
+        folder: `${appRoot}/www/generated/`,
         pages: `${appRoot}/www/generated/films/pages`,
+        pageCovers: 30,
+        index: (i, additions = '') => `${appRoot}/www/generated/films/page${i}.html${additions}`,
     },
 
     getRel: path => path.replace(/^.+www\/generated\/films\//, ''),

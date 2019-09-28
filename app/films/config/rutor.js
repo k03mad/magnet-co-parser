@@ -24,5 +24,4 @@ export default {
     tagSplit: ' | ',
 
     timeout: 20000,
-    minSeeds: 0,
 };

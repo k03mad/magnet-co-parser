@@ -10,7 +10,8 @@ export default {
         page: `${appRoot}/templates/page.html`,
     },
     www: {
-        index: `${appRoot}/www/generated/shows/shows.html`,
+        folder: `${appRoot}/www/generated/`,
+        index: `${appRoot}/www/generated/shows/page.html`,
         pages: `${appRoot}/www/generated/shows/pages`,
     },
 

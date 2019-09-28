@@ -2,6 +2,14 @@ export default {
     placeholder: '{{}}',
 
     date: data => `<div id="date">${data}</div>`,
+    paginator: (length, path, add) => `
+        <div id="paginator">
+        ${[...new Array(length).keys()].map(elem => ++elem).map(num => `
+            <a href="${path(num, add)}">${num}</a>
+        `).join(' ')}
+        </div>
+    `,
+
     head: (vote, photo) => `
         <div id="rating">${vote}
         ${photo.reverse().map(elem => `

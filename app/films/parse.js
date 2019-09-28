@@ -43,7 +43,6 @@ export default async proxy => {
                 if (
                     matched
                     && matched.groups.name
-                    && Number(matched.groups.seed) >= rutor.minSeeds
                 ) {
                     matched.groups.magnet = decodeURIComponent(
                         $(elem)
