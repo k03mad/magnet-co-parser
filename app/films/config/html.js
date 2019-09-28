@@ -10,10 +10,16 @@ export default {
         </div>
     `,
 
-    head: (vote, photo) => `
-        <div id="rating">${vote}
+    rating: (href, src) => `
+        <div id="rating">
+            <a href="${href}" target="_blank"><img src="${src}"></a>
+        </div>
+    `,
+
+    photos: photo => `
+        <div>
         ${photo.reverse().map(elem => `
-            <img align="right" src="${elem}">
+            <img id="photos" align="right" src="${elem}">
         `).join('\n')}
         </div>
     `,
@@ -24,7 +30,7 @@ export default {
         </div>
     `,
 
-    cover: (href, src) => `<a href="${href}"><img src="${src}"></a>`,
+    cover: (href, src) => `<a href="${href}"><img id="covers" src="${src}"></a>`,
 
     url: data => `
         <div id="urls">

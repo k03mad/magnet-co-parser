@@ -2,7 +2,6 @@ import fs from 'fs';
 import html from './config/html.js';
 import paths from './config/paths.js';
 import pretty from 'pretty';
-import service from './config/service.js';
 import utils from 'utils-mad';
 
 /**
@@ -33,24 +32,26 @@ export default async () => {
         ];
 
         await Promise.all(filmsArray.map(film => {
-            const pageAbsPath = `${paths.www.pages}/${film.id}.html`;
-            const pageRelPath = `${paths.getRel(paths.www.pages)}/${film.id}.html?rnd=${Math.random()}`;
+            const id = `${film.id}-${Math.random()}`;
+            const pageAbsPath = `${paths.www.pages}/${id}.html`;
+            const pageRelPath = `${paths.getRel(paths.www.pages)}/${id}.html`;
 
             pageIndex.push(html.cover(pageRelPath, film.cover));
-
-            const [mainVote] = String(film.rating).split('.').map(Number);
-            const rating = `${film.rating} ${
-                service.tmdb.stars.fill.repeat(mainVote)
-            + service.tmdb.stars.empty.repeat(10 - mainVote)
-            }`;
 
             const pasteFilm = [
                 html.date(date),
                 html.url(film.urls),
-                html.head(rating, film.photos.map(elem => elem.url)),
+            ];
+
+            if (film.kp.rating) {
+                pasteFilm.push(html.rating(film.kp.url, film.kp.rating));
+            }
+
+            pasteFilm.push(
+                html.photos(film.photos.map(elem => elem.url)),
                 html.info([film.tagline, film.overview, film.genres.join(', ')]),
                 ...film.rutor.map(elem => html.td(elem)),
-            ];
+            );
 
             const generatedPage = page.toString().replace(html.placeholder, pasteFilm.join('\n'));
             return fs.promises.writeFile(pageAbsPath, pretty(generatedPage.replace(/\s{2,}/g, '\n')));

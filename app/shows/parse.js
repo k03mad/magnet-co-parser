@@ -117,11 +117,11 @@ export default async proxy => {
     const withMagnet = parsed.filter(elem => elem.rutor.length > 0);
 
     console.log(c.blue(`Сериалов с Myshows: ${watching.length}`));
-    console.log(c.blue(`Найдено на Rutor: ${withMagnet.length}`));
+    console.log(c.blue(`Сериалов найдено на Rutor: ${withMagnet.length}`));
 
     const diff = utils.array.diff(seriesList, withMagnet.map(elem => elem.titleGenerated));
 
-    console.log(c.cyan(`Не найдено: ${diff.length}`));
+    console.log(c.cyan(`Сериалов не найдено: ${diff.length}`));
     console.log(diff.sort().join('\n'));
 
     await fs.promises.writeFile(paths.json.file, JSON.stringify(parsed));

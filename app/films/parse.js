@@ -48,9 +48,12 @@ export default async proxy => {
                         $(elem)
                             .find(rutor.selectors.magnet)
                             .attr('href')
-                            .replace(/^.+magnet/, 'magnet')
-                            .trim(),
+                            .replace(/.+magnet/, 'magnet'),
                     );
+
+                    matched.groups.link = decodeURIComponent(
+                        $(elem).find(rutor.selectors.link).attr('href'),
+                    ).replace(new RegExp(`.+${rutor.domain}`), rutor.domain);
 
                     const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
                     matched.groups.quality = quality.replace(/ от .+/, '');
@@ -68,7 +71,20 @@ export default async proxy => {
         }
     }));
 
-    for (const [key, value] of Object.entries(films)) {
+    const sorted = Object.entries(films).sort((a, b) => {
+        const FORMAT = 'DD MMM YY';
+        const date = {
+            a: moment(a[1].rutor[0].date, FORMAT).valueOf(),
+            b: moment(b[1].rutor[0].date, FORMAT).valueOf(),
+        };
+        return date.b - date.a;
+    });
+
+    for (const [key, value] of sorted) {
+        if (parsed.length === rutor.filmsCount) {
+            break;
+        }
+
         const [, originalName] = key.split(' / ');
         const title = originalName || key;
 
@@ -98,19 +114,18 @@ export default async proxy => {
             // первая страница, без категории, все слова
             const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;
 
-            parsed.push({
+            const info = {
                 title,
                 cover: service.tmdb.cover + data.poster_path,
                 id: data.id,
 
-                rating: data.vote_average,
                 tagline: movie.tagline,
                 overview: data.overview,
-                genres: movie.genres.map(elem => elem.name).slice(0, 3),
+                genres: movie.genres.map(elem => elem.name).slice(0, service.tmdb.genresCount),
 
                 photos: [
                     ...new Set(cast
-                        .slice(0, 3)
+                        .slice(0, service.tmdb.castCount)
                         .filter(elem => Boolean(elem.profile_path))
                         .map(elem => ({
                             id: elem.id,
@@ -128,25 +143,33 @@ export default async proxy => {
                     imdb: service.imdb.url + movie.imdb_id,
                     rutracker: service.rutracker.url + title + rutor.search.quality,
                 },
-            });
+            };
+
+            for (const {link} of value.rutor) {
+                const filmProxyUrl = proxy + encodeURIComponent(link);
+                const {body} = await utils.request.cache(filmProxyUrl, {timeout: rutor.timeout});
+
+                const [, id] = body.match(service.kp.re) || ['', ''];
+
+                if (id) {
+                    info.kp = {
+                        url: service.kp.film(id),
+                        rating: service.kp.rating(id),
+                    };
+                    break;
+                }
+            }
+
+            parsed.push(info);
         }
     }
 
-    console.log(c.blue(`Найдено на Rutor: ${parsed.length}`));
+    console.log(c.blue(`Фильмов найдено на Rutor: ${parsed.length}`));
 
-    const sorted = parsed.sort((a, b) => {
-        const FORMAT = 'DD MMM YY';
-        const date = {
-            a: moment(a.rutor[0].date, FORMAT).valueOf(),
-            b: moment(b.rutor[0].date, FORMAT).valueOf(),
-        };
-        return date.b - date.a;
-    });
-
-    sorted.forEach((elem, i) => {
+    parsed.forEach((elem, i) => {
         const bySeed = elem.rutor.sort((a, b) => Number(b.seed) - Number(a.seed));
         sorted[i].rutor = bySeed;
     });
 
-    await fs.promises.writeFile(paths.json.file, JSON.stringify(sorted));
+    await fs.promises.writeFile(paths.json.file, JSON.stringify(parsed));
 };
