@@ -5,9 +5,6 @@ export default {
         folder: `${appRoot}/parsed/`,
         file: `${appRoot}/parsed/shows.json`,
     },
-    covers: {
-        folder: `${appRoot}/www/generated/shows/pic/covers`,
-    },
     templates: {
         index: `${appRoot}/templates/index.html`,
         page: `${appRoot}/templates/page.html`,
