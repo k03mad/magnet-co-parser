@@ -1,0 +1,43 @@
+{
+	"name": "magnet-rutor",
+	"version": "1.0.0",
+	"maintainers": [
+		"Kirill Molchanov <k03.mad@gmail.com"
+	],
+	"repository": "k03mad/magnet-rutor",
+	"engines": {
+		"node": ">=12"
+	},
+	"type": "module",
+	"dependencies": {
+		"app-root-path": "2.2.1",
+		"cheerio": "1.0.0-rc.3",
+		"colorette": "1.1.0",
+		"pretty": "2.0.0",
+		"utils-mad": "2.2.1",
+    "moment": "2.24.0"
+	},
+	"devDependencies": {
+		"eslint": "6.4.0",
+		"eslint-config-k03mad": "3.0.0",
+		"eslint-plugin-const-case": "1.2.2",
+		"eslint-plugin-jsdoc": "15.9.5",
+		"eslint-plugin-node": "10.0.0",
+		"eslint-plugin-optimize-regex": "1.1.7",
+		"eslint-plugin-promise": "4.2.1",
+		"eslint-plugin-sonarjs": "0.4.0",
+		"eslint-plugin-sort-requires": "2.1.0",
+		"eslint-plugin-unicorn": "12.0.1",
+		"pre-commit": "1.2.2"
+	},
+	"scripts": {
+		"lint": "eslint --report-unused-disable-directives ./ --format codeframe && echo '\n\\033[34mESLinted!\\033[39m\n'",
+		"setup": "npm i",
+    "parse": "node --experimental-modules index.js",
+    "server": "pm2 start pm2.json"
+	},
+	"pre-commit": [
+		"lint"
+	],
+	"license": "Unlicense"
+}

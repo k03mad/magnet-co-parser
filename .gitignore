@@ -1,0 +1,5 @@
+.DS_Store
+/node_modules
+/parsed
+/_cache
+/www/generated
