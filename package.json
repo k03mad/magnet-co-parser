@@ -13,7 +13,6 @@
 		"app-root-path": "2.2.1",
 		"cheerio": "1.0.0-rc.3",
 		"colorette": "1.1.0",
-		"make-dir": "3.0.0",
 		"moment": "2.24.0",
 		"pretty": "2.0.0",
 		"utils-mad": "2.2.1"

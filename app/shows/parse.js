@@ -1,7 +1,6 @@
 import c from 'colorette';
 import cheerio from 'cheerio';
 import fs from 'fs';
-import makeDir from 'make-dir';
 import paths from './config/paths.js';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
@@ -125,12 +124,5 @@ export default async proxy => {
     console.log(c.cyan(`Не найдено: ${diff.length}`));
     console.log(diff.sort().join('\n'));
 
-    try {
-        await fs.promises.unlink(paths.json.file);
-    } catch (err) {
-        console.log(c.yellow(`Не найден старый файл парсера ${paths.json.file}`));
-    }
-
-    await makeDir(paths.json.folder);
     await fs.promises.writeFile(paths.json.file, JSON.stringify(parsed));
 };

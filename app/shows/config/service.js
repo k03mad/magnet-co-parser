@@ -4,7 +4,6 @@ export default {
         url: 'https://www.themoviedb.org/tv/',
         cacheDays: {
             api: 7,
-            cover: 7,
         },
         timeout: 20000,
     },

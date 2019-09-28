@@ -2,7 +2,6 @@ import fs from 'fs';
 import html from './config/html.js';
 import paths from './config/paths.js';
 import pretty from 'pretty';
-import service from './config/service.js';
 import utils from 'utils-mad';
 
 /**
@@ -24,23 +23,13 @@ export default async () => {
     const notFoundIndex = [];
 
     for (const show of JSON.parse(data)) {
-        const {baseSafe, nameSafe} = await utils.request.download({
-            url: show.cover,
-            folder: paths.covers.folder,
-            name: show.titleOriginal,
-            ext: 'jpg',
-            replace: false,
-            force: true,
-            eraseFolderDays: service.tmdb.cacheDays.cover,
-        });
-
-        const coverRelPath = `${paths.getRel(paths.covers.folder)}/${baseSafe}`;
+        const nameSafe = show.titleOriginal.replace(/ /g, '-');
         const pageAbsPath = `${paths.www.pages}/${nameSafe}.html`;
         const pageRelPath = `${paths.getRel(paths.www.pages)}/${nameSafe}.html?rnd=${Math.random()}`;
 
         show.rutor.length > 0
-            ? pasteIndex.push(html.cover.found(pageRelPath, coverRelPath))
-            : notFoundIndex.push(html.cover.notFound(pageRelPath, coverRelPath));
+            ? pasteIndex.push(html.cover.found(pageRelPath, show.cover))
+            : notFoundIndex.push(html.cover.notFound(pageRelPath, show.cover));
 
         const pasteSerial = [
             html.date(date),
