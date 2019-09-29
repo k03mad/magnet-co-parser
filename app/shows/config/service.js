@@ -1,8 +1,6 @@
 export default {
     tmdb: {
         cover: 'https://image.tmdb.org/t/p/w600_and_h900_bestv2',
-        cacheDays: 7,
-        timeout: 20000,
     },
     myshows: {
         url: 'https://myshows.me/view/',

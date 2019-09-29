@@ -36,5 +36,4 @@ export default {
     tagSplit: ' | ',
 
     filmsCount: 150,
-    timeout: 20000,
 };

@@ -21,7 +21,7 @@ export default async proxy => {
             const rutorUrl = rutor.search.url(page, cat) + rutor.search.query + rutor.search.quality;
             const rutorProxyUrl = proxy + encodeURIComponent(rutorUrl);
 
-            const {body} = await utils.request.got(rutorProxyUrl, {timeout: rutor.timeout});
+            const {body} = await utils.request.got(rutorProxyUrl);
 
             const $ = cheerio.load(body);
 
@@ -85,25 +85,11 @@ export default async proxy => {
         const [, originalName] = key.split(' / ');
         const title = originalName || key;
 
-        const [data] = await utils.tmdb.get({
-            path: 'search/movie',
-            params: {query: title},
-            gotOpts: {timeout: service.tmdb.timeout},
-            cacheExpireDays: service.tmdb.cacheDays,
-        });
+        const [data] = await utils.tmdb.get({path: 'search/movie', params: {query: title}});
 
         if (data && data.poster_path) {
-            const movie = await utils.tmdb.get({
-                path: `movie/${data.id}`,
-                gotOpts: {timeout: service.tmdb.timeout},
-                cacheExpireDays: service.tmdb.cacheDays,
-            });
-
-            const {cast} = await utils.tmdb.get({
-                path: `movie/${data.id}/credits`,
-                gotOpts: {timeout: service.tmdb.timeout},
-                cacheExpireDays: service.tmdb.cacheDays,
-            });
+            const movie = await utils.tmdb.get({path: `movie/${data.id}`});
+            const {cast} = await utils.tmdb.get({path: `movie/${data.id}/credits`});
 
             // первая страница, без категории, все слова
             const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;
@@ -138,13 +124,7 @@ export default async proxy => {
             };
 
             for (const {link} of value.rutor) {
-                const filmProxyUrl = proxy + encodeURIComponent(link);
-                const {body} = await utils.request.cache(
-                    filmProxyUrl,
-                    {timeout: rutor.timeout},
-                    {cacheExpireDays: service.kp.cacheDays},
-                );
-
+                const {body} = await utils.request.cache(proxy + encodeURIComponent(link));
                 const [, id] = body.match(service.kp.re) || ['', ''];
 
                 if (id) {

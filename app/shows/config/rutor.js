@@ -17,6 +17,4 @@ export default {
     comments: / \d+$/,
 
     tagSplit: ' | ',
-
-    timeout: 20000,
 };

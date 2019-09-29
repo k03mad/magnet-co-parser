@@ -32,7 +32,7 @@ export default async proxy => {
             const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
             const rutorProxyUrl = proxy + encodeURIComponent(rutorUrl);
 
-            const {body} = await utils.request.got(rutorProxyUrl, {timeout: rutor.timeout});
+            const {body} = await utils.request.got(rutorProxyUrl);
             return {$: cheerio.load(body), rutorUrl, rutorProxyUrl};
         };
 
@@ -91,12 +91,7 @@ export default async proxy => {
 
         });
 
-        const [data] = await utils.tmdb.get({
-            path: 'search/tv',
-            params: {query: titleOriginal},
-            gotOpts: {timeout: service.tmdb.timeout},
-            cacheExpireDays: service.tmdb.cacheDays,
-        });
+        const [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}});
 
         parsed[i].cover = service.tmdb.cover + data.poster_path;
         parsed[i].id = id;
