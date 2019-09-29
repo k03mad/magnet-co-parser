@@ -9,7 +9,16 @@ export default {
     search: {
         // rutor.info/search/страница/категория/логическое выражение/сортировка по дате/
         url: (page, cat, log = 300) => `${RUTOR_DOMAIN}/search/${page}/${cat}/${log}/0/`,
-        query: `${currentYear}|${prevYear} (iTunes|Лицензия| D) -( BDRemux) -( Blu-Ray) -( 3D-Video) -( 60 fps) -( Line) -( HDRezka)`,
+        query: [
+            `${currentYear}|${prevYear}`,
+            '(iTunes|Лицензия| D)',
+            '-( BDRemux)',
+            '-( Blu-Ray)',
+            '-( 3D-Video)',
+            '-( 60 fps)',
+            '-( Line)',
+            '-( HDRezka)',
+        ].join(' '),
         quality: ' 1080p',
         pages: 20,
         // зарубежные фильмы, наши фильмы, телевизор, мультипликация, аниме, науч-поп

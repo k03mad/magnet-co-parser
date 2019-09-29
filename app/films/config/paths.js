@@ -1,10 +1,6 @@
 import appRoot from 'app-root-path';
 
 export default {
-    json: {
-        folder: `${appRoot}/parsed/`,
-        file: `${appRoot}/parsed/films.json`,
-    },
     templates: {
         index: `${appRoot}/templates/index.html`,
         page: `${appRoot}/templates/page.html`,

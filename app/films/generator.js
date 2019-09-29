@@ -5,20 +5,19 @@ import pretty from 'pretty';
 import utils from 'utils-mad';
 
 /**
- * Генерация HTML
+ * @param {object} data
  * @returns {Function}
  */
-export default async () => {
+export default async data => {
     const date = utils.date.now();
 
-    const [index, page, data] = await Promise.all([
+    const [index, page] = await Promise.all([
         fs.promises.readFile(paths.templates.index),
         fs.promises.readFile(paths.templates.page),
-        fs.promises.readFile(paths.json.file),
     ]);
 
     const pasteIndex = [];
-    const pages = utils.array.chunk(JSON.parse(data), paths.www.pageCovers);
+    const pages = utils.array.chunk(data, paths.www.pageCovers);
 
     for (const filmsArray of pages) {
         const pageIndex = [

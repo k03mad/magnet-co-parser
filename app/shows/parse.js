@@ -1,7 +1,5 @@
 import c from 'colorette';
 import cheerio from 'cheerio';
-import fs from 'fs';
-import paths from './config/paths.js';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 import utils from 'utils-mad';
@@ -124,5 +122,5 @@ export default async proxy => {
     console.log(c.cyan(`Сериалов не найдено: ${diff.length}`));
     console.log(diff.sort().join('\n'));
 
-    await fs.promises.writeFile(paths.json.file, JSON.stringify(parsed));
+    return parsed;
 };

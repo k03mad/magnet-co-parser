@@ -9,23 +9,21 @@ import utils from 'utils-mad';
 (async () => {
     try {
         await utils.folder.erase([
-            pathsFilms.json.folder,
             pathsFilms.www.folder,
-
             pathsFilms.www.pages,
             pathsShows.www.pages,
         ]);
 
         const [proxy] = await utils.request.proxy();
 
-        await Promise.all([
+        const [filmsData, showsData] = await Promise.all([
             filmsParse(proxy),
             showsParse(proxy),
         ]);
 
         await Promise.all([
-            filmsGenerator(),
-            showsGenerator(),
+            filmsGenerator(filmsData),
+            showsGenerator(showsData),
         ]);
     } catch (err) {
         utils.print.ex(err, {exit: true, full: true});

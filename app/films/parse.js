@@ -1,14 +1,11 @@
 import c from 'colorette';
 import cheerio from 'cheerio';
-import fs from 'fs';
 import moment from 'moment';
-import paths from './config/paths.js';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 import utils from 'utils-mad';
 
 /**
- * Парсинг трекера
  * @param {string} proxy
  * @returns {Function}
  */
@@ -92,23 +89,20 @@ export default async proxy => {
             path: 'search/movie',
             params: {query: title},
             gotOpts: {timeout: service.tmdb.timeout},
-            cacheExpireDays: service.tmdb.cacheDays.api,
-            force: true,
+            cacheExpireDays: service.tmdb.cacheDays,
         });
 
         if (data && data.poster_path) {
             const movie = await utils.tmdb.get({
                 path: `movie/${data.id}`,
                 gotOpts: {timeout: service.tmdb.timeout},
-                cacheExpireDays: service.tmdb.cacheDays.api,
-                force: true,
+                cacheExpireDays: service.tmdb.cacheDays,
             });
 
             const {cast} = await utils.tmdb.get({
                 path: `movie/${data.id}/credits`,
                 gotOpts: {timeout: service.tmdb.timeout},
-                cacheExpireDays: service.tmdb.cacheDays.api,
-                force: true,
+                cacheExpireDays: service.tmdb.cacheDays,
             });
 
             // первая страница, без категории, все слова
@@ -175,5 +169,5 @@ export default async proxy => {
         sorted[i].rutor = bySeed;
     });
 
-    await fs.promises.writeFile(paths.json.file, JSON.stringify(parsed));
+    return parsed;
 };

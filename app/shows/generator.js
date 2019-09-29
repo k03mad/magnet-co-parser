@@ -5,22 +5,21 @@ import pretty from 'pretty';
 import utils from 'utils-mad';
 
 /**
- * Generate HTML
+ * @param {object} data
  * @returns {Function}
  */
-export default async () => {
+export default async data => {
     const date = utils.date.now();
 
-    const [index, page, data] = await Promise.all([
+    const [index, page] = await Promise.all([
         fs.promises.readFile(paths.templates.index),
         fs.promises.readFile(paths.templates.page),
-        fs.promises.readFile(paths.json.file),
     ]);
 
     const pasteIndex = [html.date(date)];
     const notFoundIndex = [];
 
-    for (const show of JSON.parse(data)) {
+    for (const show of data) {
         const pageAbsPath = `${paths.www.pages}/${show.id}.html`;
         const pageRelPath = `${paths.getRel(paths.www.pages)}/${show.id}.html?rnd=${Math.random()}`;
 
