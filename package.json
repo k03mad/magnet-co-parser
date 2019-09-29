@@ -18,7 +18,7 @@
 		"utils-mad": "2.2.3"
 	},
 	"devDependencies": {
-		"eslint": "6.4.0",
+		"eslint": "6.5.0",
 		"eslint-config-k03mad": "3.0.0",
 		"eslint-plugin-const-case": "1.2.2",
 		"eslint-plugin-jsdoc": "15.9.5",
