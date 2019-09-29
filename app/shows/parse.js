@@ -16,7 +16,7 @@ export default async proxy => {
     const watching = await utils.myshows.watch({onlyAired: true});
 
     await Promise.all(watching.map(async (series, i) => {
-        const {title, titleOriginal, episodesToWatch, id, kinopoiskId, imdbId} = series.show;
+        const {title, titleOriginal, episodesToWatch, id, kinopoiskId} = series.show;
         const {seasonNumber} = episodesToWatch[episodesToWatch.length - 1];
 
         const titleGenerated = title === titleOriginal ? title : `${title} / ${titleOriginal}`;
@@ -103,12 +103,10 @@ export default async proxy => {
         parsed[i].urls = {
             rutor: rutorUrl,
             proxy: rutorProxyUrl,
-            myshows: service.myshows.url + id,
-            kinopoisk: service.kinopoisk.url + kinopoiskId,
-            imdb: service.imdb.url + imdbId,
-            tmdb: service.tmdb.url + data.id,
             rutracker: service.rutracker.url + titleOriginal + rutor.search.quality.full,
             lostfilm: service.lostfilm.url + titleOriginal,
+            myshows: service.myshows.url + id,
+            kinopoisk: service.kinopoisk.url + kinopoiskId,
         };
     }));
 

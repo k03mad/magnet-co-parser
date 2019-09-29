@@ -133,8 +133,6 @@ export default async proxy => {
                 urls: {
                     rutor: rutorUrl,
                     proxy: proxy + encodeURIComponent(rutorUrl),
-                    tmdb: service.tmdb.url + data.id,
-                    imdb: service.imdb.url + movie.imdb_id,
                     rutracker: service.rutracker.url + title + rutor.search.quality,
                 },
             };
@@ -151,7 +149,7 @@ export default async proxy => {
 
                 if (id) {
                     info.kp = {
-                        url: service.kp.film(id),
+                        url: service.kp.film + id,
                         rating: service.kp.rating(id),
                     };
                     break;
