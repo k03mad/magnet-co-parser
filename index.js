@@ -10,8 +10,8 @@ import utils from 'utils-mad';
     try {
         const [proxy] = await utils.request.proxy();
 
-        const filmsData = await filmsParse(proxy);
         const showsData = await showsParse(proxy);
+        const filmsData = await filmsParse(proxy);
 
         await utils.folder.erase([
             pathsFilms.www.folder,
@@ -20,8 +20,8 @@ import utils from 'utils-mad';
         ]);
 
         await Promise.all([
-            filmsGenerator(filmsData),
             showsGenerator(showsData),
+            filmsGenerator(filmsData),
         ]);
     } catch (err) {
         utils.print.ex(err, {exit: true, full: true});
