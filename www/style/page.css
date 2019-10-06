@@ -25,7 +25,7 @@ body {
     padding: 10px;
     text-align: center;
 }
-#photos {
+#photos img {
     border-radius: 1em;
     height: 20vw;
     margin-bottom: 20px;

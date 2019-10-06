@@ -26,16 +26,17 @@ export default async data => {
                 pages.length,
                 paths.getRel,
                 paths.www.list,
-                `?rnd=${Math.random()}`,
             ),
         ];
 
-        await Promise.all(filmsArray.map(film => {
-            const id = `${film.id}-${Math.random()}`;
+        const pageCovers = [];
+
+        await Promise.all(filmsArray.map((film, i) => {
+            const id = `${film.id}-${String(i + 1).padStart(String(filmsArray.length).length, 0)}`;
             const pageAbsPath = `${paths.www.pages}/${id}.html`;
             const pageRelPath = `${paths.getRel(paths.www.pages)}/${id}.html`;
 
-            pageIndex.push(html.cover(pageRelPath, film.cover));
+            pageCovers.push({href: pageRelPath, src: film.cover});
 
             const pasteFilm = [
                 html.date(date),
@@ -56,6 +57,7 @@ export default async data => {
             return fs.promises.writeFile(pageAbsPath, pretty(generatedPage.replace(/\s{2,}/g, '\n')));
         }));
 
+        pageIndex.push(html.cover(pageCovers));
         pasteIndex.push(pageIndex);
     }
 

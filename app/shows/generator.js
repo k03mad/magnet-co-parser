@@ -21,7 +21,7 @@ export default async data => {
 
     for (const show of data) {
         const pageAbsPath = `${paths.www.pages}/${show.id}.html`;
-        const pageRelPath = `${paths.getRel(paths.www.pages)}/${show.id}.html?rnd=${Math.random()}`;
+        const pageRelPath = `${paths.getRel(paths.www.pages)}/${show.id}.html`;
 
         show.rutor.length > 0
             ? pasteIndex.push(html.cover.found(pageRelPath, show.cover))

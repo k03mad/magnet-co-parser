@@ -2,10 +2,10 @@ export default {
     placeholder: '{{}}',
 
     date: data => `<div id="date">${data}</div>`,
-    paginator: (length, rel, path, add) => `
+    paginator: (length, rel, path) => `
         <div id="paginator">
         ${[...new Array(length).keys()].map(elem => ++elem).map(num => `
-            <a href="${rel(path(num, add))}">${num}</a>
+            <a href="${rel(path(num))}">${num}</a>
         `).join(' ')}
         </div>
     `,
@@ -17,20 +17,26 @@ export default {
     `,
 
     photos: photo => `
-        <div>
+        <div id="photos">
         ${photo.reverse().map(elem => `
-            <img id="photos" align="right" src="${elem}">
+            <img align="right" src="${elem}">
         `).join('\n')}
         </div>
     `,
 
     info: data => `
         <div id="info">
-            ${data.filter(Boolean).join('<p>')}
+            ${data.filter(Boolean).join('<p>')}</p>
         </div>
     `,
 
-    cover: (href, src) => `<a href="${href}"><img id="covers" src="${src}"></a>`,
+    cover: data => `
+        <div id="covers">
+            ${data.map(elem => `
+                <a href="${elem.href}"><img src="${elem.src}"></a>
+            `).join('\n')}
+        </div>
+    `,
 
     url: data => `
         <div id="urls">
