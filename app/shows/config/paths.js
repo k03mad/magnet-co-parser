@@ -2,12 +2,12 @@ import appRoot from 'app-root-path';
 
 export default {
     templates: {
-        index: `${appRoot}/templates/index.html`,
+        list: `${appRoot}/templates/list.html`,
         page: `${appRoot}/templates/page.html`,
     },
     www: {
         folder: `${appRoot}/www/generated/`,
-        index: `${appRoot}/www/generated/shows/page.html`,
+        list: `${appRoot}/www/generated/shows/list.html`,
         pages: `${appRoot}/www/generated/shows/pages`,
     },
 

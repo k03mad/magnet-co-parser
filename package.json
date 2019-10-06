@@ -15,27 +15,27 @@
 		"colorette": "1.1.0",
 		"moment": "2.24.0",
 		"pretty": "2.0.0",
-		"utils-mad": "2.2.3"
+		"utils-mad": "2.2.4"
 	},
 	"devDependencies": {
-		"eslint": "6.5.0",
+		"eslint": "6.5.1",
 		"eslint-config-k03mad": "3.0.0",
 		"eslint-plugin-const-case": "1.2.2",
-		"eslint-plugin-jsdoc": "15.9.5",
+		"eslint-plugin-jsdoc": "15.9.10",
 		"eslint-plugin-node": "10.0.0",
 		"eslint-plugin-optimize-regex": "1.1.7",
 		"eslint-plugin-promise": "4.2.1",
 		"eslint-plugin-sonarjs": "0.4.0",
 		"eslint-plugin-sort-requires": "2.1.0",
-		"eslint-plugin-unicorn": "12.0.1",
+		"eslint-plugin-unicorn": "12.0.2",
 		"pre-commit": "1.2.2"
 	},
 	"scripts": {
 		"lint": "eslint --report-unused-disable-directives ./ --format codeframe && echo '\n\\033[34mESLinted!\\033[39m\n'",
 		"setup": "npm i",
 		"parse": "node --experimental-modules index.js",
-    "server": "pm2 start pm2.json",
-    "start": "npm run parse && npm run server"
+		"server": "pm2 start pm2.json",
+		"start": "npm run parse && npm run server"
 	},
 	"pre-commit": [
 		"lint"

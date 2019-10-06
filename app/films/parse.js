@@ -85,11 +85,11 @@ export default async proxy => {
         const [, originalName] = key.split(' / ');
         const title = originalName || key;
 
-        const [data] = await utils.tmdb.get({path: 'search/movie', params: {query: title}});
+        const [data] = await utils.tmdb.get({path: 'search/movie', params: {query: title}, caching: true});
 
         if (data && data.poster_path) {
-            const movie = await utils.tmdb.get({path: `movie/${data.id}`});
-            const {cast} = await utils.tmdb.get({path: `movie/${data.id}/credits`});
+            const movie = await utils.tmdb.get({path: `movie/${data.id}`, caching: true});
+            const {cast} = await utils.tmdb.get({path: `movie/${data.id}/credits`, caching: true});
 
             // первая страница, без категории, все слова
             const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;

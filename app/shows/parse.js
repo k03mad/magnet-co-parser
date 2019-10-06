@@ -91,7 +91,7 @@ export default async proxy => {
 
         });
 
-        const [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}});
+        const [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, caching: true});
 
         parsed[i].cover = service.tmdb.cover + data.poster_path;
         parsed[i].id = id;

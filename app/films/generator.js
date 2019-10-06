@@ -12,7 +12,7 @@ export default async data => {
     const date = utils.date.now();
 
     const [index, page] = await Promise.all([
-        fs.promises.readFile(paths.templates.index),
+        fs.promises.readFile(paths.templates.list),
         fs.promises.readFile(paths.templates.page),
     ]);
 
@@ -25,7 +25,7 @@ export default async data => {
             html.paginator(
                 pages.length,
                 paths.getRel,
-                paths.www.index,
+                paths.www.list,
                 `?rnd=${Math.random()}`,
             ),
         ];
@@ -61,6 +61,6 @@ export default async data => {
 
     await Promise.all(pasteIndex.map((pageIndex, i) => {
         const generatedIndex = index.toString().replace(html.placeholder, pageIndex.join('\n'));
-        return fs.promises.writeFile(paths.www.index(i + 1), pretty(generatedIndex.replace(/\s{2,}/g, '\n')));
+        return fs.promises.writeFile(paths.www.list(i + 1), pretty(generatedIndex.replace(/\s{2,}/g, '\n')));
     }));
 };

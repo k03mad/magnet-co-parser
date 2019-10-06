@@ -3,44 +3,16 @@
     <head>
         <title>Magnet</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <style type="text/css">
-            body {
-                background-color: #0c1a20;
-                color: aliceblue;
-                font-family: Helvetica;
-                font-size: 20px;
-                padding: 10px;
-                text-align: center;
-            }
-            div#main {
-                background-color: #a4b6bd;
-                border-radius: 1em;
-                padding: 20px;
-            }
-            table {
-                width: 100%;
-            }
-            tr {
-                background-color: #527097;
-            }
-            td:hover {
-                background: darkslateblue;
-                cursor: pointer;
-            }
-            td {
-                border-radius: 1em;
-                padding: 50px;
-            }
-        </style>
+        <link rel="stylesheet" href="./style/index.css">
     </head>
     <body>
         <div id="main">
             <table>
                 <tr>
-                    <td onclick="document.location = 'generated/shows/page.html?rnd=' + Math.random()">S H O W S</td>
+                    <td onclick="document.location = 'generated/shows/list.html'">S H O W S</td>
                 </tr>
                 <tr>
-                    <td onclick="document.location = 'generated/films/page1.html?rnd=' + Math.random()">F I L M S</td>
+                    <td onclick="document.location = 'generated/films/list1.html'">F I L M S</td>
                 </tr>
             </table>
         </div>
