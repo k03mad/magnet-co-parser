@@ -1,5 +1,6 @@
 import c from 'colorette';
 import cheerio from 'cheerio';
+import ms from 'ms';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 import utils from 'utils-mad';
@@ -10,6 +11,9 @@ import utils from 'utils-mad';
  * @returns {Function}
  */
 export default async proxy => {
+    const date = new Date();
+    const startTime = utils.date.now();
+
     const parsed = [];
     const seriesList = [];
 
@@ -115,5 +119,11 @@ export default async proxy => {
     console.log(c.cyan(`Сериалов не найдено: ${diff.length}`));
     console.log(diff.sort().join('\n'));
 
-    return parsed;
+    return {
+        timestamp: {
+            startTime,
+            diff: ms(utils.date.diff({date, period: 'milliseconds'})),
+        },
+        items: parsed,
+    };
 };

@@ -1,6 +1,7 @@
 import c from 'colorette';
 import cheerio from 'cheerio';
 import moment from 'moment';
+import ms from 'ms';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 import utils from 'utils-mad';
@@ -11,6 +12,8 @@ import utils from 'utils-mad';
  */
 export default async proxy => {
     moment.locale('ru');
+    const date = new Date();
+    const startTime = utils.date.now();
 
     const films = {};
     const parsed = [];
@@ -70,11 +73,11 @@ export default async proxy => {
 
     const sorted = Object.entries(films).sort((a, b) => {
         const FORMAT = 'DD MMM YY';
-        const date = {
+        const sortings = {
             a: moment(a[1].rutor[0].date, FORMAT).valueOf(),
             b: moment(b[1].rutor[0].date, FORMAT).valueOf(),
         };
-        return date.b - date.a;
+        return sortings.b - sortings.a;
     });
 
     for (const [key, value] of sorted) {
@@ -147,5 +150,11 @@ export default async proxy => {
         sorted[i].rutor = bySeed;
     });
 
-    return parsed;
+    return {
+        timestamp: {
+            startTime,
+            diff: ms(utils.date.diff({date, period: 'milliseconds'})),
+        },
+        items: parsed,
+    };
 };

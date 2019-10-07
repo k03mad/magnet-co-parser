@@ -2,24 +2,21 @@ import fs from 'fs';
 import html from './config/html.js';
 import paths from './config/paths.js';
 import pretty from 'pretty';
-import utils from 'utils-mad';
 
 /**
  * @param {object} data
  * @returns {Function}
  */
 export default async data => {
-    const date = utils.date.now();
-
     const [index, page] = await Promise.all([
         fs.promises.readFile(paths.templates.list),
         fs.promises.readFile(paths.templates.page),
     ]);
 
-    const pasteIndex = [html.date(date)];
+    const pasteIndex = [html.date(`${data.timestamp.startTime} - ${data.timestamp.diff}`)];
     const notFoundIndex = [];
 
-    for (const show of data) {
+    for (const show of data.items) {
         const pageAbsPath = `${paths.www.pages}/${show.id}.html`;
         const pageRelPath = `${paths.getRel(paths.www.pages)}/${show.id}.html`;
 
@@ -28,7 +25,6 @@ export default async data => {
             : notFoundIndex.push(html.cover.notFound(pageRelPath, show.cover));
 
         const pasteSerial = [
-            html.date(date),
             html.url(show.urls),
             ...show.rutor.map(elem => html.td(elem)),
         ];

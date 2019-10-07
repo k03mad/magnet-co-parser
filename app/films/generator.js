@@ -9,19 +9,17 @@ import utils from 'utils-mad';
  * @returns {Function}
  */
 export default async data => {
-    const date = utils.date.now();
-
     const [index, page] = await Promise.all([
         fs.promises.readFile(paths.templates.list),
         fs.promises.readFile(paths.templates.page),
     ]);
 
     const pasteIndex = [];
-    const pages = utils.array.chunk(data, paths.www.pageCovers);
+    const pages = utils.array.chunk(data.items, paths.www.pageCovers);
 
     for (const filmsArray of pages) {
         const pageIndex = [
-            html.date(date),
+            html.date(`${data.timestamp.startTime} - ${data.timestamp.diff}`),
             html.paginator(
                 pages.length,
                 paths.getRel,
@@ -38,10 +36,7 @@ export default async data => {
 
             pageCovers.push({href: pageRelPath, src: film.cover});
 
-            const pasteFilm = [
-                html.date(date),
-                html.url(film.urls),
-            ];
+            const pasteFilm = [html.url(film.urls)];
 
             if (film.kp.rating) {
                 pasteFilm.push(html.rating(film.kp.url, film.kp.rating));
