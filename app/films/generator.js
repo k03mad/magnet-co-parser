@@ -43,9 +43,9 @@ export default async data => {
             }
 
             pasteFilm.push(
-                html.photos(film.photos.map(elem => elem.url)),
+                html.photos(film.photos),
                 html.info([film.tagline, film.overview, film.genres.join(', ')]),
-                ...film.rutor.map(elem => html.td(elem)),
+                html.table(film.rutor),
             );
 
             const generatedPage = page.toString().replace(html.placeholder, pasteFilm.join('\n'));

@@ -30,7 +30,7 @@ img {
     height: 300px;
     padding: 5px;
 }
-img#notfound {
+img.notfound {
     filter: grayscale(100%);
     opacity: 0.2;
 }

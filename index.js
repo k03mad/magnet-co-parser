@@ -19,8 +19,8 @@ import utils from 'utils-mad';
                 fs.promises.readFile(`${pathsShows.templates.folder}shows.json`, 'utf8'),
             ]);
 
-            filmsData = JSON.parse(filmsData.replace(/[\n ]/g, ''));
-            showsData = JSON.parse(showsData.replace(/[\n ]/g, ''));
+            filmsData = JSON.parse(filmsData.replace(/\n| {2,}/g, ''));
+            showsData = JSON.parse(showsData.replace(/\n| {2,}/g, ''));
 
         // иначе парсим
         } else {

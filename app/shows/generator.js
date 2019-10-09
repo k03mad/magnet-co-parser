@@ -26,10 +26,10 @@ export default async data => {
 
         const pasteSerial = [
             html.url(show.urls),
-            ...show.rutor.map(elem => html.td(elem)),
+            html.table(show.rutor),
         ];
 
-        const generatedPage = page.toString().replace(html.placeholder, pasteSerial.join('\n'));
+        const generatedPage = page.toString().replace(html.placeholder, pasteSerial.join(''));
         await fs.promises.writeFile(pageAbsPath, pretty(generatedPage));
     }
 
