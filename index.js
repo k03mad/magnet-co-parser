@@ -12,7 +12,7 @@ import utils from 'utils-mad';
         let filmsData, showsData;
 
         // только генерим страницы из json-файлов для отладки
-        if (process.env.npm_config_onlygen) {
+        if (process.env.npm_config_fromjson) {
 
             [filmsData, showsData] = await Promise.all([
                 fs.promises.readFile(`${pathsShows.templates.folder}films.json`, 'utf8'),
@@ -33,7 +33,7 @@ import utils from 'utils-mad';
             ]);
 
             // сохраняем json-файлы для отладки
-            if (process.env.npm_config_onlysave) {
+            if (process.env.npm_config_savejson) {
 
                 await Promise.all([
                     fs.promises.writeFile(`${pathsShows.templates.folder}films.json`, JSON.stringify(filmsData, null, 4)),

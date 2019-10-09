@@ -2,3 +2,4 @@
 /node_modules
 /_cache
 /www/generated
+/templates/*.json
