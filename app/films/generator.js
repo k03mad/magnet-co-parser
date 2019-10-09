@@ -1,7 +1,6 @@
 import fs from 'fs';
 import html from './config/html.js';
 import paths from './config/paths.js';
-import pretty from 'pretty';
 import utils from 'utils-mad';
 
 /**
@@ -48,8 +47,8 @@ export default async data => {
                 html.table(film.rutor),
             );
 
-            const generatedPage = page.toString().replace(html.placeholder, pasteFilm.join('\n'));
-            return fs.promises.writeFile(pageAbsPath, pretty(generatedPage.replace(/\s{2,}/g, '\n')));
+            const generatedPage = page.toString().replace(html.placeholder, pasteFilm.join(''));
+            return fs.promises.writeFile(pageAbsPath, generatedPage);
         }));
 
         pageIndex.push(html.cover(pageCovers));
@@ -57,7 +56,7 @@ export default async data => {
     }
 
     await Promise.all(pasteIndex.map((pageIndex, i) => {
-        const generatedIndex = index.toString().replace(html.placeholder, pageIndex.join('\n'));
-        return fs.promises.writeFile(paths.www.list(i + 1), pretty(generatedIndex.replace(/\s{2,}/g, '\n')));
+        const generatedIndex = index.toString().replace(html.placeholder, pageIndex.join(''));
+        return fs.promises.writeFile(paths.www.list(i + 1), generatedIndex);
     }));
 };

@@ -17,18 +17,25 @@ body {
     font-size: 25px;
     margin-bottom: 5px;
 }
-#paginator a {
-    color: #a4b6bd;
-    text-decoration: none;
-    padding: 3px;
-}
-#paginator a:hover {
+#paginator .pages_container {
+    background-color: #0c1a20;
     color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    width: 30px;
+}
+#paginator .pages_container:hover {
+    color: #918b8b;
+}
+#covers .covers_container {
+    display: inline-block;
+    height: 300px;
+    width: 200px;
+    padding: 5px;
 }
 img {
     border-radius: 1em;
     height: 300px;
-    padding: 5px;
 }
 img.notfound {
     filter: grayscale(100%);

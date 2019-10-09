@@ -1,7 +1,6 @@
 import fs from 'fs';
 import html from './config/html.js';
 import paths from './config/paths.js';
-import pretty from 'pretty';
 
 /**
  * @param {object} data
@@ -14,6 +13,8 @@ export default async data => {
     ]);
 
     const pasteIndex = [html.date(`${data.timestamp.startTime} - ${data.timestamp.diff}`)];
+
+    const foundIndex = [];
     const notFoundIndex = [];
 
     for (const show of data.items) {
@@ -21,8 +22,8 @@ export default async data => {
         const pageRelPath = `${paths.getRel(paths.www.pages)}/${show.id}.html`;
 
         show.rutor.length > 0
-            ? pasteIndex.push(html.cover.found(pageRelPath, show.cover))
-            : notFoundIndex.push(html.cover.notFound(pageRelPath, show.cover));
+            ? foundIndex.push({href: pageRelPath, src: show.cover})
+            : notFoundIndex.push({href: pageRelPath, src: show.cover, notfound: true});
 
         const pasteSerial = [
             html.url(show.urls),
@@ -30,9 +31,11 @@ export default async data => {
         ];
 
         const generatedPage = page.toString().replace(html.placeholder, pasteSerial.join(''));
-        await fs.promises.writeFile(pageAbsPath, pretty(generatedPage));
+        await fs.promises.writeFile(pageAbsPath, generatedPage);
     }
 
-    const generatedIndex = index.toString().replace(html.placeholder, [...pasteIndex, ...notFoundIndex].join('\n'));
-    await fs.promises.writeFile(paths.www.list, pretty(generatedIndex));
+    pasteIndex.push(html.cover([...foundIndex, ...notFoundIndex]));
+
+    const generatedIndex = index.toString().replace(html.placeholder, pasteIndex.join(''));
+    await fs.promises.writeFile(paths.www.list, generatedIndex);
 };

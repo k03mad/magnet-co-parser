@@ -1,13 +1,13 @@
 body {
     background-color: #0c1a20;
-    color: aliceblue;
+    color: #FFFFFF;
     font-family: Helvetica;
     font-size: 20px;
     padding: 10px;
     text-align: center;
 }
 div#main {
-    background-color: #a4b6bd;
+    background-color: #263238;
     border-radius: 1em;
     padding: 20px;
 }
@@ -15,10 +15,10 @@ table {
     width: 100%;
 }
 tr {
-    background-color: #527097;
+    background-color: #7d98a3;
 }
 td:hover {
-    background: darkslateblue;
+    background: #918b8b;
     cursor: pointer;
 }
 td {
