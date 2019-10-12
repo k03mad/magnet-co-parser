@@ -37,7 +37,7 @@ export default async data => {
 
             const pasteFilm = [html.url(film.urls)];
 
-            if (film.kp.rating) {
+            if (film.kp && film.kp.rating) {
                 pasteFilm.push(html.rating(film.kp.url, film.kp.rating));
             }
 
