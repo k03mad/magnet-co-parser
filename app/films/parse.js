@@ -88,7 +88,42 @@ export default async proxy => {
         const [, originalName] = key.split(' / ');
         const title = originalName || key;
 
-        const [data] = await utils.tmdb.get({path: 'search/movie', params: {query: title}, caching: true});
+        const filmdb = {};
+
+        for (const {link} of value.rutor) {
+            const {body} = await utils.request.cache(proxy + encodeURIComponent(link));
+            const kp = body.match(service.kp.re);
+            const imdb = body.match(service.imdb.re);
+
+            if (kp && !filmdb.kp) {
+                filmdb.kp = {
+                    id: kp.groups.id,
+                    url: service.kp.film + kp.groups.id,
+                    rating: service.kp.rating(kp.groups.id),
+                };
+            }
+
+            if (imdb && !filmdb.imdb) {
+                filmdb.imdb = {
+                    id: imdb.groups.id,
+                    url: service.imdb.film + imdb.groups.id,
+                };
+            }
+
+            if (kp && imdb) {
+                break;
+            }
+        }
+
+        let data;
+
+        // если есть imdb id — используем ручку матчинга по нему
+        if (filmdb.imdb) {
+            ({movie_results: [data]} = await utils.tmdb.get({path: `find/${filmdb.imdb.id}`, params: {external_source: 'imdb_id'}, caching: true}));
+        // иначе — по названию
+        } else {
+            [data] = await utils.tmdb.get({path: 'search/movie', params: {query: title}, caching: true});
+        }
 
         if (data && data.poster_path) {
             const movie = await utils.tmdb.get({path: `movie/${data.id}`, caching: true});
@@ -124,20 +159,8 @@ export default async proxy => {
                     proxy: proxy + encodeURIComponent(rutorUrl),
                     rutracker: service.rutracker.url + title + rutor.search.quality,
                 },
+                ...filmdb,
             };
-
-            for (const {link} of value.rutor) {
-                const {body} = await utils.request.cache(proxy + encodeURIComponent(link));
-                const [, id] = body.match(service.kp.re) || ['', ''];
-
-                if (id) {
-                    info.kp = {
-                        url: service.kp.film + id,
-                        rating: service.kp.rating(id),
-                    };
-                    break;
-                }
-            }
 
             parsed.push(info);
         }

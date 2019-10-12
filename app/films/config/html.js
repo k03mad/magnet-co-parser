@@ -4,6 +4,7 @@ export default {
     date: data => `<div id="date">${data}</div>`,
     paginator: (length, rel, path) => `
         <div id="paginator">
+            <div class="pages_container" onclick="document.location = '/';">M</div>
             ${[...new Array(length).keys()].map(elem => ++elem).map(num => `
                 <div class="pages_container" onclick="document.location = '${rel(path(num))}';">
                     ${num}

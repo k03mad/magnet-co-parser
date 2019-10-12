@@ -5,9 +5,13 @@ export default {
         genresCount: 3,
     },
     kp: {
-        re: /kinopoisk.+film.*%2F(\d+)%2F/,
+        re: /kinopoisk.+film.*%2F(?<id>\d+)%2F/,
         film: 'https://www.kinopoisk.ru/film/',
         rating: id => `https://rating.kinopoisk.ru/${id}.gif`,
+    },
+    imdb: {
+        re: /imdb.+title.*%2F(?<id>tt\d+)%2F/,
+        film: 'https://www.imdb.com/title/',
     },
     rutracker: {
         url: 'https://rutracker.org/forum/tracker.php?nm=',
