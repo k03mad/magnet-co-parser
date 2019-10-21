@@ -13,6 +13,26 @@ export default {
         </div>
     `,
 
+    rating: (href, src) => `
+        <div id="rating">
+            <a href="${href}" target="_blank"><img src="${src}"></a>
+        </div>
+    `,
+
+    photos: photo => `
+        <div id="photos">
+            ${photo.reverse().map(elem => elem.url).map(elem => `
+                <img align="right" src="${elem}">
+            `).join(' ')}
+        </div>
+    `,
+
+    info: data => `
+        <div id="info">
+            ${data.filter(Boolean).map((elem, i) => i === 0 ? elem : `<p>${elem}</p>`).join(' ')}
+        </div>
+    `,
+
     url: data => `
         <div id="urls">
             ${Object.entries(data).map(([key, value]) => `

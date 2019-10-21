@@ -15,13 +15,13 @@
 		"colorette": "1.1.0",
 		"moment": "2.24.0",
 		"ms": "2.1.2",
-		"utils-mad": "2.2.4"
+		"utils-mad": "2.3.3"
 	},
 	"devDependencies": {
 		"eslint": "6.5.1",
 		"eslint-config-k03mad": "3.0.0",
 		"eslint-plugin-const-case": "1.2.2",
-		"eslint-plugin-jsdoc": "15.11.0",
+		"eslint-plugin-jsdoc": "15.12.0",
 		"eslint-plugin-node": "10.0.0",
 		"eslint-plugin-optimize-regex": "1.1.7",
 		"eslint-plugin-promise": "4.2.1",

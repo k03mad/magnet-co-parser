@@ -19,31 +19,32 @@ export default async proxy => {
 
     const watching = await utils.myshows.watch({onlyAired: true});
 
-    await Promise.all(watching.map(async (series, i) => {
-        const {title, titleOriginal, episodesToWatch, id, kinopoiskId} = series.show;
+    /**
+     * Возвращает элементы на странице поиска со ссылкой
+     * @param {string} quality
+     * @param {string} titleOriginal
+     * @returns {object}
+     */
+    const getRutorElems = async (quality, titleOriginal) => {
+        const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
+        const rutorProxyUrl = proxy + encodeURIComponent(rutorUrl);
+
+        const {body} = await utils.request.got(rutorProxyUrl);
+        return {$: cheerio.load(body), rutorUrl, rutorProxyUrl};
+    };
+
+    for (const [i, element] of watching.entries()) {
+        const {title, titleOriginal, episodesToWatch, id, kinopoiskId, imdbId} = element.show;
         const {seasonNumber} = episodesToWatch[episodesToWatch.length - 1];
 
         const titleGenerated = title === titleOriginal ? title : `${title} / ${titleOriginal}`;
         seriesList.push(titleGenerated);
         parsed[i] = {title, titleOriginal, titleGenerated, rutor: []};
 
-        /**
-         * Возвращает элементы на странице поиска со ссылкой
-         * @param {string} quality
-         * @returns {object}
-         */
-        const getRutorElems = async quality => {
-            const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
-            const rutorProxyUrl = proxy + encodeURIComponent(rutorUrl);
-
-            const {body} = await utils.request.got(rutorProxyUrl);
-            return {$: cheerio.load(body), rutorUrl, rutorProxyUrl};
-        };
-
-        let {$, rutorUrl, rutorProxyUrl} = await getRutorElems(rutor.search.quality.full);
+        let {$, rutorUrl, rutorProxyUrl} = await getRutorElems(rutor.search.quality.full, titleOriginal);
 
         if ($(rutor.selectors.td).contents().length === 0) {
-            ({$, rutorUrl, rutorProxyUrl} = await getRutorElems(rutor.search.quality.back));
+            ({$, rutorUrl, rutorProxyUrl} = await getRutorElems(rutor.search.quality.back, titleOriginal));
         }
 
         $(rutor.selectors.td).each((_, elem) => {
@@ -95,7 +96,29 @@ export default async proxy => {
 
         });
 
-        const [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, caching: true});
+        let data, show;
+
+        if (imdbId) {
+            ({movie_results: [data]} = await utils.tmdb.get({path: `find/tt${imdbId}`, params: {external_source: 'imdb_id'}, caching: true}));
+        }
+
+        if (!data) {
+            [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, caching: true});
+        }
+
+        try {
+            show = await utils.tmdb.get({path: `tv/${data.id}`, caching: true});
+        } catch (err) {
+            if (err.statusCode === 404) {
+                [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, caching: true});
+            }
+        }
+
+        if (!show) {
+            show = await utils.tmdb.get({path: `tv/${data.id}`, caching: true});
+        }
+
+        const {cast} = await utils.tmdb.get({path: `tv/${data.id}/credits`, caching: true});
 
         parsed[i].cover = service.tmdb.cover + data.poster_path;
         parsed[i].id = id;
@@ -105,9 +128,30 @@ export default async proxy => {
             rutracker: service.rutracker.url + titleOriginal + rutor.search.quality.full,
             lostfilm: service.lostfilm.url + titleOriginal,
             myshows: service.myshows.url + id,
-            kinopoisk: service.kinopoisk.url + kinopoiskId,
         };
-    }));
+
+        parsed[i].networks = show.networks.map(elem => elem.name).join(', ');
+        parsed[i].genres = show.genres.map(elem => elem.name).slice(0, service.tmdb.genresCount);
+        parsed[i].overview = data.overview;
+
+        parsed[i].photos = [
+            ...new Set(cast
+                .slice(0, service.tmdb.castCount)
+                .filter(elem => Boolean(elem.profile_path))
+                .map(elem => ({
+                    id: elem.id,
+                    name: elem.name,
+                    url: service.tmdb.cover + elem.profile_path,
+                })),
+            ),
+        ];
+
+        parsed[i].kp = {
+            id: kinopoiskId,
+            url: service.kp.url + kinopoiskId,
+            rating: service.kp.rating(kinopoiskId),
+        };
+    }
 
     const withMagnet = parsed.filter(elem => elem.rutor.length > 0);
 
