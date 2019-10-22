@@ -17,6 +17,7 @@ import utils from 'utils-mad';
             [filmsData, showsData] = await Promise.all([
                 fs.promises.readFile(`${pathsShows.templates.folder}films.json`, 'utf8'),
                 fs.promises.readFile(`${pathsShows.templates.folder}shows.json`, 'utf8'),
+                [''],
             ]);
 
             filmsData = JSON.parse(filmsData.replace(/\n| {2,}/g, ''));
@@ -36,8 +37,8 @@ import utils from 'utils-mad';
             if (process.env.npm_config_savejson) {
 
                 await Promise.all([
-                    fs.promises.writeFile(`${pathsShows.templates.folder}films.json`, JSON.stringify(filmsData, null, 4)),
                     fs.promises.writeFile(`${pathsShows.templates.folder}shows.json`, JSON.stringify(showsData, null, 4)),
+                    fs.promises.writeFile(`${pathsShows.templates.folder}films.json`, JSON.stringify(filmsData, null, 4)),
                 ]);
 
             }
@@ -50,8 +51,8 @@ import utils from 'utils-mad';
         ]);
 
         await Promise.all([
-            showsGenerator(showsData),
             filmsGenerator(filmsData),
+            showsGenerator(showsData),
         ]);
 
     } catch (err) {

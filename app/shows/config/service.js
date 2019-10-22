@@ -1,7 +1,7 @@
 export default {
     tmdb: {
-        cover: 'https://image.tmdb.org/t/p/w600_and_h900_bestv2',
-        castCount: 3,
+        cover: 'https://image.tmdb.org/t/p/w300_and_h450_bestv2',
+        castCount: 5,
         genresCount: 3,
     },
     myshows: {

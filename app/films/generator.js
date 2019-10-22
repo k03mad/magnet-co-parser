@@ -1,6 +1,7 @@
 import fs from 'fs';
 import html from './config/html.js';
 import paths from './config/paths.js';
+import rutor from './config/rutor.js';
 import utils from 'utils-mad';
 
 /**
@@ -14,7 +15,7 @@ export default async data => {
     ]);
 
     const pasteIndex = [];
-    const pages = utils.array.chunk(data.items, paths.www.pageCovers);
+    const pages = utils.array.chunk(data.items, rutor.pageCovers);
 
     for (const filmsArray of pages) {
         const pageIndex = [

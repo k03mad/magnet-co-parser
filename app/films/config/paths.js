@@ -9,7 +9,6 @@ export default {
     www: {
         folder: `${appRoot}/www/generated/`,
         pages: `${appRoot}/www/generated/films/pages`,
-        pageCovers: 30,
         list: (i, additions = '') => `${appRoot}/www/generated/films/list${i}.html${additions}`,
     },
 

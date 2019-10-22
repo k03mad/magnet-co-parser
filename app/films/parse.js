@@ -97,7 +97,7 @@ export default async proxy => {
 
             if (kp && !filmdb.kp) {
                 filmdb.kp = {
-                    id: kp.groups.id,
+                    id: Number(kp.groups.id),
                     url: service.kp.film + kp.groups.id,
                     rating: service.kp.rating(kp.groups.id),
                 };
@@ -126,43 +126,57 @@ export default async proxy => {
         }
 
         if (data && data.poster_path) {
-            const movie = await utils.tmdb.get({path: `movie/${data.id}`, caching: true});
-            const {cast} = await utils.tmdb.get({path: `movie/${data.id}/credits`, caching: true});
 
-            // первая страница, без категории, все слова
-            const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;
+            let double = false;
 
-            const info = {
-                title,
-                cover: service.tmdb.cover + data.poster_path,
-                id: data.id,
+            parsed.forEach((elem, i) => {
+                if (elem.id === data.id) {
+                    parsed[i].rutor.push(...value.rutor);
+                    double = true;
+                }
+            });
 
-                tagline: movie.tagline,
-                overview: data.overview,
-                genres: movie.genres.map(elem => elem.name).slice(0, service.tmdb.genresCount),
+            if (!double) {
 
-                photos: [
-                    ...new Set(cast
-                        .slice(0, service.tmdb.castCount)
-                        .filter(elem => Boolean(elem.profile_path))
-                        .map(elem => ({
-                            id: elem.id,
-                            name: elem.name,
-                            url: service.tmdb.cover + elem.profile_path,
-                        })),
-                    ),
-                ],
+                const movie = await utils.tmdb.get({path: `movie/${data.id}`, caching: true});
+                const {cast} = await utils.tmdb.get({path: `movie/${data.id}/credits`, caching: true});
 
-                rutor: value.rutor,
-                urls: {
-                    rutor: rutorUrl,
-                    proxy: proxy + encodeURIComponent(rutorUrl),
-                    rutracker: service.rutracker.url + title + rutor.search.quality,
-                },
-                ...filmdb,
-            };
+                // первая страница, без категории, все слова
+                const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;
 
-            parsed.push(info);
+                const info = {
+                    title,
+                    cover: service.tmdb.cover + data.poster_path,
+                    id: data.id,
+
+                    tagline: movie.tagline,
+                    overview: data.overview,
+                    genres: movie.genres.map(elem => elem.name).slice(0, service.tmdb.genresCount),
+
+                    photos: [
+                        ...new Set(cast
+                            .slice(0, service.tmdb.castCount)
+                            .filter(elem => Boolean(elem.profile_path))
+                            .map(elem => ({
+                                id: elem.id,
+                                name: elem.name,
+                                url: service.tmdb.cover + elem.profile_path,
+                            })),
+                        ),
+                    ],
+
+                    rutor: value.rutor,
+                    urls: {
+                        rutor: rutorUrl,
+                        proxy: proxy + encodeURIComponent(rutorUrl),
+                        rutracker: service.rutracker.url + title + rutor.search.quality,
+                    },
+                    ...filmdb,
+                };
+
+                parsed.push(info);
+
+            }
         }
     }
 

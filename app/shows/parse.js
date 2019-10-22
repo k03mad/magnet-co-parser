@@ -96,7 +96,7 @@ export default async proxy => {
 
         });
 
-        let data, show;
+        let data;
 
         if (imdbId) {
             ({movie_results: [data]} = await utils.tmdb.get({path: `find/tt${imdbId}`, params: {external_source: 'imdb_id'}, caching: true}));
@@ -107,17 +107,14 @@ export default async proxy => {
         }
 
         try {
-            show = await utils.tmdb.get({path: `tv/${data.id}`, caching: true});
+            await utils.tmdb.get({path: `tv/${data.id}`, caching: true, gotOpts: {attempts: 1}});
         } catch (err) {
             if (err.statusCode === 404) {
                 [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, caching: true});
             }
         }
 
-        if (!show) {
-            show = await utils.tmdb.get({path: `tv/${data.id}`, caching: true});
-        }
-
+        const show = await utils.tmdb.get({path: `tv/${data.id}`, caching: true});
         const {cast} = await utils.tmdb.get({path: `tv/${data.id}/credits`, caching: true});
 
         parsed[i].cover = service.tmdb.cover + data.poster_path;
