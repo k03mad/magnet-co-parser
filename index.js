@@ -15,9 +15,8 @@ import utils from 'utils-mad';
         if (process.env.npm_config_fromjson) {
 
             [filmsData, showsData] = await Promise.all([
-                fs.promises.readFile(`${pathsShows.templates.folder}films.json`, 'utf8'),
-                fs.promises.readFile(`${pathsShows.templates.folder}shows.json`, 'utf8'),
-                [''],
+                fs.promises.readFile(`${pathsFilms.parsed.folder}films.json`, 'utf8'),
+                fs.promises.readFile(`${pathsShows.parsed.folder}shows.json`, 'utf8'),
             ]);
 
             filmsData = JSON.parse(filmsData.replace(/\n| {2,}/g, ''));
@@ -28,24 +27,26 @@ import utils from 'utils-mad';
 
             const [proxy] = await utils.request.proxy();
 
-            [showsData, filmsData] = await Promise.all([
-                showsParse(proxy),
+            [filmsData, showsData] = await Promise.all([
                 filmsParse(proxy),
+                showsParse(proxy),
             ]);
 
-            // сохраняем json-файлы для отладки
-            if (process.env.npm_config_savejson) {
+            await utils.folder.erase([
+                pathsFilms.parsed.folder,
+                pathsShows.parsed.folder,
+            ]);
 
-                await Promise.all([
-                    fs.promises.writeFile(`${pathsShows.templates.folder}shows.json`, JSON.stringify(showsData, null, 4)),
-                    fs.promises.writeFile(`${pathsShows.templates.folder}films.json`, JSON.stringify(filmsData, null, 4)),
-                ]);
+            await Promise.all([
+                fs.promises.writeFile(`${pathsFilms.parsed.folder}films.json`, JSON.stringify(filmsData, null, 4)),
+                fs.promises.writeFile(`${pathsShows.parsed.folder}shows.json`, JSON.stringify(showsData, null, 4)),
+            ]);
 
-            }
         }
 
         await utils.folder.erase([
             pathsFilms.www.folder,
+            pathsShows.www.folder,
             pathsFilms.www.pages,
             pathsShows.www.pages,
         ]);

@@ -1,6 +1,9 @@
 import appRoot from 'app-root-path';
 
 export default {
+    parsed: {
+        folder: `${appRoot}/parsed/`,
+    },
     templates: {
         folder: `${appRoot}/templates/`,
         list: `${appRoot}/templates/list.html`,

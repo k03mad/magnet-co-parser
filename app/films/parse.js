@@ -187,10 +187,13 @@ export default async proxy => {
         sorted[i].rutor = bySeed;
     });
 
+    const diff = utils.date.diff({date, period: 'milliseconds'});
+
     return {
         timestamp: {
             startTime,
-            diff: ms(utils.date.diff({date, period: 'milliseconds'})),
+            diff: ms(diff),
+            diffRaw: diff,
         },
         items: parsed,
     };

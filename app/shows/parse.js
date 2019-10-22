@@ -155,16 +155,20 @@ export default async proxy => {
     console.log(c.blue(`Сериалов с Myshows: ${watching.length}`));
     console.log(c.blue(`Сериалов найдено на Rutor: ${withMagnet.length}`));
 
-    const diff = utils.array.diff(seriesList, withMagnet.map(elem => elem.titleGenerated));
+    const notFound = utils.array.diff(seriesList, withMagnet.map(elem => elem.titleGenerated));
 
-    console.log(c.cyan(`Сериалов не найдено: ${diff.length}`));
-    console.log(diff.sort().join('\n'));
+    console.log(c.cyan(`Сериалов не найдено: ${notFound.length}`));
+    console.log(notFound.sort().join('\n'));
+
+    const diff = utils.date.diff({date, period: 'milliseconds'});
 
     return {
         timestamp: {
             startTime,
-            diff: ms(utils.date.diff({date, period: 'milliseconds'})),
+            diff: ms(diff),
+            diffRaw: diff,
         },
         items: parsed,
     };
+
 };
