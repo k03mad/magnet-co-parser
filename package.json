@@ -10,18 +10,18 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"app-root-path": "2.2.1",
+		"app-root-path": "3.0.0",
 		"cheerio": "1.0.0-rc.3",
 		"colorette": "1.1.0",
 		"moment": "2.24.0",
 		"ms": "2.1.2",
-		"utils-mad": "2.3.3"
+		"utils-mad": "2.4.2"
 	},
 	"devDependencies": {
-		"eslint": "6.5.1",
+		"eslint": "6.6.0",
 		"eslint-config-k03mad": "3.0.0",
 		"eslint-plugin-const-case": "1.2.2",
-		"eslint-plugin-jsdoc": "15.12.0",
+		"eslint-plugin-jsdoc": "17.0.0",
 		"eslint-plugin-node": "10.0.0",
 		"eslint-plugin-optimize-regex": "1.1.7",
 		"eslint-plugin-promise": "4.2.1",
