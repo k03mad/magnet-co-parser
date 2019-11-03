@@ -35,6 +35,6 @@ export default {
 
     tagSplit: ' | ',
 
-    filmsCount: 200,
+    filmsCount: 400,
     pageCovers: 40,
 };
