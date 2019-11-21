@@ -51,9 +51,10 @@ export default async proxy => {
                             .replace(/.+magnet/, 'magnet'),
                     );
 
-                    matched.groups.link = decodeURIComponent(
-                        $(elem).find(rutor.selectors.link).attr('href'),
-                    ).replace(new RegExp(`.+${rutor.domain}`), rutor.domain);
+                    const href = $(elem).find(rutor.selectors.link).attr('href');
+                    matched.groups.link = href.includes(rutor.domain)
+                        ? decodeURIComponent(href).replace(new RegExp(`.+${rutor.domain}`), rutor.url)
+                        : rutor.domain + href;
 
                     const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
                     matched.groups.quality = quality.replace(/ от .+/, '');
@@ -95,18 +96,19 @@ export default async proxy => {
             const kp = body.match(service.kp.re);
             const imdb = body.match(service.imdb.re);
 
-            if (kp && !filmdb.kp) {
+            if (kp && kp.groups && !filmdb.kp) {
+                const id = kp.groups.id1 || kp.groups.id2;
                 filmdb.kp = {
-                    id: Number(kp.groups.id),
-                    url: service.kp.film + kp.groups.id,
-                    rating: service.kp.rating(kp.groups.id),
+                    id: Number(id),
+                    url: service.kp.film + id,
+                    rating: service.kp.rating(id),
                 };
             }
 
-            if (imdb && !filmdb.imdb) {
+            if (imdb && imdb.groups && !filmdb.imdb) {
+                const {id} = imdb.groups;
                 filmdb.imdb = {
-                    id: imdb.groups.id,
-                    url: service.imdb.film + imdb.groups.id,
+                    id, url: service.imdb.film + imdb.groups.id,
                 };
             }
 

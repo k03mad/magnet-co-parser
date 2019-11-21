@@ -2,13 +2,16 @@ import utils from 'utils-mad';
 
 const currentYear = Number(utils.date.now('YYYY'));
 const prevYear = currentYear - 1;
-const RUTOR_DOMAIN = 'http://rutor.info';
+
+const RUTOR_DOMAIN = 'rutor.info';
+const rutorUrl = `http://${RUTOR_DOMAIN}`;
 
 export default {
+    url: rutorUrl,
     domain: RUTOR_DOMAIN,
     search: {
         // rutor.info/search/страница/категория/логическое выражение/сортировка по дате/
-        url: (page, cat, log = 300) => `${RUTOR_DOMAIN}/search/${page}/${cat}/${log}/0/`,
+        url: (page, cat, log = 300) => `${rutorUrl}/search/${page}/${cat}/${log}/0/`,
         query: [
             `${currentYear}|${prevYear}`,
             '(iTunes|Лицензия| D)',
