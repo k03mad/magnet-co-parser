@@ -16,5 +16,6 @@ export default {
     episodes: /\[(\w?\d.+)]/,
     comments: / \d+$/,
 
+    timeout: 20000,
     tagSplit: ' | ',
 };

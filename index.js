@@ -1,5 +1,6 @@
 import filmsGenerator from './app/films/generator.js';
 import filmsParse from './app/films/parse.js';
+import filmsRutorConfig from './app/films/config/rutor.js';
 import fs from 'fs';
 import pathsFilms from './app/films/config/paths.js';
 import pathsShows from './app/shows/config/paths.js';
@@ -25,7 +26,7 @@ import utils from 'utils-mad';
         // иначе парсим
         } else {
 
-            const [proxy] = await utils.request.proxy();
+            const [proxy] = await utils.request.proxy({testUrl: filmsRutorConfig.domain});
 
             [filmsData, showsData] = await Promise.all([
                 filmsParse(proxy),

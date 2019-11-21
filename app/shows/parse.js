@@ -29,7 +29,7 @@ export default async proxy => {
         const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
         const rutorProxyUrl = proxy + encodeURIComponent(rutorUrl);
 
-        const {body} = await utils.request.got(rutorProxyUrl);
+        const {body} = await utils.request.got(rutorProxyUrl, {timeout: rutor.timeout});
         return {$: cheerio.load(body), rutorUrl, rutorProxyUrl};
     };
 

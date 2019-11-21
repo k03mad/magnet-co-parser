@@ -35,6 +35,7 @@ export default {
 
     tagSplit: ' | ',
 
+    timeout: 20000,
     filmsCount: Infinity,
     pageCovers: 40,
 };

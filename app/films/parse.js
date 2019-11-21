@@ -24,7 +24,7 @@ export default async proxy => {
             const rutorUrl = rutor.search.url(page, cat) + rutor.search.query + rutor.search.quality;
             const rutorProxyUrl = proxy + encodeURIComponent(rutorUrl);
 
-            const {body} = await utils.request.got(rutorProxyUrl);
+            const {body} = await utils.request.got(rutorProxyUrl, {timeout: rutor.timeout});
 
             const $ = cheerio.load(body);
 
