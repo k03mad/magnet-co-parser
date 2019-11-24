@@ -21,8 +21,8 @@ export default {
 
     photos: photo => `
         <div id="photos">
-            ${photo.reverse().map(elem => elem.url).map(elem => `
-                <img align="right" src="${elem}">
+            ${photo.reverse().map(elem => `
+                <a href=${elem.link}><img align="right" src="${elem.cover}"></a>
             `).join(' ')}
         </div>
     `,

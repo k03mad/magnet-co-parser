@@ -24,7 +24,9 @@ export default async proxy => {
             const rutorUrl = rutor.search.url(page, cat) + rutor.search.query + rutor.search.quality;
             const rutorProxyUrl = proxy + encodeURIComponent(rutorUrl);
 
-            const {body} = await utils.request.got(rutorProxyUrl, {timeout: rutor.timeout});
+            const {body} = await utils.request.got(rutorProxyUrl, {timeout: rutor.timeout, headers: {
+                'user-agent': utils.ua.win.chrome,
+            }});
 
             const $ = cheerio.load(body);
 
@@ -92,7 +94,10 @@ export default async proxy => {
         const filmdb = {};
 
         for (const {link} of value.rutor) {
-            const {body} = await utils.request.cache(proxy + encodeURIComponent(link));
+            const {body} = await utils.request.cache(proxy + encodeURIComponent(link), {headers: {
+                'user-agent': utils.ua.win.chrome,
+            }});
+
             const kp = body.match(service.kp.re);
             const imdb = body.match(service.imdb.re);
 
@@ -161,8 +166,9 @@ export default async proxy => {
                             .filter(elem => Boolean(elem.profile_path))
                             .map(elem => ({
                                 id: elem.id,
+                                link: service.tmdb.person + elem.id,
                                 name: elem.name,
-                                url: service.tmdb.cover + elem.profile_path,
+                                cover: service.tmdb.cover + elem.profile_path,
                             })),
                         ),
                     ],

@@ -29,7 +29,9 @@ export default async proxy => {
         const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
         const rutorProxyUrl = proxy + encodeURIComponent(rutorUrl);
 
-        const {body} = await utils.request.got(rutorProxyUrl, {timeout: rutor.timeout});
+        const {body} = await utils.request.got(rutorProxyUrl, {timeout: rutor.timeout, headers: {
+            'user-agent': utils.ua.win.chrome,
+        }});
         return {$: cheerio.load(body), rutorUrl, rutorProxyUrl};
     };
 
@@ -37,64 +39,81 @@ export default async proxy => {
         const {title, titleOriginal, episodesToWatch, id, kinopoiskId, imdbId} = element.show;
         const {seasonNumber} = episodesToWatch[episodesToWatch.length - 1];
 
+        // рутор не понимает звездочки в названии
+        // The End Of The F***ing World => The End Of The F World
+        const titleOriginalExcaped = titleOriginal.replace(/(?=.+)(\*.+) /, ' ');
         const titleGenerated = title === titleOriginal ? title : `${title} / ${titleOriginal}`;
+
         seriesList.push(titleGenerated);
         parsed[i] = {title, titleOriginal, titleGenerated, rutor: []};
 
-        let {$, rutorUrl, rutorProxyUrl} = await getRutorElems(rutor.search.quality.full, titleOriginal);
+        /**
+         * Парсим поиск по названию сериала
+         * @param {object} $
+         */
+        const parseGroups = $ => {
+            $(rutor.selectors.td).each((_, elem) => {
 
-        if ($(rutor.selectors.td).contents().length === 0) {
-            ({$, rutorUrl, rutorProxyUrl} = await getRutorElems(rutor.search.quality.back, titleOriginal));
-        }
+                const td = $(elem)
+                    .text()
+                    .replace(/\s+/g, ' ')
+                    .trim();
 
-        $(rutor.selectors.td).each((_, elem) => {
-
-            const td = $(elem)
-                .text()
-                .replace(/\s+/g, ' ')
-                .trim();
-
-            const matched = td.match(rutor.regexp);
-
-            if (
-                matched
-                && matched.groups.name
-                && matched.groups.name.match(rutor.episodes)
-            ) {
-                matched.groups.magnet = decodeURIComponent(
-                    $(elem)
-                        .find(rutor.selectors.magnet)
-                        .attr('href')
-                        .replace(/^.+magnet/, 'magnet')
-                        .trim(),
-                );
-
-                const [, episodes] = matched.groups.name.match(rutor.episodes);
-
-                matched.groups.episodes = episodes
-                    // S01 => s01
-                    // 01x01-05 / 7 => s01x01-05 / 7
-                    .replace(/^S?(\d+)/, 's$1')
-                    // s01x01-05 / 7 => s01x01-05 / 07
-                    .replace(/ (\d)$/, ' 0$1')
-                    .replace('из', '/')
-                    .replace(/x|х/, ' e');
+                const matched = td.match(rutor.regexp);
 
                 if (
-                    matched.groups.episodes.includes(`s${seasonNumber}`)
-                    || matched.groups.episodes.includes(`s0${seasonNumber}`)
+                    matched
+                    && matched.groups.name
+                    && matched.groups.name.match(rutor.episodes)
                 ) {
-                    matched.groups.name = matched.groups.name.replace(rutor.episodes, '').trim();
+                    matched.groups.magnet = decodeURIComponent(
+                        $(elem)
+                            .find(rutor.selectors.magnet)
+                            .attr('href')
+                            .replace(/^.+magnet/, 'magnet')
+                            .trim(),
+                    );
 
-                    const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
-                    matched.groups.quality = quality;
-                    matched.groups.tags = tags.join(rutor.tagSplit).replace(rutor.comments, '');
+                    const [, episodes] = matched.groups.name.match(rutor.episodes);
 
-                    parsed[i].rutor.push({...matched.groups});
+                    matched.groups.episodes = episodes
+                        // S01 => s01
+                        // 01x01-05 / 7 => s01x01-05 / 7
+                        .replace(/^S?(\d+)/, 's$1')
+                        // s01x01-05 / 7 => s01x01-05 / 07
+                        .replace(/ (\d)$/, ' 0$1')
+                        .replace('из', '/')
+                        .replace(/x|х/, ' e');
+
+                    if (
+                        matched.groups.episodes.includes(`s${seasonNumber}`)
+                        || matched.groups.episodes.includes(`s0${seasonNumber}`)
+                    ) {
+                        matched.groups.name = matched.groups.name.replace(rutor.episodes, '').trim();
+
+                        const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
+
+                        matched.groups.tags = tags.join(rutor.tagSplit).replace(rutor.comments, '');
+                        // вырезаем не относящееся к качеству
+                        // WEBRip 720p от FilmStudio
+                        matched.groups.quality = quality.replace(new RegExp(
+                            `(${rutor.search.quality.full}|${rutor.search.quality.back})(.+)`,
+                        ), '$1');
+
+                        parsed[i].rutor.push({...matched.groups});
+                    }
                 }
-            }
+            });
+        };
 
-        });
+        let {$, rutorUrl, rutorProxyUrl} = await getRutorElems(rutor.search.quality.full, titleOriginalExcaped);
+        parseGroups($);
+
+        // если ничего не нашли — пробуем другое качество
+        if (parsed[i].rutor.length === 0) {
+            ({$, rutorUrl, rutorProxyUrl} = await getRutorElems(rutor.search.quality.back, titleOriginalExcaped));
+            parseGroups($);
+        }
 
         let data;
 
@@ -137,8 +156,9 @@ export default async proxy => {
                 .filter(elem => Boolean(elem.profile_path))
                 .map(elem => ({
                     id: elem.id,
+                    link: service.tmdb.person + elem.id,
                     name: elem.name,
-                    url: service.tmdb.cover + elem.profile_path,
+                    cover: service.tmdb.cover + elem.profile_path,
                 })),
             ),
         ];
