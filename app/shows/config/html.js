@@ -6,7 +6,7 @@ export default {
     cover: data => `
         <div id="covers">
             ${data.map(elem => `
-                <div class="covers_container">
+                <div class="container">
                     <a href="${elem.href}"><img src="${elem.src}"${elem.notfound ? ' class="notfound"' : ''}></a>
                 </div>
             `).join(' ')}

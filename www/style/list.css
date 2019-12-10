@@ -17,17 +17,17 @@ body {
     font-size: 25px;
     margin-bottom: 5px;
 }
-#paginator .pages_container {
+#paginator .container {
     background-color: #0c1a20;
     color: #FFFFFF;
     cursor: pointer;
     display: inline-block;
     width: 30px;
 }
-#paginator .pages_container:hover {
+#paginator .container:hover {
     color: #918b8b;
 }
-#covers .covers_container {
+#covers .container {
     display: inline-block;
     height: 300px;
     width: 200px;

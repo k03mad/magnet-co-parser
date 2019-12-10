@@ -4,9 +4,9 @@ export default {
     date: data => `<div id="date">${data}</div>`,
     paginator: (length, rel, path) => `
         <div id="paginator">
-            <div class="pages_container" onclick="document.location = '/';">M</div>
+            <div class="container" onclick="document.location = '/';">M</div>
             ${[...new Array(length).keys()].map(elem => ++elem).map(num => `
-                <div class="pages_container" onclick="document.location = '${rel(path(num))}';">
+                <div class="container" onclick="document.location = '${rel(path(num))}';">
                     ${num}
                 </div>
             `).join(' ')}
@@ -36,7 +36,7 @@ export default {
     cover: data => `
         <div id="covers">
             ${data.map(elem => `
-                <div class="covers_container">
+                <div class="container">
                     <a href="${elem.href}"><img src="${elem.src}"></a>
                 </div>
             `).join(' ')}
