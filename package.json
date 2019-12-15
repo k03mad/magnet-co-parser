@@ -33,7 +33,7 @@
 	"scripts": {
 		"lint": "eslint --report-unused-disable-directives ./ --format codeframe && echo '\n\\033[34mESLinted!\\033[39m\n'",
 		"setup": "npm i",
-		"parse": "node --experimental-modules index.js",
+		"parse": "node index.js",
 		"server": "pm2 start pm2.json",
 		"start": "npm run parse && npm run server"
 	},

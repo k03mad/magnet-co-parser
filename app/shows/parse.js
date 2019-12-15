@@ -125,14 +125,6 @@ export default async proxy => {
             [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, caching: true});
         }
 
-        try {
-            await utils.tmdb.get({path: `tv/${data.id}`, caching: true, gotOpts: {attempts: 1}});
-        } catch (err) {
-            if (err.statusCode === 404) {
-                [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, caching: true});
-            }
-        }
-
         const show = await utils.tmdb.get({path: `tv/${data.id}`, caching: true});
         const {cast} = await utils.tmdb.get({path: `tv/${data.id}/credits`, caching: true});
 
