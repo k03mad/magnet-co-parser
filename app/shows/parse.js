@@ -118,7 +118,7 @@ export default async proxy => {
         let data;
 
         if (imdbId) {
-            ({movie_results: [data]} = await utils.tmdb.get({path: `find/tt${imdbId}`, params: {external_source: 'imdb_id'}, caching: true}));
+            ({tv_results: [data]} = await utils.tmdb.get({path: `find/tt${imdbId}`, params: {external_source: 'imdb_id'}, caching: true}));
         }
 
         if (!data) {
