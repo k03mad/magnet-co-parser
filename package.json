@@ -1,10 +1,10 @@
 {
-	"name": "magnet-rutor",
+	"name": "magnet-co-parser",
 	"version": "1.0.0",
 	"maintainers": [
 		"Kirill Molchanov <k03.mad@gmail.com"
 	],
-	"repository": "k03mad/magnet-rutor",
+	"repository": "k03mad/magnet-co-parser",
 	"engines": {
 		"node": ">=12"
 	},
@@ -15,10 +15,10 @@
 		"colorette": "1.1.0",
 		"moment": "2.24.0",
 		"ms": "2.1.2",
-		"utils-mad": "3.1.0"
+		"utils-mad": "3.1.2"
 	},
 	"devDependencies": {
-		"eslint": "6.7.2",
+		"eslint": "6.8.0",
 		"eslint-config-k03mad": "3.3.0",
 		"eslint-plugin-const-case": "1.2.2",
 		"eslint-plugin-jsdoc": "18.4.3",
