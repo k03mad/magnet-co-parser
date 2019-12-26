@@ -1,10 +1,10 @@
 {
-	"name": "magnet-rutor",
+	"name": "magnet-co-parser",
 	"version": "1.0.0",
 	"maintainers": [
 		"Kirill Molchanov <k03.mad@gmail.com"
 	],
-	"repository": "k03mad/magnet-rutor",
+	"repository": "k03mad/magnet-co-parser",
 	"engines": {
 		"node": ">=12"
 	},
