@@ -17,7 +17,7 @@ export default async proxy => {
     const parsed = [];
     const seriesList = [];
 
-    const watching = await utils.myshows.watch({onlyAired: true});
+    const watching = await utils.myshows.watch({onlyAired: true, gotOpts: {timeout: 30000}});
 
     /**
      * Возвращает элементы на странице поиска со ссылкой
