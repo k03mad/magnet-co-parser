@@ -159,6 +159,8 @@ export default async proxy => {
                     tagline: movie.tagline,
                     overview: data.overview,
                     genres: movie.genres.map(elem => elem.name).slice(0, service.tmdb.genresCount),
+                    companies: movie.production_companies.map(elem => elem.name),
+                    countries: movie.production_countries.map(elem => elem.iso_3166_1),
 
                     photos: [
                         ...new Set(cast
