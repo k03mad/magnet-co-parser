@@ -138,7 +138,7 @@ export default async proxy => {
             myshows: service.myshows.url + id,
         };
 
-        parsed[i].networks = show.networks.map(elem => elem.name).join(', ');
+        parsed[i].networks = show.networks.map(elem => elem.name);
         parsed[i].genres = show.genres.map(elem => elem.name).slice(0, service.tmdb.genresCount);
         parsed[i].overview = data.overview;
         parsed[i].companies = show.production_companies.map(elem => elem.name);
