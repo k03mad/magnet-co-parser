@@ -48,3 +48,6 @@ td {
     border-radius: 5px;
     padding: 10px;
 }
+hr {
+    border: 1px dashed gray;
+}

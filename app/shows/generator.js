@@ -33,7 +33,12 @@ export default async data => {
 
         pasteSerial.push(
             html.photos(show.photos),
-            html.info([show.networks.join(', '), show.overview, show.genres.join(', ')]),
+            html.info([
+                `${show.companies.join(', ')} (${show.countries.join(', ')})`,
+                show.networks.join(', '),
+                show.overview,
+                show.genres.join(', '),
+            ]),
             html.table(show.rutor),
         );
 

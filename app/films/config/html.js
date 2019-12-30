@@ -29,7 +29,7 @@ export default {
 
     info: data => `
         <div id="info">
-            ${data.filter(Boolean).map((elem, i) => i === 0 ? elem : `<p>${elem}</p>`).join(' ')}
+            ${data.filter(Boolean).join('<hr><p>')}
         </div>
     `,
 

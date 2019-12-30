@@ -44,7 +44,12 @@ export default async data => {
 
             pasteFilm.push(
                 html.photos(film.photos),
-                html.info([film.tagline, film.overview, film.genres.join(', ')]),
+                html.info([
+                    `${film.companies.join(', ')} (${film.countries.join(', ')})`,
+                    film.tagline,
+                    film.overview,
+                    film.genres.join(', '),
+                ]),
                 html.table(film.rutor),
             );
 
