@@ -15,7 +15,7 @@
 		"colorette": "1.1.0",
 		"moment": "2.24.0",
 		"ms": "2.1.2",
-		"utils-mad": "3.2.0"
+		"utils-mad": "3.3.0"
 	},
 	"devDependencies": {
 		"eslint": "6.8.0",
