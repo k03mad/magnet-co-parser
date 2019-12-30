@@ -41,5 +41,5 @@
 		"lint"
 	],
   "license": "Unlicense",
-  "eslintIgnore": ["/www/**"]
+  "eslintIgnore": ["/www/**/*"]
 }
