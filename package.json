@@ -40,6 +40,5 @@
 	"pre-commit": [
 		"lint"
 	],
-  "license": "Unlicense",
-  "eslintIgnore": ["/www/**/*"]
+  "license": "Unlicense"
 }
