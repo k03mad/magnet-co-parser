@@ -1,5 +1,6 @@
 import c from 'colorette';
 import cheerio from 'cheerio';
+import countries from 'i18n-iso-countries';
 import ms from 'ms';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
@@ -142,7 +143,7 @@ export default async proxy => {
         parsed[i].genres = show.genres.map(elem => elem.name).slice(0, service.tmdb.genresCount);
         parsed[i].overview = data.overview;
         parsed[i].companies = show.production_companies.map(elem => elem.name);
-        parsed[i].countries = show.origin_country;
+        parsed[i].countries = show.origin_country.map(elem => countries.getName(elem, 'ru'));
 
         parsed[i].photos = [
             ...new Set(cast
