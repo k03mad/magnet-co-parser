@@ -1,5 +1,4 @@
 .DS_Store
 /node_modules
-/_cache
 /www/generated
 /parsed
