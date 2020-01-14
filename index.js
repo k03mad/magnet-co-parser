@@ -26,7 +26,7 @@ import utils from 'utils-mad';
         // иначе парсим
         } else {
 
-            const [proxy] = await utils.request.proxy({testUrl: filmsRutorConfig.url});
+            const proxy = await utils.request.proxy({testUrl: filmsRutorConfig.url});
 
             [filmsData, showsData] = await Promise.all([
                 filmsParse(proxy),
