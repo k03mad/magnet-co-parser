@@ -1,6 +1,7 @@
 import c from 'colorette';
 import cheerio from 'cheerio';
 import countries from 'i18n-iso-countries';
+import debug from 'debug';
 import moment from 'moment';
 import ms from 'ms';
 import rutor from './config/rutor.js';
@@ -12,6 +13,8 @@ import utils from 'utils-mad';
  * @returns {Function}
  */
 export default async proxy => {
+    const printDebug = debug('utils-mad:magnet:films:parse');
+
     moment.locale('ru');
     const date = new Date();
     const startTime = utils.date.now();
@@ -22,7 +25,10 @@ export default async proxy => {
     await Promise.all(rutor.search.categories.map(async cat => {
         for (let page = 0; page < rutor.search.pages; page++) {
 
-            const rutorUrl = rutor.search.url(page, cat) + rutor.search.query + rutor.search.quality;
+            const rutorUrl = cat === 5
+                ? rutor.search.url(page, cat) + rutor.search.queries.rus + rutor.search.quality
+                : rutor.search.url(page, cat) + rutor.search.queries.default + rutor.search.quality;
+
             const rutorProxyUrl = proxy + encodeURIComponent(rutorUrl);
 
             const {body} = await utils.request.got(rutorProxyUrl, {timeout: rutor.timeout, headers: {
@@ -60,8 +66,14 @@ export default async proxy => {
                         : rutor.domain + href;
 
                     const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
-                    matched.groups.quality = quality.replace(/ от .+/, '');
-                    matched.groups.tags = tags.join(rutor.tagSplit).replace(rutor.comments, '');
+
+                    matched.groups.quality = quality
+                        .replace(/ от .+/, '')
+                        .replace(rutor.comments, '');
+
+                    matched.groups.tags = tags
+                        .join(rutor.tagSplit)
+                        .replace(rutor.comments, '');
 
                     if (films[matched.groups.name]) {
                         films[matched.groups.name].rutor.push({...matched.groups});
@@ -84,7 +96,12 @@ export default async proxy => {
         return sortings.b - sortings.a;
     });
 
+    let counter = 0;
+
     for (const [key, value] of sorted) {
+        counter++;
+        printDebug(`FILM ${counter}/${sorted.length}`);
+
         if (parsed.length === rutor.filmsCount) {
             break;
         }

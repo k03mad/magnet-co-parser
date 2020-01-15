@@ -58,7 +58,7 @@ export default {
                     <td align="right">${elem.seed}</td>
                     <td>${elem.year}</td>
                     <td>${elem.name}</td>
-                    <td>${elem.tags}</td>
+                    ${elem.tags ? `<td>${elem.tags}</td>` : ''}
                     <td>${elem.quality}</td>
                     <td align="right">${elem.size}</td>
                 </tr>
