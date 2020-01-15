@@ -34,8 +34,7 @@ export default {
         },
         quality: ' 1080p',
         pages: 20,
-        // зарубежные фильмы, наши фильмы, мультипликация
-        categories: [1, 5, 7],
+        categories: [1, 5, 6, 7, 10, 12],
     },
     selectors: {
         td: '.gai, .tum',
@@ -50,5 +49,5 @@ export default {
 
     timeout: 20000,
     filmsCount: Infinity,
-    pageCovers: 40,
+    pageCovers: 42,
 };
