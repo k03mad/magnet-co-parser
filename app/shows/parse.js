@@ -158,11 +158,13 @@ export default async proxy => {
             ),
         ];
 
-        parsed[i].kp = {
-            id: kinopoiskId,
-            url: service.kp.url + kinopoiskId,
-            rating: service.kp.rating(kinopoiskId),
-        };
+        if (kinopoiskId) {
+            parsed[i].kp = {
+                id: kinopoiskId,
+                url: service.kp.url + kinopoiskId,
+                rating: service.kp.rating(kinopoiskId),
+            };
+        }
     }
 
     const withMagnet = parsed.filter(elem => elem.rutor.length > 0);
