@@ -8,11 +8,8 @@ import rutor from './config/rutor.js';
 import service from './config/service.js';
 import utils from 'utils-mad';
 
-/**
- * @param {string} proxy
- * @returns {Function}
- */
-export default async proxy => {
+/** @returns {Function} */
+export default async () => {
     const printDebug = debug('utils-mad:magnet:films:parse');
 
     moment.locale('ru');
@@ -29,11 +26,10 @@ export default async proxy => {
                 ? rutor.search.url(page, cat) + rutor.search.queries.rus + rutor.search.quality
                 : rutor.search.url(page, cat) + rutor.search.queries.default + rutor.search.quality;
 
-            const rutorProxyUrl = proxy + encodeURIComponent(rutorUrl);
-
-            const {body} = await utils.request.got(rutorProxyUrl, {timeout: rutor.timeout, headers: {
-                'user-agent': utils.ua.win.chrome,
-            }});
+            const {body} = await utils.request.got(rutorUrl, {
+                timeout: rutor.timeout,
+                headers: {'user-agent': utils.ua.win.chrome},
+            });
 
             const $ = cheerio.load(body);
 
@@ -63,7 +59,7 @@ export default async proxy => {
                     const href = $(elem).find(rutor.selectors.link).attr('href');
                     matched.groups.link = href.includes(rutor.domain)
                         ? decodeURIComponent(href).replace(new RegExp(`.+${rutor.domain}`), rutor.url)
-                        : rutor.domain + href;
+                        : rutor.url + href;
 
                     const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
 
@@ -112,7 +108,7 @@ export default async proxy => {
         const filmdb = {};
 
         for (const {link} of value.rutor) {
-            const {body} = await utils.request.cache(proxy + encodeURIComponent(link), {headers: {
+            const {body} = await utils.request.cache(link, {headers: {
                 'user-agent': utils.ua.win.chrome,
             }});
 
@@ -196,7 +192,6 @@ export default async proxy => {
                     rutor: value.rutor,
                     urls: {
                         rutor: rutorUrl,
-                        proxy: proxy + encodeURIComponent(rutorUrl),
                         rutracker: service.rutracker.url + title + rutor.search.quality,
                     },
                     ...filmdb,

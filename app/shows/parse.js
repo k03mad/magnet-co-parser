@@ -6,12 +6,8 @@ import rutor from './config/rutor.js';
 import service from './config/service.js';
 import utils from 'utils-mad';
 
-/**
- * Парсинг трекера
- * @param {string} proxy
- * @returns {Function}
- */
-export default async proxy => {
+/** @returns {Function} */
+export default async () => {
     const date = new Date();
     const startTime = utils.date.now();
 
@@ -28,12 +24,11 @@ export default async proxy => {
      */
     const getRutorElems = async (quality, titleOriginal) => {
         const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
-        const rutorProxyUrl = proxy + encodeURIComponent(rutorUrl);
 
-        const {body} = await utils.request.got(rutorProxyUrl, {timeout: rutor.timeout, headers: {
+        const {body} = await utils.request.got(rutorUrl, {timeout: rutor.timeout, headers: {
             'user-agent': utils.ua.win.chrome,
         }});
-        return {$: cheerio.load(body), rutorUrl, rutorProxyUrl};
+        return {$: cheerio.load(body), rutorUrl};
     };
 
     for (const [i, element] of watching.entries()) {
@@ -107,12 +102,12 @@ export default async proxy => {
             });
         };
 
-        let {$, rutorUrl, rutorProxyUrl} = await getRutorElems(rutor.search.quality.full, titleOriginalExcaped);
+        let {$, rutorUrl} = await getRutorElems(rutor.search.quality.full, titleOriginalExcaped);
         parseGroups($);
 
         // если ничего не нашли — пробуем другое качество
         if (parsed[i].rutor.length === 0) {
-            ({$, rutorUrl, rutorProxyUrl} = await getRutorElems(rutor.search.quality.back, titleOriginalExcaped));
+            ({$, rutorUrl} = await getRutorElems(rutor.search.quality.back, titleOriginalExcaped));
             parseGroups($);
         }
 
@@ -133,7 +128,6 @@ export default async proxy => {
         parsed[i].id = id;
         parsed[i].urls = {
             rutor: rutorUrl,
-            proxy: rutorProxyUrl,
             rutracker: service.rutracker.url + titleOriginal + rutor.search.quality.full,
             lostfilm: service.lostfilm.url + titleOriginal,
             myshows: service.myshows.url + id,
