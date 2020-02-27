@@ -17,7 +17,7 @@
 		"i18n-iso-countries": "4.3.1",
 		"moment": "2.24.0",
 		"ms": "2.1.2",
-		"utils-mad": "6.4.3"
+		"utils-mad": "6.4.5"
 	},
 	"devDependencies": {
 		"eslint": "6.8.0",
@@ -33,8 +33,8 @@
 		"pre-commit": "1.2.2"
 	},
 	"scripts": {
-		"lint": "eslint --report-unused-disable-directives ./ --format codeframe && echo '\n\\033[34mESLinted!\\033[39m\n'",
-		"setup": "pnpm i",
+		"lint": "eslint --report-unused-disable-directives ./ --format codeframe",
+		"setup": "pnpm i && pnpm prune",
 		"parse": "node index.js",
 		"server": "pm2 start pm2.json",
 		"start": "npm run parse && npm run server"
