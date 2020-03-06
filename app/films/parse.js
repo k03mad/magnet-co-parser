@@ -20,7 +20,7 @@ export default async () => {
     const parsed = [];
 
     await Promise.all(rutor.search.categories.map(async cat => {
-        for (let page = 0; page < rutor.search.pages; page++) {
+        await Promise.all([...new Array(rutor.search.pages).keys()].map(async page => {
 
             const rutorUrl = cat === 5
                 ? rutor.search.url(page, cat) + rutor.search.queries.rus + rutor.search.quality
@@ -33,54 +33,51 @@ export default async () => {
 
             const $ = cheerio.load(body);
 
-            if ($(rutor.selectors.td).contents().length === 0) {
-                break;
+            if ($(rutor.selectors.td).contents().length !== 0) {
+                $(rutor.selectors.td).each((_, elem) => {
+                    const td = $(elem)
+                        .text()
+                        .replace(/\s+/g, ' ')
+                        .trim();
+
+                    const matched = td.match(rutor.regexp);
+
+                    if (
+                        matched
+                    && matched.groups.name
+                    ) {
+                        matched.groups.magnet = decodeURIComponent(
+                            $(elem)
+                                .find(rutor.selectors.magnet)
+                                .attr('href')
+                                .replace(/.+magnet/, 'magnet'),
+                        );
+
+                        const href = $(elem).find(rutor.selectors.link).attr('href');
+                        matched.groups.link = href.includes(rutor.domain)
+                            ? decodeURIComponent(href).replace(new RegExp(`.+${rutor.domain}`), rutor.url)
+                            : rutor.url + href;
+
+                        const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
+
+                        matched.groups.quality = quality
+                            .replace(/ от .+/, '')
+                            .replace(rutor.comments, '');
+
+                        matched.groups.tags = tags
+                            .join(rutor.tagSplit)
+                            .replace(rutor.comments, '');
+
+                        if (films[matched.groups.name]) {
+                            films[matched.groups.name].rutor.push({...matched.groups});
+                        } else {
+                            films[matched.groups.name] = {rutor: [{...matched.groups}]};
+                        }
+                    }
+                });
             }
 
-            $(rutor.selectors.td).each((_, elem) => {
-                const td = $(elem)
-                    .text()
-                    .replace(/\s+/g, ' ')
-                    .trim();
-
-                const matched = td.match(rutor.regexp);
-
-                if (
-                    matched
-                    && matched.groups.name
-                ) {
-                    matched.groups.magnet = decodeURIComponent(
-                        $(elem)
-                            .find(rutor.selectors.magnet)
-                            .attr('href')
-                            .replace(/.+magnet/, 'magnet'),
-                    );
-
-                    const href = $(elem).find(rutor.selectors.link).attr('href');
-                    matched.groups.link = href.includes(rutor.domain)
-                        ? decodeURIComponent(href).replace(new RegExp(`.+${rutor.domain}`), rutor.url)
-                        : rutor.url + href;
-
-                    const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
-
-                    matched.groups.quality = quality
-                        .replace(/ от .+/, '')
-                        .replace(rutor.comments, '');
-
-                    matched.groups.tags = tags
-                        .join(rutor.tagSplit)
-                        .replace(rutor.comments, '');
-
-                    if (films[matched.groups.name]) {
-                        films[matched.groups.name].rutor.push({...matched.groups});
-                    } else {
-                        films[matched.groups.name] = {rutor: [{...matched.groups}]};
-                    }
-                }
-
-            });
-
-        }
+        }));
     }));
 
     const sorted = Object.entries(films).sort((a, b) => {
