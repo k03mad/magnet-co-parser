@@ -49,5 +49,6 @@ export default {
 
     timeout: 20000,
     filmsCount: Infinity,
+    concurrency: 5,
     pageCovers: 42,
 };

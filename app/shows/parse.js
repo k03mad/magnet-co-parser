@@ -2,6 +2,7 @@ import c from 'colorette';
 import cheerio from 'cheerio';
 import countries from 'i18n-iso-countries';
 import ms from 'ms';
+import pMap from 'p-map';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 import utils from 'utils-mad';
@@ -31,7 +32,8 @@ export default async () => {
         return {$: cheerio.load(body), rutorUrl};
     };
 
-    for (const [i, element] of watching.entries()) {
+    await pMap(watching.entries(), async ([i, element]) => {
+
         const {title, titleOriginal, episodesToWatch, id, kinopoiskId, imdbId} = element.show;
         const {seasonNumber} = episodesToWatch[episodesToWatch.length - 1];
 
@@ -121,10 +123,8 @@ export default async () => {
             [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, caching: true});
         }
 
-        const [show, {cast}] = await Promise.all([
-            utils.tmdb.get({path: `tv/${data.id}`, caching: true}),
-            utils.tmdb.get({path: `tv/${data.id}/credits`, caching: true}),
-        ]);
+        const show = await utils.tmdb.get({path: `tv/${data.id}`, caching: true});
+        const {cast} = await utils.tmdb.get({path: `tv/${data.id}/credits`, caching: true});
 
         parsed[i].cover = service.tmdb.cover + data.poster_path;
         parsed[i].id = id;
@@ -161,7 +161,8 @@ export default async () => {
                 rating: service.kp.rating(kinopoiskId),
             };
         }
-    }
+
+    }, {concurrency: rutor.concurrency});
 
     const withMagnet = parsed.filter(elem => elem.rutor.length > 0);
 

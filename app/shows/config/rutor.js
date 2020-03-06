@@ -17,5 +17,6 @@ export default {
     comments: / \d+$/,
 
     timeout: 20000,
+    concurrency: 5,
     tagSplit: ' | ',
 };

@@ -6,6 +6,7 @@ dependencies:
   i18n-iso-countries: 4.3.1
   moment: 2.24.0
   ms: 2.1.2
+  p-map: 4.0.0
   utils-mad: 7.1.0
 devDependencies:
   eslint: 6.8.0
@@ -1461,6 +1462,14 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-d3qXVTF/s+W+CdJ5A29wywV2n8CQQYahlgz2bFiA+4eVNJbHJodPZ+/gXwPGh0bOqA+j8S+6+ckmvLGPk1QpxQ==
+  /p-map/4.0.0:
+    dependencies:
+      aggregate-error: 3.0.1
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-/bjOqmgETBYB5BoEeGVea8dmvHb2m9GLy1E9W43yeyfP6QQCZGFNa+XRceJEuDB6zqr+gKpIAmlLebMpykw/MQ==
   /p-timeout/2.0.1:
     dependencies:
       p-finally: 1.0.0
@@ -2093,5 +2102,6 @@ specifiers:
   i18n-iso-countries: 4.3.1
   moment: 2.24.0
   ms: 2.1.2
+  p-map: 4.0.0
   pre-commit: 1.2.2
   utils-mad: 7.1.0
