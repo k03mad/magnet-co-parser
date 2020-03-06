@@ -159,8 +159,10 @@ export default async () => {
 
             if (!double) {
 
-                const movie = await utils.tmdb.get({path: `movie/${data.id}`, caching: true});
-                const {cast} = await utils.tmdb.get({path: `movie/${data.id}/credits`, caching: true});
+                const [movie, {cast}] = await Promise.all([
+                    utils.tmdb.get({path: `movie/${data.id}`, caching: true}),
+                    utils.tmdb.get({path: `movie/${data.id}/credits`, caching: true}),
+                ]);
 
                 // первая страница, без категории, все слова
                 const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;

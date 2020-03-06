@@ -121,8 +121,10 @@ export default async () => {
             [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, caching: true});
         }
 
-        const show = await utils.tmdb.get({path: `tv/${data.id}`, caching: true});
-        const {cast} = await utils.tmdb.get({path: `tv/${data.id}/credits`, caching: true});
+        const [show, {cast}] = await Promise.all([
+            utils.tmdb.get({path: `tv/${data.id}`, caching: true}),
+            utils.tmdb.get({path: `tv/${data.id}/credits`, caching: true}),
+        ]);
 
         parsed[i].cover = service.tmdb.cover + data.poster_path;
         parsed[i].id = id;

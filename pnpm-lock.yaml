@@ -6,7 +6,7 @@ dependencies:
   i18n-iso-countries: 4.3.1
   moment: 2.24.0
   ms: 2.1.2
-  utils-mad: 7.0.2
+  utils-mad: 7.1.0
 devDependencies:
   eslint: 6.8.0
   eslint-config-k03mad: 3.3.1_d790d305902bc58dc2d21dc49fbb1cd8
@@ -2001,7 +2001,7 @@ packages:
   /util-deprecate/1.0.2:
     resolution:
       integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
-  /utils-mad/7.0.2:
+  /utils-mad/7.1.0:
     dependencies:
       cheerio: 1.0.0-rc.3
       colorette: 1.1.0
@@ -2021,7 +2021,7 @@ packages:
     engines:
       node: '>=13'
     resolution:
-      integrity: sha512-XFNoWnuJfzQQD7BZuAYo/sdsA2UlLhvoDQ0QodIsRs0FLqNYoqLjd8KtKCF15zVCRZPzKfBQpChpvm5XN2CQRg==
+      integrity: sha512-a6s5jh3N//CMpkRFSklfzv4lA9vJRKsx71MvSTlVHq4db/PVowTnfXJd0+uC4U6iR/jAOwcG6E4vylMngM/iPQ==
   /v8-compile-cache/2.1.0:
     dev: true
     resolution:
@@ -2094,4 +2094,4 @@ specifiers:
   moment: 2.24.0
   ms: 2.1.2
   pre-commit: 1.2.2
-  utils-mad: 7.0.2
+  utils-mad: 7.1.0
