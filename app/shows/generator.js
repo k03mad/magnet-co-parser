@@ -25,22 +25,18 @@ export default async data => {
             ? foundIndex.push({href: pageRelPath, src: show.cover})
             : notFoundIndex.push({href: pageRelPath, src: show.cover, notfound: true});
 
-        const pasteSerial = [html.url(show.urls)];
-
-        if (show.kp && show.kp.rating) {
-            pasteSerial.push(html.rating(show.kp.url, show.kp.rating));
-        }
-
-        pasteSerial.push(
+        const pasteSerial = [
+            html.url(show.urls),
+            show.kp && show.kp.rating ? html.rating(show.kp.url, show.kp.rating) : '',
             html.photos(show.photos),
             html.info([
-                `${show.companies.join(', ')} (${show.countries.join(', ')})`,
+                show.countries.join(', '),
                 show.networks.join(', '),
                 show.overview,
                 show.genres.join(', '),
-            ]),
+            ].filter(Boolean)),
             html.table(show.rutor),
-        );
+        ];
 
         const generatedPage = page.toString().replace(html.placeholder, pasteSerial.join(''));
         await fs.promises.writeFile(pageAbsPath, generatedPage);

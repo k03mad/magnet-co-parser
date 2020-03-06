@@ -36,22 +36,19 @@ export default async data => {
 
             pageCovers.push({href: pageRelPath, src: film.cover});
 
-            const pasteFilm = [html.url(film.urls)];
-
-            if (film.kp && film.kp.rating) {
-                pasteFilm.push(html.rating(film.kp.url, film.kp.rating));
-            }
-
-            pasteFilm.push(
+            const pasteFilm = [
+                html.url(film.urls),
+                film.kp && film.kp.rating ? html.rating(film.kp.url, film.kp.rating) : '',
                 html.photos(film.photos),
                 html.info([
-                    `${film.companies.join(', ')} (${film.countries.join(', ')})`,
+                    film.countries.join(', '),
+                    film.companies.join(', '),
                     film.tagline,
                     film.overview,
                     film.genres.join(', '),
-                ]),
+                ].filter(Boolean)),
                 html.table(film.rutor),
-            );
+            ];
 
             const generatedPage = page.toString().replace(html.placeholder, pasteFilm.join(''));
             return fs.promises.writeFile(pageAbsPath, generatedPage);
