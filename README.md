@@ -1,1 +1,1 @@
-¯\_(ツ)_/¯
+Magnet links parser & local page generator
