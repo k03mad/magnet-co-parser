@@ -3,22 +3,21 @@ dependencies:
   cheerio: 1.0.0-rc.3
   colorette: 1.1.0
   debug: 4.1.1
-  i18n-iso-countries: 4.3.1
+  i18n-iso-countries: 5.0.0
   moment: 2.24.0
   ms: 2.1.2
   p-map: 4.0.0
-  utils-mad: 7.1.0
+  utils-mad: 7.2.2
 devDependencies:
   eslint: 6.8.0
-  eslint-config-k03mad: 3.3.1_d790d305902bc58dc2d21dc49fbb1cd8
+  eslint-config-k03mad: 4.0.0_e59f1c05a056505530ca9221db891a63
   eslint-plugin-const-case: 1.2.2
   eslint-plugin-jsdoc: 22.0.0_eslint@6.8.0
   eslint-plugin-node: 11.0.0_eslint@6.8.0
-  eslint-plugin-optimize-regex: 1.1.7
   eslint-plugin-promise: 4.2.1
   eslint-plugin-sonarjs: 0.5.0_eslint@6.8.0
   eslint-plugin-sort-requires: 2.1.0
-  eslint-plugin-unicorn: 16.1.1_eslint@6.8.0
+  eslint-plugin-unicorn: 17.1.0_eslint@6.8.0
   pre-commit: 1.2.2
 lockfileVersion: 5.1
 packages:
@@ -548,30 +547,28 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-otzzTim2/1+lVrlH19EfQQJEhVJSu0zOb9ygb3iapN6UlyaDtyRq4b5U1FuW0v1lRa9Fp/GJyHkSwm6NqABgCA==
-  /eslint-config-k03mad/3.3.1_d790d305902bc58dc2d21dc49fbb1cd8:
+  /eslint-config-k03mad/4.0.0_e59f1c05a056505530ca9221db891a63:
     dependencies:
       eslint: 6.8.0
       eslint-plugin-const-case: 1.2.2
       eslint-plugin-jsdoc: 22.0.0_eslint@6.8.0
       eslint-plugin-node: 11.0.0_eslint@6.8.0
-      eslint-plugin-optimize-regex: 1.1.7
       eslint-plugin-promise: 4.2.1
       eslint-plugin-sonarjs: 0.5.0_eslint@6.8.0
       eslint-plugin-sort-requires: 2.1.0
-      eslint-plugin-unicorn: 16.1.1_eslint@6.8.0
+      eslint-plugin-unicorn: 17.1.0_eslint@6.8.0
     dev: true
     peerDependencies:
       eslint: '>=6.8.0'
       eslint-plugin-const-case: '>=1.2.2'
-      eslint-plugin-jsdoc: '>=20.3.0'
+      eslint-plugin-jsdoc: '>=22.0.0'
       eslint-plugin-node: '>=11.0.0'
-      eslint-plugin-optimize-regex: '>=1.1.7'
       eslint-plugin-promise: '>=4.2.1'
       eslint-plugin-sonarjs: '>=0.5.0'
       eslint-plugin-sort-requires: '>=2.1.0'
-      eslint-plugin-unicorn: '>=15.0.1'
+      eslint-plugin-unicorn: '>=17.1.0'
     resolution:
-      integrity: sha512-3hsLnMXi7YTqMsExxmJUgFYcgdOm7Yt1oIO1gR/ZNDBXONddPVD7zYCvD0L0irI/9kK9oc65triuoZ5XVQQT4A==
+      integrity: sha512-t6Af9RUr2dKQuVJZRM8ypnLtmQDxhcfvaqT7OueasyRJBb0lg/cskuf4qpduOzLEtg0FNbLWOwGMTgtqfNpfCw==
   /eslint-plugin-const-case/1.2.2:
     dependencies:
       requireindex: 1.2.0
@@ -625,14 +622,6 @@ packages:
       eslint: '>=5.16.0'
     resolution:
       integrity: sha512-chUs/NVID+sknFiJzxoN9lM7uKSOEta8GC8365hw1nDfwIPIjjpRSwwPvQanWv8dt/pDe9EV4anmVSwdiSndNg==
-  /eslint-plugin-optimize-regex/1.1.7:
-    dependencies:
-      regexp-tree: 0.1.11
-    dev: true
-    engines:
-      node: '>=6'
-    resolution:
-      integrity: sha512-YiMp9uerCHqG+EhfQhCNNDyjWkaya2L8ggg0+ou5f1oVu51IK+ziE1VlzaILFVTrhU1llAQw+vNn7cOd73VtwQ==
   /eslint-plugin-promise/4.2.1:
     dev: true
     engines:
@@ -653,7 +642,7 @@ packages:
     dev: true
     resolution:
       integrity: sha1-PvrZSNyDeYIZ6An1QGfEDlVESGE=
-  /eslint-plugin-unicorn/16.1.1_eslint@6.8.0:
+  /eslint-plugin-unicorn/17.1.0_eslint@6.8.0:
     dependencies:
       ci-info: 2.0.0
       clean-regexp: 1.0.0
@@ -661,14 +650,9 @@ packages:
       eslint-ast-utils: 1.1.0
       eslint-template-visitor: 1.1.0_eslint@6.8.0
       import-modules: 2.0.0
-      lodash.camelcase: 4.3.0
-      lodash.defaultsdeep: 4.6.1
-      lodash.kebabcase: 4.1.1
-      lodash.snakecase: 4.1.1
-      lodash.upperfirst: 4.3.1
+      lodash: 4.17.15
       read-pkg-up: 7.0.1
       regexp-tree: 0.1.20
-      regexpp: 3.0.0
       reserved-words: 0.1.2
       safe-regex: 2.1.1
       semver: 7.1.3
@@ -678,7 +662,7 @@ packages:
     peerDependencies:
       eslint: '>=6.7.1'
     resolution:
-      integrity: sha512-IMxCsntb0T8s660Irc40gtzXtxuXHcOn36G9G8OYKfiseBD/kNrA1cNJhsJ0xQteDASGrFwqdzBsYEkUvczhOA==
+      integrity: sha512-yYNgXXSnFY73yvcaAB3z32SOY4km5NDzbY1mCSc6gVrKXgvGdU7K1IMJqQpoOrj2+QzdA1Mz0qLYn/ITGuNSFg==
   /eslint-scope/5.0.0:
     dependencies:
       esrecurse: 4.2.1
@@ -1005,14 +989,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Z2EICWNJou7Tr9Bd2M2UqDJq3A9F2ePG9w3lIpjoyuSyXFP9QbniJVu3XQYytuw5ebmG7dXSXO9PgAjJG8DDKA==
-  /i18n-iso-countries/4.3.1:
+  /i18n-iso-countries/5.0.0:
     dependencies:
       diacritics: 1.3.0
     dev: false
     engines:
-      node: '>= 6'
+      node: '>= 8'
     resolution:
-      integrity: sha512-yxeCvmT8yO1p/epv93c1OHnnYNNMOX6NUNpNfuvzSIcDyripS7OGeKXgzYGd5QI31UK+GBrMG0nPFNv0jrHggw==
+      integrity: sha512-VM2Ag6pt3ESsCiCSozwS2+muIsPqs9f/XF1ZhacUDqB0Q9J0wkIMqTrtCyzesXkaXsn9je7Mgl25qqk2JoB27Q==
   /iconv-lite/0.4.24:
     dependencies:
       safer-buffer: 2.1.2
@@ -1222,30 +1206,10 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
-  /lodash.camelcase/4.3.0:
-    dev: true
-    resolution:
-      integrity: sha1-soqmKIorn8ZRA1x3EfZathkDMaY=
-  /lodash.defaultsdeep/4.6.1:
-    dev: true
-    resolution:
-      integrity: sha512-3j8wdDzYuWO3lM3Reg03MuQR957t287Rpcxp1njpEa8oDrikb+FwGdW3n+FELh/A6qib6yPit0j/pv9G/yeAqA==
   /lodash.get/4.4.2:
     dev: true
     resolution:
       integrity: sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
-  /lodash.kebabcase/4.1.1:
-    dev: true
-    resolution:
-      integrity: sha1-hImxyw0p/4gZXM7KRI/21swpXDY=
-  /lodash.snakecase/4.1.1:
-    dev: true
-    resolution:
-      integrity: sha1-OdcUo1NXFHg3rv1ktdy7Fr7Nj40=
-  /lodash.upperfirst/4.3.1:
-    dev: true
-    resolution:
-      integrity: sha1-E2Xt9DFIBIHvDRxolXpe2Z1J984=
   /lodash.zip/4.2.0:
     dev: true
     resolution:
@@ -1641,11 +1605,6 @@ packages:
       node: '>= 6'
     resolution:
       integrity: sha512-BViHy7LKeTz4oNnkcLJ+lVSL6vpiFeX6/d3oSH8zCW7UxP2onchk+vTGB143xuFjHS3deTgkKoXXymXqymiIdA==
-  /regexp-tree/0.1.11:
-    dev: true
-    hasBin: true
-    resolution:
-      integrity: sha512-7/l/DgapVVDzZobwMCCgMlqiqyLFJ0cduo/j+3BcDJIB+yJdsYCfKuI3l/04NV+H/rfNRdPIDbXNZHM9XvQatg==
   /regexp-tree/0.1.20:
     dev: true
     hasBin: true
@@ -2010,7 +1969,7 @@ packages:
   /util-deprecate/1.0.2:
     resolution:
       integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
-  /utils-mad/7.1.0:
+  /utils-mad/7.2.2:
     dependencies:
       cheerio: 1.0.0-rc.3
       colorette: 1.1.0
@@ -2030,7 +1989,7 @@ packages:
     engines:
       node: '>=13'
     resolution:
-      integrity: sha512-a6s5jh3N//CMpkRFSklfzv4lA9vJRKsx71MvSTlVHq4db/PVowTnfXJd0+uC4U6iR/jAOwcG6E4vylMngM/iPQ==
+      integrity: sha512-bKHLUJ9B6X0+ZR1i76FdtJ4EvineGJSJZ3yQmtHPjGhxOsEKIgXEDTyd+XU1o7kBFLS/PAyQQW8+d/B1aq4EAA==
   /v8-compile-cache/2.1.0:
     dev: true
     resolution:
@@ -2090,18 +2049,17 @@ specifiers:
   colorette: 1.1.0
   debug: 4.1.1
   eslint: 6.8.0
-  eslint-config-k03mad: 3.3.1
+  eslint-config-k03mad: 4.0.0
   eslint-plugin-const-case: 1.2.2
   eslint-plugin-jsdoc: 22.0.0
   eslint-plugin-node: 11.0.0
-  eslint-plugin-optimize-regex: 1.1.7
   eslint-plugin-promise: 4.2.1
   eslint-plugin-sonarjs: 0.5.0
   eslint-plugin-sort-requires: 2.1.0
-  eslint-plugin-unicorn: 16.1.1
-  i18n-iso-countries: 4.3.1
+  eslint-plugin-unicorn: 17.1.0
+  i18n-iso-countries: 5.0.0
   moment: 2.24.0
   ms: 2.1.2
   p-map: 4.0.0
   pre-commit: 1.2.2
-  utils-mad: 7.1.0
+  utils-mad: 7.2.2

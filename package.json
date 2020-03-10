@@ -14,23 +14,22 @@
 		"cheerio": "1.0.0-rc.3",
 		"colorette": "1.1.0",
 		"debug": "4.1.1",
-		"i18n-iso-countries": "4.3.1",
+		"i18n-iso-countries": "5.0.0",
 		"moment": "2.24.0",
 		"ms": "2.1.2",
 		"p-map": "4.0.0",
-		"utils-mad": "7.1.0"
+		"utils-mad": "7.2.2"
 	},
 	"devDependencies": {
 		"eslint": "6.8.0",
-		"eslint-config-k03mad": "3.3.1",
+		"eslint-config-k03mad": "4.0.0",
 		"eslint-plugin-const-case": "1.2.2",
 		"eslint-plugin-jsdoc": "22.0.0",
 		"eslint-plugin-node": "11.0.0",
-		"eslint-plugin-optimize-regex": "1.1.7",
 		"eslint-plugin-promise": "4.2.1",
 		"eslint-plugin-sonarjs": "0.5.0",
 		"eslint-plugin-sort-requires": "2.1.0",
-		"eslint-plugin-unicorn": "16.1.1",
+		"eslint-plugin-unicorn": "17.1.0",
 		"pre-commit": "1.2.2"
 	},
 	"scripts": {
