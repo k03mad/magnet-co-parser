@@ -24,7 +24,7 @@ export default async () => {
      * @returns {object}
      */
     const getRutorElems = async (quality, titleOriginal) => {
-        const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
+        const rutorUrl = rutor.search.url + titleOriginal.replaceAll("'", '') + quality;
 
         const {body} = await utils.request.got(rutorUrl, {timeout: rutor.timeout, headers: {
             'user-agent': utils.ua.win.chrome,
