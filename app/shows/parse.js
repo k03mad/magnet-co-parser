@@ -123,43 +123,45 @@ export default async () => {
             [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, caching: true});
         }
 
-        const show = await utils.tmdb.get({path: `tv/${data.id}`, caching: true});
-        const {cast} = await utils.tmdb.get({path: `tv/${data.id}/credits`, caching: true});
+        if (data) {
+            const show = await utils.tmdb.get({path: `tv/${data.id}`, caching: true});
+            const {cast} = await utils.tmdb.get({path: `tv/${data.id}/credits`, caching: true});
 
-        parsed[i].cover = service.tmdb.cover + data.poster_path;
-        parsed[i].id = id;
-        parsed[i].urls = {
-            rutor: rutorUrl,
-            rutracker: service.rutracker.url + titleOriginal + rutor.search.quality.full,
-            lostfilm: service.lostfilm.url + titleOriginal,
-            myshows: service.myshows.url + id,
-        };
-
-        parsed[i].networks = show.networks.map(elem => elem.name);
-        parsed[i].genres = show.genres.map(elem => elem.name).slice(0, service.tmdb.genresCount);
-        parsed[i].overview = data.overview;
-        parsed[i].companies = show.production_companies.map(elem => elem.name);
-        parsed[i].countries = show.origin_country.map(elem => countries.getName(elem, 'ru'));
-
-        parsed[i].photos = [
-            ...new Set(cast
-                .slice(0, service.tmdb.castCount)
-                .filter(elem => Boolean(elem.profile_path))
-                .map(elem => ({
-                    id: elem.id,
-                    link: service.tmdb.person + elem.id,
-                    name: elem.name,
-                    cover: service.tmdb.cover + elem.profile_path,
-                })),
-            ),
-        ];
-
-        if (kinopoiskId) {
-            parsed[i].kp = {
-                id: kinopoiskId,
-                url: service.kp.url + kinopoiskId,
-                rating: service.kp.rating(kinopoiskId),
+            parsed[i].cover = service.tmdb.cover + data.poster_path;
+            parsed[i].id = id;
+            parsed[i].urls = {
+                rutor: rutorUrl,
+                rutracker: service.rutracker.url + titleOriginal + rutor.search.quality.full,
+                lostfilm: service.lostfilm.url + titleOriginal,
+                myshows: service.myshows.url + id,
             };
+
+            parsed[i].networks = show.networks.map(elem => elem.name);
+            parsed[i].genres = show.genres.map(elem => elem.name).slice(0, service.tmdb.genresCount);
+            parsed[i].overview = data.overview;
+            parsed[i].companies = show.production_companies.map(elem => elem.name);
+            parsed[i].countries = show.origin_country.map(elem => countries.getName(elem, 'ru'));
+
+            parsed[i].photos = [
+                ...new Set(cast
+                    .slice(0, service.tmdb.castCount)
+                    .filter(elem => Boolean(elem.profile_path))
+                    .map(elem => ({
+                        id: elem.id,
+                        link: service.tmdb.person + elem.id,
+                        name: elem.name,
+                        cover: service.tmdb.cover + elem.profile_path,
+                    })),
+                ),
+            ];
+
+            if (kinopoiskId) {
+                parsed[i].kp = {
+                    id: kinopoiskId,
+                    url: service.kp.url + kinopoiskId,
+                    rating: service.kp.rating(kinopoiskId),
+                };
+            }
         }
 
     }, {concurrency: rutor.concurrency});
