@@ -12,7 +12,7 @@ export default {
         page: `${appRoot}/templates/page.html`,
     },
     www: {
-        noposter: id => `${appRoot}/www/generated/${id}.png`,
+        noposter: id => `../${id}.png`,
         folder: `${appRoot}/www/generated/`,
         list: `${appRoot}/www/generated/shows/list.html`,
         pages: `${appRoot}/www/generated/shows/pages`,
