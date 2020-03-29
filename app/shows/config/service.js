@@ -18,4 +18,13 @@ export default {
     lostfilm: {
         url: 'http://www.lostfilm.tv/search/?q=',
     },
+    poster: {
+        opts: {
+            customHeight: 300,
+            maxWidth: 200,
+            textAlign: 'center',
+            fontFamily: 'Arial',
+            fontSize: 25,
+        },
+    },
 };
