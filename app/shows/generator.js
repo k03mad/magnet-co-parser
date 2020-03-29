@@ -1,9 +1,7 @@
-import base64Img from 'base64-img-promise';
+import Jimp from 'jimp';
 import fs from 'fs';
 import html from './config/html.js';
 import paths from './config/paths.js';
-import service from './config/service.js';
-import tti from 'text-to-image';
 
 /**
  * @param {object} data
@@ -25,8 +23,16 @@ export default async data => {
         const pageRelPath = `${paths.getRel(paths.www.pages)}/${show.id}.html`;
 
         if (!show.cover) {
-            const img = await tti.generate(show.titleGenerated, service.poster.opts);
-            await base64Img.img(img, paths.www.folder, show.id);
+            const noposter = await Jimp.read(paths.templates.noposter);
+            const font = await Jimp.loadFont(paths.templates.font);
+
+            const withText = await noposter.print(font, 0, 0, {
+                text: show.titleGenerated,
+                alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+                alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE,
+            }, 200, 300);
+
+            await withText.writeAsync(`${paths.www.folder + show.id}.png`);
 
             show.cover = paths.www.noposter(show.id);
         }

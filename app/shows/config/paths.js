@@ -5,12 +5,14 @@ export default {
         folder: `${appRoot}/parsed/`,
     },
     templates: {
+        font: `${appRoot}/templates/font.fnt`,
+        noposter: `${appRoot}/templates/no-poster.png`,
         folder: `${appRoot}/templates/`,
         list: `${appRoot}/templates/list.html`,
         page: `${appRoot}/templates/page.html`,
     },
     www: {
-        noposter: img => `../${img}.png`,
+        noposter: id => `${appRoot}/www/generated/${id}.png`,
         folder: `${appRoot}/www/generated/`,
         list: `${appRoot}/www/generated/shows/list.html`,
         pages: `${appRoot}/www/generated/shows/pages`,

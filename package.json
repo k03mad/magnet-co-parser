@@ -11,15 +11,14 @@
   "type": "module",
   "dependencies": {
     "app-root-path": "3.0.0",
-    "base64-img-promise": "1.0.5",
     "cheerio": "1.0.0-rc.3",
     "colorette": "1.1.0",
     "debug": "4.1.1",
     "i18n-iso-countries": "5.1.0",
+    "jimp": "0.9.8",
     "moment": "2.24.0",
     "ms": "2.1.2",
     "p-map": "4.0.0",
-    "text-to-image": "2.2.0",
     "utils-mad": "7.4.0"
   },
   "devDependencies": {
