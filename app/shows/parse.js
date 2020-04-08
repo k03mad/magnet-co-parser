@@ -75,6 +75,8 @@ export default async () => {
                     const [, episodes] = matched.groups.name.match(rutor.episodes);
 
                     matched.groups.episodes = episodes
+                        // 01-15 => s01 e01-15
+                        .replace(/^(\d+-.+)$/, 's01 e$1')
                         // S01 => s01
                         // 01x01-05 / 7 => s01x01-05 / 7
                         .replace(/^S?(\d+)/, 's$1')
