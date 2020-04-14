@@ -55,6 +55,6 @@ import utils from 'utils-mad';
         ]);
 
     } catch (err) {
-        utils.print.ex(err, {exit: true, full: true});
+        utils.print.ex(err, {exit: true});
     }
 })();
