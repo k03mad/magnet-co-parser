@@ -14,12 +14,12 @@
     "cheerio": "1.0.0-rc.3",
     "colorette": "1.1.0",
     "debug": "4.1.1",
-    "i18n-iso-countries": "5.1.0",
-    "jimp": "0.10.2",
+    "i18n-iso-countries": "5.2.0",
+    "jimp": "0.10.3",
     "moment": "2.24.0",
     "ms": "2.1.2",
     "p-map": "4.0.0",
-    "utils-mad": "7.4.6"
+    "utils-mad": "7.5.2"
   },
   "devDependencies": {
     "eslint": "6.8.0",

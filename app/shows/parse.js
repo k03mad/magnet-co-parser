@@ -37,9 +37,12 @@ export default async () => {
         const {title, titleOriginal, episodesToWatch, id, kinopoiskId, imdbId} = element.show;
         const {seasonNumber} = episodesToWatch[episodesToWatch.length - 1];
 
-        // рутор не понимает звездочки в названии
-        // The End Of The F***ing World => The End Of The F World
-        const titleOriginalExcaped = titleOriginal.replace(/(?=.+)(\*.+) /, ' ');
+        const titleOriginalEscaped = titleOriginal
+            // The End Of The F***ing World => The End Of The F World
+            .replace(/(?=.+)(\*.+) /, ' ')
+            // Project "А" => Project A
+            .replace(/["«»]/g, '');
+
         const titleGenerated = title === titleOriginal ? title : `${title} / ${titleOriginal}`;
 
         seriesList.push(titleGenerated);
@@ -106,12 +109,12 @@ export default async () => {
             });
         };
 
-        let {$, rutorUrl} = await getRutorElems(rutor.search.quality.full, titleOriginalExcaped);
+        let {$, rutorUrl} = await getRutorElems(rutor.search.quality.full, titleOriginalEscaped);
         parseGroups($);
 
         // если ничего не нашли — пробуем другое качество
         if (parsed[i].rutor.length === 0) {
-            ({$, rutorUrl} = await getRutorElems(rutor.search.quality.back, titleOriginalExcaped));
+            ({$, rutorUrl} = await getRutorElems(rutor.search.quality.back, titleOriginalEscaped));
             parseGroups($);
         }
 
