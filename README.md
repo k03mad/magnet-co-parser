@@ -1,1 +1,1 @@
-Magnet links parser and local page generator
+Magnet links parser & local page generator
