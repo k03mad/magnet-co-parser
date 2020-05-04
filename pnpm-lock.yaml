@@ -8,7 +8,7 @@ dependencies:
   moment: 2.25.3
   ms: 2.1.2
   p-map: 4.0.0
-  utils-mad: 7.6.0
+  utils-mad: 7.6.1
 devDependencies:
   eslint: 6.8.0
   eslint-config-k03mad: 4.2.0_c920e3be4c1636cf07f4a70519e0204e
@@ -1396,7 +1396,7 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-7dUi7RvCoT/xast/o/dLN53oqND4yk0nsHkhRgn9w65C4PofCLOoJ39iSOg+qVDdWQPIEj+eszMHQ+aLVwwQSg==
-  /got/11.0.2:
+  /got/11.1.0:
     dependencies:
       '@sindresorhus/is': 2.1.0
       '@szmarczak/http-timer': 4.0.5
@@ -1414,7 +1414,7 @@ packages:
     engines:
       node: '>=10.19.0'
     resolution:
-      integrity: sha512-zOanxiJs1LaBAiKsV43UUw/oRlyRNtJFeuATahfi4c3MTremj09eAeJBSJ7GR2oEMhrLLRSJpz8fQaojVDijjw==
+      integrity: sha512-9lZDzFe43s6HH60tSurUk04kEtssfLiIfMiY5lSE0+vVaDCmT7+0xYzzlHY5VArSiz41mQQC38LefW2KoE9erw==
   /graceful-fs/4.2.3:
     dev: false
     resolution:
@@ -1811,10 +1811,6 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-iG9AK/dJLtJ0XNgTuDbSyNS3zECqDlAhnQW4CsNxBG3LQJBbHmRX1egw39DmtOdCAqY+dKXV+sgPgilNWUKMVw==
-  /moment/2.24.0:
-    dev: false
-    resolution:
-      integrity: sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
   /moment/2.25.3:
     dev: false
     resolution:
@@ -2541,16 +2537,16 @@ packages:
   /util-deprecate/1.0.2:
     resolution:
       integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
-  /utils-mad/7.6.0:
+  /utils-mad/7.6.1:
     dependencies:
       cheerio: 1.0.0-rc.3
       colorette: 1.1.0
       debug: 4.1.1
       del: 5.1.0
-      got: 11.0.2
+      got: 11.1.0
       json-cycle: 1.3.0
       make-dir: 3.1.0
-      moment: 2.24.0
+      moment: 2.25.3
       nano-time: 1.0.0
       node-routeros: 1.6.8
       pretty-bytes: 5.3.0
@@ -2561,7 +2557,7 @@ packages:
     engines:
       node: '>=14'
     resolution:
-      integrity: sha512-VpYu8H0+S6p4+BwcFjYt/oWPGYhqOzJA3A44M9IncAKTTPsrXVdlXl8Z6AXtV6UU4riB5NyLbF4cNWytmom6Dg==
+      integrity: sha512-dtDAdrQPObGV7VfFFgaQgI4aAjZOarNIUBWZUjNleFs3EhxGYqpzZx3c2+szyhuJc9Q0nnbpf45yB9L1wIOSeA==
   /v8-compile-cache/2.1.0:
     dev: true
     resolution:
@@ -2669,4 +2665,4 @@ specifiers:
   ms: 2.1.2
   p-map: 4.0.0
   pre-commit: 1.2.2
-  utils-mad: 7.6.0
+  utils-mad: 7.6.1
