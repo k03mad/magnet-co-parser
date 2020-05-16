@@ -3,7 +3,9 @@ export default {
         cover: 'https://image.tmdb.org/t/p/w300_and_h450_bestv2',
         person: 'https://www.themoviedb.org/person/',
         castCount: 5,
-        genresCount: 3,
+        genresCount: Infinity,
+        companiesCount: Infinity,
+        countriesCount: Infinity,
     },
     kp: {
         re: /(kinopoisk\.ru(%2F|\/)rating(%2F|\/)(?<id1>\d+)\.gif)|rating\.kinopoisk\.ru(%2F|\/)(?<id2>\d+)\.gif/,

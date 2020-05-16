@@ -3,7 +3,10 @@ export default {
         cover: 'https://image.tmdb.org/t/p/w300_and_h450_bestv2',
         person: 'https://www.themoviedb.org/person/',
         castCount: 5,
-        genresCount: 3,
+        genresCount: Infinity,
+        companiesCount: Infinity,
+        countriesCount: Infinity,
+        networksCount: Infinity,
     },
     myshows: {
         url: 'https://myshows.me/view/',

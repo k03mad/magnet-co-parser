@@ -2,6 +2,7 @@ import Jimp from 'jimp';
 import fs from 'fs';
 import html from './config/html.js';
 import paths from './config/paths.js';
+import service from './config/service.js';
 
 /**
  * @param {object} data
@@ -41,20 +42,19 @@ export default async data => {
             ? foundIndex.push({href: pageRelPath, src: show.cover})
             : notFoundIndex.push({href: pageRelPath, src: show.cover, notfound: true});
 
-        const info = [
-            show.countries,
-            show.networks,
-            show.overview,
-            show.genres,
-        ]
-            .map(elem => Array.isArray(elem) ? elem.join(', ') : elem)
-            .filter(Boolean);
-
         const pasteSerial = [
             html.url(show.urls),
             show.kp && show.kp.rating ? html.rating(show.kp.url, show.kp.rating) : '',
-            show.photos ? html.photos(show.photos) : '',
-            info.length > 0 ? html.info(info) : '',
+            show.photos ? html.photos(show.photos.slice(0, service.tmdb.castCount)) : '',
+            html.info([
+                show.countries.length > 0 ? `Страны: ${show.countries.slice(0, service.tmdb.countriesCount).join(', ')}` : '',
+                show.creator.length > 0 ? `Создатели: ${show.creator.join(', ')}` : '',
+                show.director.length > 0 ? `Режиссёры: ${show.director.join(', ')}` : '',
+                show.companies.length > 0 ? `Компании: ${show.companies.slice(0, service.tmdb.companiesCount).join(', ')}` : '',
+                show.networks.length > 0 ? `ТВ: ${show.networks.slice(0, service.tmdb.networksCount).join(', ')}` : '',
+                show.overview,
+                show.genres.slice(0, service.tmdb.genresCount).join(', '),
+            ].filter(Boolean)),
             html.table(show.rutor),
         ].filter(Boolean);
 

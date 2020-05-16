@@ -2,6 +2,7 @@ import fs from 'fs';
 import html from './config/html.js';
 import paths from './config/paths.js';
 import rutor from './config/rutor.js';
+import service from './config/service.js';
 import utils from 'utils-mad';
 
 /**
@@ -39,13 +40,14 @@ export default async data => {
             const pasteFilm = [
                 html.url(film.urls),
                 film.kp && film.kp.rating ? html.rating(film.kp.url, film.kp.rating) : '',
-                html.photos(film.photos),
+                html.photos(film.photos.slice(0, service.tmdb.castCount)),
                 html.info([
-                    film.countries.join(', '),
-                    film.companies.join(', '),
+                    film.countries.length > 0 ? `Страны: ${film.countries.slice(0, service.tmdb.countriesCount).join(', ')}` : '',
+                    film.director.length > 0 ? `Режиссёры: ${film.director.join(', ')}` : '',
+                    film.companies.length > 0 ? `Компании: ${film.companies.slice(0, service.tmdb.companiesCount).join(', ')}` : '',
                     film.tagline,
                     film.overview,
-                    film.genres.join(', '),
+                    film.genres.slice(0, service.tmdb.genresCount).join(', '),
                 ].filter(Boolean)),
                 html.table(film.rutor),
             ];

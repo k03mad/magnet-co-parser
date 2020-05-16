@@ -157,7 +157,7 @@ export default async () => {
                 if (!double) {
 
                     const movie = await utils.tmdb.get({path: `movie/${data.id}`, caching: true});
-                    const {cast} = await utils.tmdb.get({path: `movie/${data.id}/credits`, caching: true});
+                    const {cast, crew} = await utils.tmdb.get({path: `movie/${data.id}/credits`, caching: true});
 
                     // первая страница, без категории, все слова
                     const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;
@@ -169,13 +169,13 @@ export default async () => {
 
                         tagline: movie.tagline,
                         overview: data.overview,
-                        genres: movie.genres.map(elem => elem.name).slice(0, service.tmdb.genresCount),
+                        genres: movie.genres.map(elem => elem.name),
                         companies: movie.production_companies.map(elem => elem.name),
                         countries: movie.production_countries.map(elem => countries.getName(elem.iso_3166_1, 'ru')),
+                        director: crew.filter(elem => elem.job === 'Director').map(elem => elem.name),
 
                         photos: [
                             ...new Set(cast
-                                .slice(0, service.tmdb.castCount)
                                 .filter(elem => Boolean(elem.profile_path))
                                 .map(elem => ({
                                     id: elem.id,

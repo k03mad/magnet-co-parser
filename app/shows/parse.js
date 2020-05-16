@@ -146,18 +146,19 @@ export default async () => {
 
         if (data) {
             const show = await utils.tmdb.get({path: `tv/${data.id}`, caching: true});
-            const {cast} = await utils.tmdb.get({path: `tv/${data.id}/credits`, caching: true});
+            const {cast, crew} = await utils.tmdb.get({path: `tv/${data.id}/credits`, caching: true});
 
             parsed[i].cover = service.tmdb.cover + data.poster_path;
             parsed[i].networks = show.networks.map(elem => elem.name);
-            parsed[i].genres = show.genres.map(elem => elem.name).slice(0, service.tmdb.genresCount);
+            parsed[i].genres = show.genres.map(elem => elem.name);
             parsed[i].overview = data.overview;
             parsed[i].companies = show.production_companies.map(elem => elem.name);
             parsed[i].countries = show.origin_country.map(elem => countries.getName(elem, 'ru'));
+            parsed[i].director = crew.filter(elem => elem.job === 'Director').map(elem => elem.name);
+            parsed[i].creator = show.created_by.map(elem => elem.name);
 
             parsed[i].photos = [
                 ...new Set(cast
-                    .slice(0, service.tmdb.castCount)
                     .filter(elem => Boolean(elem.profile_path))
                     .map(elem => ({
                         id: elem.id,
