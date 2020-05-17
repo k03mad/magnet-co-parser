@@ -12,14 +12,14 @@
   "dependencies": {
     "app-root-path": "3.0.0",
     "cheerio": "1.0.0-rc.3",
-    "colorette": "1.1.0",
+    "colorette": "1.2.0",
     "debug": "4.1.1",
     "i18n-iso-countries": "5.3.0",
-    "jimp": "0.11.0",
+    "jimp": "0.12.0",
     "moment": "2.25.3",
     "ms": "2.1.2",
     "p-map": "4.0.0",
-    "utils-mad": "7.6.5"
+    "utils-mad": "7.7.0"
   },
   "devDependencies": {
     "eslint": "7.0.0",
