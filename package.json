@@ -31,7 +31,7 @@
     "eslint-plugin-sonarjs": "0.5.0",
     "eslint-plugin-sort-requires": "2.1.0",
     "eslint-plugin-unicorn": "20.0.0",
-    "pre-commit": "1.2.2"
+    "husky": "4.2.5"
   },
   "scripts": {
     "lint": "eslint --report-unused-disable-directives ./ --format codeframe",
@@ -40,8 +40,5 @@
     "server": "pm2 start pm2.json",
     "start": "npm run parse && npm run server"
   },
-  "pre-commit": [
-    "lint"
-  ],
   "license": "Unlicense"
 }
