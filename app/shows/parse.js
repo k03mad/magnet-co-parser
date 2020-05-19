@@ -26,9 +26,10 @@ export default async () => {
     const getRutorElems = async (quality, titleOriginal) => {
         const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
 
-        const {body} = await utils.request.got(rutorUrl, {timeout: rutor.timeout, headers: {
-            'user-agent': utils.ua.win.chrome,
-        }});
+        const {body} = await utils.request.cache(rutorUrl, {
+            timeout: rutor.timeout,
+            headers: {'user-agent': utils.ua.win.chrome},
+        }, {expire: '30m'});
         return {$: cheerio.load(body), rutorUrl};
     };
 

@@ -27,10 +27,10 @@ export default async () => {
                 ? rutor.search.url(page, cat) + rutor.search.queries.rus + rutor.search.quality
                 : rutor.search.url(page, cat) + rutor.search.queries.default + rutor.search.quality;
 
-            const {body} = await utils.request.got(rutorUrl, {
+            const {body} = await utils.request.cache(rutorUrl, {
                 timeout: rutor.timeout,
                 headers: {'user-agent': utils.ua.win.chrome},
-            });
+            }, {expire: '30m'});
 
             const $ = cheerio.load(body);
 
