@@ -105,9 +105,9 @@ export default async () => {
             const filmdb = {};
 
             for (const {link} of value.rutor) {
-                const {body} = await utils.request.cache(link, {headers: {
-                    'user-agent': utils.ua.win.chrome,
-                }});
+                const {body} = await utils.request.cache(link, {
+                    headers: {'user-agent': utils.ua.win.chrome},
+                });
 
                 const kp = body.match(service.kp.re);
                 const imdb = body.match(service.imdb.re);
@@ -137,10 +137,10 @@ export default async () => {
 
             // если есть imdb id — используем ручку матчинга по нему
             if (filmdb.imdb) {
-                ({movie_results: [data]} = await utils.tmdb.get({path: `find/${filmdb.imdb.id}`, params: {external_source: 'imdb_id'}, caching: true}));
+                ({movie_results: [data]} = await utils.tmdb.get({path: `find/${filmdb.imdb.id}`, params: {external_source: 'imdb_id'}, cache: true}));
                 // иначе — по названию
             } else {
-                [data] = await utils.tmdb.get({path: 'search/movie', params: {query: title}, caching: true});
+                [data] = await utils.tmdb.get({path: 'search/movie', params: {query: title}, cache: true});
             }
 
             if (data && data.poster_path) {
@@ -156,8 +156,8 @@ export default async () => {
 
                 if (!double) {
 
-                    const movie = await utils.tmdb.get({path: `movie/${data.id}`, caching: true});
-                    const {cast, crew} = await utils.tmdb.get({path: `movie/${data.id}/credits`, caching: true});
+                    const movie = await utils.tmdb.get({path: `movie/${data.id}`, cache: true});
+                    const {cast, crew} = await utils.tmdb.get({path: `movie/${data.id}/credits`, cache: true});
 
                     // первая страница, без категории, все слова
                     const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;

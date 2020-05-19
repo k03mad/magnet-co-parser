@@ -122,11 +122,11 @@ export default async () => {
         let data;
 
         if (imdbId) {
-            ({tv_results: [data]} = await utils.tmdb.get({path: `find/tt${imdbId}`, params: {external_source: 'imdb_id'}, caching: true}));
+            ({tv_results: [data]} = await utils.tmdb.get({path: `find/tt${imdbId}`, params: {external_source: 'imdb_id'}, cache: true}));
         }
 
         if (!data) {
-            [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, caching: true});
+            [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, cache: true});
         }
 
         parsed[i].id = id;
@@ -146,8 +146,8 @@ export default async () => {
         }
 
         if (data) {
-            const show = await utils.tmdb.get({path: `tv/${data.id}`, caching: true});
-            const {cast, crew} = await utils.tmdb.get({path: `tv/${data.id}/credits`, caching: true});
+            const show = await utils.tmdb.get({path: `tv/${data.id}`, cache: true});
+            const {cast, crew} = await utils.tmdb.get({path: `tv/${data.id}/credits`, cache: true});
 
             parsed[i].cover = service.tmdb.cover + data.poster_path;
             parsed[i].networks = show.networks.map(elem => elem.name);
