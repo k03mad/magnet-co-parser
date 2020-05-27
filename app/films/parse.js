@@ -45,7 +45,7 @@ export default async () => {
 
                     if (
                         matched
-                    && matched.groups.name
+                        && matched.groups.name
                     ) {
                         matched.groups.magnet = decodeURIComponent(
                             $(elem)
@@ -92,7 +92,7 @@ export default async () => {
 
     let counter = 0;
 
-    await pMap(sorted, async ([key, value]) => {
+    for (const [key, value] of sorted) {
 
         counter++;
         printDebug(`FILM ${counter}/${sorted.length}`);
@@ -144,8 +144,7 @@ export default async () => {
             }
 
             if (data && data.poster_path) {
-
-                let double = false;
+                let double;
 
                 parsed.forEach((elem, i) => {
                     if (elem.id === data.id) {
@@ -156,8 +155,10 @@ export default async () => {
 
                 if (!double) {
 
-                    const movie = await utils.tmdb.get({path: `movie/${data.id}`, cache: true});
-                    const {cast, crew} = await utils.tmdb.get({path: `movie/${data.id}/credits`, cache: true});
+                    const [movie, {cast, crew}] = await Promise.all([
+                        utils.tmdb.get({path: `movie/${data.id}`, cache: true}),
+                        utils.tmdb.get({path: `movie/${data.id}/credits`, cache: true}),
+                    ]);
 
                     // первая страница, без категории, все слова
                     const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;
@@ -199,7 +200,7 @@ export default async () => {
                 }
             }
         }
-    }, {concurrency: rutor.concurrency});
+    }
 
     console.log(c.blue(`Фильмов найдено на Rutor: ${parsed.length}`));
 
