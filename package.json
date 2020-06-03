@@ -34,7 +34,7 @@
   },
   "scripts": {
     "lint": "eslint --report-unused-disable-directives ./ --format codeframe",
-    "setup": "npm i",
+    "setup": "yarn install",
     "parse": "node index.js",
     "server": "pm2 start pm2.json",
     "start": "npm run parse && npm run server"
