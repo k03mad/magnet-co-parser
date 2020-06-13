@@ -32,7 +32,7 @@ export default {
                 '-( Line)',
             ].join(' '),
         },
-        quality: ' 1080p',
+        quality: ' (1080p|2160p)',
         pages: 20,
         categories: [1, 5, 6, 7, 10, 12],
     },
