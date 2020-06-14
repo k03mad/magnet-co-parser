@@ -43,7 +43,7 @@ export default {
     },
 
     dateFormat: 'DD MMM YY',
-    regexp: /(?<date>^\d+ .+ \d+) (?<name>.+) \((?<year>[\d-]+)\) (?<info>.+) (?<size>[\d.]+ [a-z]+) (?<seed>\d+)/i,
+    regexp: /(?<date>^\d+ .+ \d{2}) (?<name>.+) \((?<year>[\d-]+)\) (?<info>.+) (?<size>[\d.]+ [a-z]+) (?<seed>\d+)/i,
     comments: / \d+$/,
 
     tagSplit: ' | ',
