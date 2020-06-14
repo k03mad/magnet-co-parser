@@ -42,6 +42,7 @@ export default {
         link: 'a:nth-child(3)',
     },
 
+    dateFormat: 'DD MMM YY',
     regexp: /(?<date>^\d{1,2} .{3} \d{2}) (?<name>.+) \((?<year>[\d-]+)\) (?<info>.+) (?<size>\d+\.\d+ GB) (?<seed>\d+)/,
     comments: / \d+$/,
 

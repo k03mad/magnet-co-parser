@@ -7,54 +7,47 @@ import showsGenerator from './app/shows/generator.js';
 import showsParse from './app/shows/parse.js';
 import utils from 'utils-mad';
 
+const parsers = [
+    {
+        name: 'films',
+        folder: pathsFilms.parsed.folder,
+        parser: () => filmsParse(),
+        generator: data => filmsGenerator(data),
+    },
+    {
+        name: 'shows',
+        folder: pathsShows.parsed.folder,
+        parser: () => showsParse(),
+        generator: data => showsGenerator(data),
+    },
+];
+
 (async () => {
     try {
-        let filmsData, showsData;
-
-        // только генерим страницы из json-файлов для отладки
-        if (process.env.npm_config_fromjson) {
-
-            [filmsData, showsData] = await Promise.all([
-                fs.promises.readFile(`${pathsFilms.parsed.folder}films.json`, 'utf8'),
-                fs.promises.readFile(`${pathsShows.parsed.folder}shows.json`, 'utf8'),
-            ]);
-
-            filmsData = JSON.parse(filmsData.replace(/\n| {2,}/g, ''));
-            showsData = JSON.parse(showsData.replace(/\n| {2,}/g, ''));
-
-        // иначе парсим
-        } else {
-
-            [filmsData, showsData] = await Promise.all([
-                filmsParse(),
-                showsParse(),
-            ]);
-
-            await utils.folder.erase([
-                pathsFilms.parsed.folder,
-                pathsShows.parsed.folder,
-            ]);
-
-            await Promise.all([
-                fs.promises.writeFile(`${pathsFilms.parsed.folder}films.json`, JSON.stringify(filmsData, null, 4)),
-                fs.promises.writeFile(`${pathsShows.parsed.folder}shows.json`, JSON.stringify(showsData, null, 4)),
-            ]);
-
-        }
-
         await utils.folder.erase([
+            pathsFilms.parsed.folder,
+            pathsShows.parsed.folder,
+
             pathsFilms.www.folder,
             pathsShows.www.folder,
+
             pathsFilms.www.pages,
             pathsShows.www.pages,
         ]);
 
-        await Promise.all([
-            filmsGenerator(filmsData),
-            showsGenerator(showsData),
-        ]);
+        await Promise.all(parsers.map(async elem => {
 
+            const data = await elem.parser();
+
+            await fs.promises.writeFile(
+                `${elem.folder + elem.name}.json`,
+                JSON.stringify(data, null, 4),
+            );
+
+            await elem.generator(data);
+
+        }));
     } catch (err) {
-        utils.print.ex(err, {exit: true});
+        utils.print.ex(err, {full: true, exit: true});
     }
 })();

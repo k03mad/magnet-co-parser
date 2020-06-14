@@ -46,7 +46,7 @@ export default {
             ${data.map(elem => `
                 <tr onclick="document.location = '${elem.magnet}';">
                     <td align="right">${elem.seed}</td>
-                    <td>${elem.year}</td>
+                    <td>${elem.date}</td>
                     <td>${elem.name}</td>
                     <td>${elem.episodes}</td>
                     ${elem.tags ? `<td>${elem.tags}</td>` : ''}

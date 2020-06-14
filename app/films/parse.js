@@ -81,21 +81,13 @@ export default async () => {
         }, {concurrency: rutor.concurrency});
     }));
 
-    const sorted = Object.entries(films).sort((a, b) => {
-        const FORMAT = 'DD MMM YY';
-        const sortings = {
-            a: moment(a[1].rutor[0].date, FORMAT).valueOf(),
-            b: moment(b[1].rutor[0].date, FORMAT).valueOf(),
-        };
-        return sortings.b - sortings.a;
-    });
-
     let counter = 0;
+    const filmsArr = Object.entries(films);
 
-    await pMap(sorted, async ([key, value]) => {
+    await pMap(filmsArr, async ([key, value]) => {
 
         counter++;
-        printDebug(`FILM ${counter}/${sorted.length}`);
+        printDebug(`FILM ${counter}/${filmsArr.length}`);
 
         if (parsed.length !== rutor.filmsCount) {
 
@@ -144,71 +136,86 @@ export default async () => {
             }
 
             if (data && data.poster_path) {
-                let double;
 
-                parsed.forEach((elem, i) => {
-                    if (elem.id === data.id) {
-                        parsed[i].rutor.push(...value.rutor);
-                        double = true;
-                    }
-                });
+                const [movie, {cast, crew}] = await Promise.all([
+                    utils.tmdb.get({path: `movie/${data.id}`, cache: true}),
+                    utils.tmdb.get({path: `movie/${data.id}/credits`, cache: true}),
+                ]);
 
-                if (!double) {
+                // первая страница, без категории, все слова
+                const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;
 
-                    const [movie, {cast, crew}] = await Promise.all([
-                        utils.tmdb.get({path: `movie/${data.id}`, cache: true}),
-                        utils.tmdb.get({path: `movie/${data.id}/credits`, cache: true}),
-                    ]);
+                const info = {
+                    title,
+                    cover: service.tmdb.cover + data.poster_path,
+                    id: data.id,
 
-                    // первая страница, без категории, все слова
-                    const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;
+                    tagline: movie.tagline,
+                    overview: data.overview,
+                    genres: movie.genres.map(elem => elem.name),
+                    companies: movie.production_companies.map(elem => elem.name),
+                    countries: movie.production_countries.map(elem => countries.getName(elem.iso_3166_1, 'ru')),
+                    director: crew.filter(elem => elem.job === 'Director').map(elem => elem.name),
 
-                    const info = {
-                        title,
-                        cover: service.tmdb.cover + data.poster_path,
-                        id: data.id,
+                    photos: [
+                        ...new Set(cast
+                            .filter(elem => Boolean(elem.profile_path))
+                            .map(elem => ({
+                                id: elem.id,
+                                link: service.tmdb.person + elem.id,
+                                name: elem.name,
+                                cover: service.tmdb.cover + elem.profile_path,
+                            })),
+                        ),
+                    ],
 
-                        tagline: movie.tagline,
-                        overview: data.overview,
-                        genres: movie.genres.map(elem => elem.name),
-                        companies: movie.production_companies.map(elem => elem.name),
-                        countries: movie.production_countries.map(elem => countries.getName(elem.iso_3166_1, 'ru')),
-                        director: crew.filter(elem => elem.job === 'Director').map(elem => elem.name),
+                    rutor: value.rutor,
+                    urls: {
+                        rutor: rutorUrl,
+                        rutracker: service.rutracker.url + title + rutor.search.quality,
+                    },
+                    ...filmdb,
+                };
 
-                        photos: [
-                            ...new Set(cast
-                                .filter(elem => Boolean(elem.profile_path))
-                                .map(elem => ({
-                                    id: elem.id,
-                                    link: service.tmdb.person + elem.id,
-                                    name: elem.name,
-                                    cover: service.tmdb.cover + elem.profile_path,
-                                })),
-                            ),
-                        ],
-
-                        rutor: value.rutor,
-                        urls: {
-                            rutor: rutorUrl,
-                            rutracker: service.rutracker.url + title + rutor.search.quality,
-                        },
-                        ...filmdb,
-                    };
-
-                    parsed.push(info);
-
-                }
+                parsed.push(info);
             }
         }
     }, {concurrency: rutor.concurrency});
 
-    console.log(c.blue(`Фильмов найдено на Rutor: ${parsed.length}`));
+    const deduped = [];
 
-    parsed.forEach((elem, i) => {
-        const bySeed = elem.rutor.sort((a, b) => Number(b.seed) - Number(a.seed));
-        sorted[i].rutor = bySeed;
+    // мержим дубликаты
+    parsed.forEach(orig => {
+        let found;
+
+        for (const element of deduped) {
+            if (element.id === orig.id) {
+                element.rutor.push(...orig.rutor);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            deduped.push(orig);
+        }
     });
 
+    const sorted = deduped
+        // сортируем торренты фильма по дате
+        .map(elem => {
+            elem.rutor = elem.rutor.sort((a, b) => moment(b.date, rutor.dateFormat).valueOf() - moment(a.date, rutor.dateFormat).valueOf());
+            return elem;
+        })
+        // сортируем все фильмы по дате новейшего торрента
+        .sort((a, b) => moment(b.rutor[0].date, rutor.dateFormat).valueOf() - moment(a.rutor[0].date, rutor.dateFormat).valueOf())
+        // сортируем торренты фильма по сидам
+        .map(elem => {
+            elem.rutor = elem.rutor.sort((a, b) => Number(b.seed) - Number(a.seed));
+            return elem;
+        });
+
+    console.log(c.blue(`Фильмов найдено на Rutor: ${sorted.length}`));
     const diff = utils.date.diff({date, period: 'milliseconds'});
 
     return {
@@ -217,6 +224,6 @@ export default async () => {
             diff: ms(diff),
             diffRaw: diff,
         },
-        items: parsed,
+        items: sorted,
     };
 };
