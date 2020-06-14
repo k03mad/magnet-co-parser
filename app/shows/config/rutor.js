@@ -12,7 +12,7 @@ export default {
         magnet: 'a:nth-child(2)',
     },
 
-    regexp: /(?<date>^\d{1,2} .{3} \d{2}) (?<name>.+) \((?<year>[\d-]+)\) (?<info>.+) (?<size>\d+\.\d+ GB) (?<seed>\d+)/,
+    regexp: /(?<date>^\d+ .+ \d{2}) (?<name>.+) \((?<year>[\d-]+)\) (?<info>.+) (?<size>[\d.]+ [a-z]+) (?<seed>\d+)/i,
     episodes: /\[(\w?\d.+)]/,
     comments: / \d+$/,
 
