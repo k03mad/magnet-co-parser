@@ -11,7 +11,7 @@ import utils from 'utils-mad';
 
 /** @returns {Function} */
 export default async () => {
-    const printDebug = debug('utils-mad:magnet:films:parse');
+    const printDebug = debug('magnet:films:parse');
 
     moment.locale('ru');
     const date = new Date();
@@ -87,7 +87,10 @@ export default async () => {
     await pMap(filmsArr, async ([key, value]) => {
 
         counter++;
-        printDebug(`FILM ${counter}/${filmsArr.length}`);
+
+        if (counter % 30 === 0 || counter === filmsArr.length) {
+            printDebug(`FILM ${counter}/${filmsArr.length}`);
+        }
 
         if (parsed.length !== rutor.filmsCount) {
 
@@ -130,7 +133,7 @@ export default async () => {
             // если есть imdb id — используем ручку матчинга по нему
             if (filmdb.imdb) {
                 ({movie_results: [data]} = await utils.tmdb.get({path: `find/${filmdb.imdb.id}`, params: {external_source: 'imdb_id'}, cache: true}));
-                // иначе — по названию
+            // иначе — по названию
             } else {
                 [data] = await utils.tmdb.get({path: 'search/movie', params: {query: title}, cache: true});
             }
@@ -178,6 +181,9 @@ export default async () => {
                 };
 
                 parsed.push(info);
+
+            } else {
+                printDebug(c.red('Skipped: %s'), title);
             }
         }
     }, {concurrency: rutor.concurrency});
