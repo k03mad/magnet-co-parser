@@ -92,7 +92,7 @@ export default async () => {
 
     let counter = 0;
 
-    for (const [key, value] of sorted) {
+    await pMap(sorted, async ([key, value]) => {
 
         counter++;
         printDebug(`FILM ${counter}/${sorted.length}`);
@@ -200,7 +200,7 @@ export default async () => {
                 }
             }
         }
-    }
+    }, {concurrency: rutor.concurrency});
 
     console.log(c.blue(`Фильмов найдено на Rutor: ${parsed.length}`));
 
