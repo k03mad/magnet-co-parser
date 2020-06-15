@@ -3,7 +3,7 @@ import utils from 'utils-mad';
 const currentYear = Number(utils.date.now('YYYY'));
 const prevYear = currentYear - 1;
 
-const RUTOR_DOMAIN = 'rutor.info';
+const RUTOR_DOMAIN = 'rutor.is';
 const rutorUrl = `http://${RUTOR_DOMAIN}`;
 
 export default {
