@@ -10,32 +10,29 @@ import utils from 'utils-mad';
 const parsers = [
     {
         name: 'films',
-        folder: pathsFilms.parsed.folder,
         parser: () => filmsParse(),
         generator: data => filmsGenerator(data),
+        paths: pathsFilms,
     },
     {
         name: 'shows',
-        folder: pathsShows.parsed.folder,
         parser: () => showsParse(),
         generator: data => showsGenerator(data),
+        paths: pathsShows,
     },
 ];
 
 (async () => {
-    await utils.folder.erase([
-        pathsFilms.www.folder,
-        pathsShows.www.folder,
-
-        pathsFilms.www.pages,
-        pathsShows.www.pages,
-    ]);
-
     const promises = await Promise.allSettled(parsers.map(async elem => {
+        await utils.folder.erase([
+            elem.paths.www.folder,
+            elem.paths.www.pages,
+        ]);
+
         const data = await elem.parser();
 
         await fs.promises.writeFile(
-            `${elem.folder + elem.name}.json`,
+            `${elem.paths.parsed.folder + elem.name}.json`,
             JSON.stringify(data, null, 4),
         );
 
