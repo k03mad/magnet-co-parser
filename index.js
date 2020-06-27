@@ -23,38 +23,28 @@ const parsers = [
 ];
 
 (async () => {
-    try {
-        await utils.folder.erase([
-            pathsFilms.www.folder,
-            pathsShows.www.folder,
+    await utils.folder.erase([
+        pathsFilms.www.folder,
+        pathsShows.www.folder,
 
-            pathsFilms.www.pages,
-            pathsShows.www.pages,
-        ]);
+        pathsFilms.www.pages,
+        pathsShows.www.pages,
+    ]);
 
-        let error;
+    const promises = await Promise.allSettled(parsers.map(async elem => {
+        const data = await elem.parser();
 
-        await Promise.all(parsers.map(async elem => {
-            try {
+        await fs.promises.writeFile(
+            `${elem.folder + elem.name}.json`,
+            JSON.stringify(data, null, 4),
+        );
 
-                const data = await elem.parser();
+        await elem.generator(data);
+    }));
 
-                await fs.promises.writeFile(
-                    `${elem.folder + elem.name}.json`,
-                    JSON.stringify(data, null, 4),
-                );
+    const errors = promises.map(elem => elem.reason).filter(Boolean);
 
-                await elem.generator(data);
-
-            } catch (err) {
-                error = err;
-            }
-        }));
-
-        if (error) {
-            utils.print.ex(error, {exit: true});
-        }
-    } catch (err) {
-        utils.print.ex(err, {exit: true});
+    if (errors.length > 0) {
+        utils.print.ex(errors.join('\n\n'), {exit: true});
     }
 })();
