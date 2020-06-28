@@ -28,14 +28,13 @@ export default async data => {
             const font = await Jimp.loadFont(paths.templates.font);
 
             const withText = await noposter.print(font, 0, 0, {
-                text: show.titleGenerated,
+                text: show.title,
                 alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
                 alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE,
             }, 200, 300);
 
-            await withText.writeAsync(`${paths.www.folder + show.id}.png`);
-
-            show.cover = paths.www.noposter(show.id);
+            await withText.writeAsync(paths.www.noposter(show.id));
+            show.cover = paths.getRel(paths.www.noposter(show.id));
         }
 
         show.rutor.length > 0

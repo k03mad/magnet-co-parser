@@ -12,8 +12,8 @@ export default {
         page: `${appRoot}/templates/page.html`,
     },
     www: {
-        noposter: id => `../${id}.png`,
-        folder: `${appRoot}/www/generated/`,
+        noposter: id => `${appRoot}/www/generated/shows/noposter/${id}.png`,
+        folder: `${appRoot}/www/generated/shows`,
         list: `${appRoot}/www/generated/shows/list.html`,
         pages: `${appRoot}/www/generated/shows/pages`,
     },

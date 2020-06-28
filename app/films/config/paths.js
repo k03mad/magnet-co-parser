@@ -10,7 +10,7 @@ export default {
         page: `${appRoot}/templates/page.html`,
     },
     www: {
-        folder: `${appRoot}/www/generated/`,
+        folder: `${appRoot}/www/generated/films`,
         pages: `${appRoot}/www/generated/films/pages`,
         list: (i, additions = '') => `${appRoot}/www/generated/films/list${i}.html${additions}`,
     },

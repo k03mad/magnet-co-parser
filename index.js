@@ -24,12 +24,12 @@ const parsers = [
 
 (async () => {
     const promises = await Promise.allSettled(parsers.map(async elem => {
+        const data = await elem.parser();
+
         await utils.folder.erase([
             elem.paths.www.folder,
             elem.paths.www.pages,
         ]);
-
-        const data = await elem.parser();
 
         await fs.promises.writeFile(
             `${elem.paths.parsed.folder + elem.name}.json`,
