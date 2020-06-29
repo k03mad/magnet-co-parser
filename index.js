@@ -3,9 +3,13 @@ import filmsParse from './app/films/parse.js';
 import fs from 'fs';
 import pathsFilms from './app/films/config/paths.js';
 import pathsShows from './app/shows/config/paths.js';
+import rutor from './app/films/config/rutor.js';
 import showsGenerator from './app/shows/generator.js';
 import showsParse from './app/shows/parse.js';
 import utils from 'utils-mad';
+
+const VPN_TIMEOUT = 6000;
+const VPN_RETIRES = 10;
 
 const parsers = [
     {
@@ -23,25 +27,48 @@ const parsers = [
 ];
 
 (async () => {
-    const promises = await Promise.allSettled(parsers.map(async elem => {
-        const data = await elem.parser();
+    try {
 
-        await utils.folder.erase([
-            elem.paths.www.folder,
-            elem.paths.www.pages,
-        ]);
+        let available, error;
 
-        await fs.promises.writeFile(
-            `${elem.paths.parsed.folder + elem.name}.json`,
-            JSON.stringify(data, null, 4),
-        );
+        for (let i = 0; i < VPN_RETIRES; i++) {
+            try {
+                await utils.request.got(rutor.url, {timeout: VPN_TIMEOUT});
+                available = true;
+                break;
+            } catch (err) {
+                error = err;
+                await utils.shell.run('mad-pptp');
+            }
+        }
 
-        await elem.generator(data);
-    }));
+        if (!available) {
+            throw new Error(`${rutor.url} is not available:\n${error}`);
+        }
 
-    const errors = promises.map(elem => elem.reason).filter(Boolean);
+        const promises = await Promise.allSettled(parsers.map(async elem => {
+            const data = await elem.parser();
 
-    if (errors.length > 0) {
-        utils.print.ex(errors.join('\n\n'), {time: false, exit: true});
+            await utils.folder.erase([
+                elem.paths.www.folder,
+                elem.paths.www.pages,
+            ]);
+
+            await fs.promises.writeFile(
+                `${elem.paths.parsed.folder + elem.name}.json`,
+                JSON.stringify(data, null, 4),
+            );
+
+            await elem.generator(data);
+        }));
+
+        const errors = promises.map(elem => elem.reason).filter(Boolean);
+
+        if (errors.length > 0) {
+            utils.print.ex(errors.join('\n\n'), {time: false, exit: true});
+        }
+
+    } catch (err) {
+        utils.print.ex(err, {time: false, exit: true});
     }
 })();
