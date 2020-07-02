@@ -9,7 +9,7 @@ import showsParse from './app/shows/parse.js';
 import utils from 'utils-mad';
 
 const VPN_TIMEOUT = 6000;
-const VPN_RETIRES = 10;
+const VPN_RETRIES = 10;
 
 const parsers = [
     {
@@ -31,7 +31,7 @@ const parsers = [
 
         let available, error;
 
-        for (let i = 0; i < VPN_RETIRES; i++) {
+        for (let i = 0; i < VPN_RETRIES; i++) {
             try {
                 await utils.request.got(rutor.url, {timeout: VPN_TIMEOUT});
                 available = true;
