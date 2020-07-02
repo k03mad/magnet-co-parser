@@ -19,7 +19,7 @@
     "moment": "2.27.0",
     "ms": "2.1.2",
     "p-map": "4.0.0",
-    "utils-mad": "8.2.4"
+    "utils-mad": "8.2.5"
   },
   "devDependencies": {
     "eslint": "7.3.1",
