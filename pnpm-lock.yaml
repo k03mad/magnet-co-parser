@@ -8,7 +8,7 @@ dependencies:
   moment: 2.27.0
   ms: 2.1.2
   p-map: 4.0.0
-  utils-mad: 8.2.6
+  utils-mad: 8.2.8
 devDependencies:
   eslint: 7.4.0
   eslint-config-k03mad: 5.0.1_076127b32fd94258a634f834e77fd7e0
@@ -1462,10 +1462,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-960VHmtN1vTpasX/1LupLohdP5odwAT7oK/VSm6mW0M58LbrBnowLAPWAZhWGhDAGjzbMnPXZxzB/QYgBwkN0w==
-  /js-base64/2.6.2:
-    dev: false
-    resolution:
-      integrity: sha512-1hgLrLIrmCgZG+ID3VoLNLOSwjGnoZa8tyrUdEteMeIzsT6PH7PMLyUvbDwzNE56P3PNxyvuIOx4Uh2E5rzQIw==
   /js-tokens/4.0.0:
     dev: true
     resolution:
@@ -2184,14 +2180,13 @@ packages:
     dev: false
     resolution:
       integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
-  /utils-mad/8.2.6:
+  /utils-mad/8.2.8:
     dependencies:
       cheerio: 1.0.0-rc.3
       colorette: 1.2.0
       debug: 4.1.1
       got: 11.3.0
       hasha: 5.2.0
-      js-base64: 2.6.2
       moment: 2.27.0
       nano-time: 1.0.0
       node-routeros: 1.6.8
@@ -2203,7 +2198,7 @@ packages:
     engines:
       node: '>=14'
     resolution:
-      integrity: sha512-P5RfvcB/+lTHyDcS4szVwSH7NqlqJcPjJdkC4uuzohwftk4XmkYa8eyexdkhMr0k56oMH0nALKr1k42Bx94s6A==
+      integrity: sha512-Wu1irroDgyL5cRCuSik0m0XdjSKMUP0zDvRceKERclXwt2M+p9CfQmL1YRXP7OOcPcM3xdtvRyMqULQB99BfRA==
   /v8-compile-cache/2.1.1:
     dev: true
     resolution:
@@ -2311,4 +2306,4 @@ specifiers:
   moment: 2.27.0
   ms: 2.1.2
   p-map: 4.0.0
-  utils-mad: 8.2.6
+  utils-mad: 8.2.8
