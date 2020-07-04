@@ -65,7 +65,7 @@ const parsers = [
         const errors = promises.map(elem => elem.reason).filter(Boolean);
 
         if (errors.length > 0) {
-            utils.print.ex(errors.join('\n\n'), {time: false, exit: true});
+            throw new Error(errors.join('\n\n'));
         }
 
     } catch (err) {
