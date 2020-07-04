@@ -8,7 +8,7 @@ dependencies:
   moment: 2.27.0
   ms: 2.1.2
   p-map: 4.0.0
-  utils-mad: 8.2.8
+  utils-mad: 8.2.9
 devDependencies:
   eslint: 7.4.0
   eslint-config-k03mad: 5.0.1_076127b32fd94258a634f834e77fd7e0
@@ -2180,7 +2180,7 @@ packages:
     dev: false
     resolution:
       integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
-  /utils-mad/8.2.8:
+  /utils-mad/8.2.9:
     dependencies:
       cheerio: 1.0.0-rc.3
       colorette: 1.2.0
@@ -2198,7 +2198,7 @@ packages:
     engines:
       node: '>=14'
     resolution:
-      integrity: sha512-Wu1irroDgyL5cRCuSik0m0XdjSKMUP0zDvRceKERclXwt2M+p9CfQmL1YRXP7OOcPcM3xdtvRyMqULQB99BfRA==
+      integrity: sha512-G3LLuw1OVbdtrw5A/tE7aHRx/2DlnRgC7wMXugby7tA6Riclwd5MLU4V+8XPBWCqwOieWAVIR+OJXMVDVD4BZA==
   /v8-compile-cache/2.1.1:
     dev: true
     resolution:
@@ -2306,4 +2306,4 @@ specifiers:
   moment: 2.27.0
   ms: 2.1.2
   p-map: 4.0.0
-  utils-mad: 8.2.8
+  utils-mad: 8.2.9
