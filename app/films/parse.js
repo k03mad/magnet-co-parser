@@ -1,4 +1,4 @@
-import c from 'colorette';
+import * as c from 'colorette';
 import cheerio from 'cheerio';
 import countries from 'i18n-iso-countries';
 import debug from 'debug';
