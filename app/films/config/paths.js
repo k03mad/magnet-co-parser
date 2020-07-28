@@ -1,6 +1,7 @@
 import appRoot from 'app-root-path';
 
 export default {
+    /* eslint-disable jsdoc/require-jsdoc */
     parsed: {
         folder: `${appRoot}/parsed/`,
     },
