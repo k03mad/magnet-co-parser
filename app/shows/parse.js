@@ -52,8 +52,9 @@ export default async () => {
         /**
          * Парсим поиск по названию сериала
          * @param {object} $
+         * @param {object} opts
          */
-        const parseGroups = $ => {
+        const parseGroups = ($, opts = {}) => {
             $(rutor.selectors.td).each((_, elem) => {
 
                 const td = $(elem)
@@ -100,9 +101,16 @@ export default async () => {
                         matched.groups.tags = tags.join(rutor.tagSplit).replace(rutor.comments, '');
                         // вырезаем не относящееся к качеству
                         // WEBRip 720p от FilmStudio
-                        matched.groups.quality = quality.replace(new RegExp(
-                            `(${rutor.search.quality.full}|${rutor.search.quality.back})(.+)`,
-                        ), '$1');
+                        matched.groups.quality = opts.noQuality
+                            ? quality.replace(rutor.releaseGroup, '')
+                            : quality.replace(new RegExp(
+                                `(${rutor.search.quality.full}|${rutor.search.quality.back})(.+)`,
+                            ), '$1');
+
+                        if (opts.noQuality) {
+                            // console.log(matched.groups.tags);
+                            console.log(matched.groups.quality);
+                        }
 
                         parsed[i].rutor.push({...matched.groups});
                     }
@@ -117,6 +125,12 @@ export default async () => {
         if (parsed[i].rutor.length === 0) {
             ({$, rutorUrl} = await getRutorElems(rutor.search.quality.back, titleOriginalEscaped));
             parseGroups($);
+        }
+
+        // если ничего не нашли — пробуем без качества
+        if (parsed[i].rutor.length === 0) {
+            ({$, rutorUrl} = await getRutorElems('', titleOriginalEscaped));
+            parseGroups($, {noQuality: true});
         }
 
         let data;

@@ -15,6 +15,7 @@ export default {
     regexp: /(?<date>^\d+ .{3} \d{2}) (?<name>.+) \((?<year>[\d-]+)\) (?<info>.+) (?<size>[\d.]+ [a-z]+) (?<seed>\d+)/i,
     episodes: /\[(\w?\d.+)]/,
     comments: / \d+$/,
+    releaseGroup: /\s.+/,
 
     timeout: 20000,
     concurrency: 5,
