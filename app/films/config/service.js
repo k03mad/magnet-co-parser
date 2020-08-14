@@ -20,4 +20,7 @@ export default {
     rutracker: {
         url: 'https://rutracker.org/forum/tracker.php?nm=',
     },
+    kinopub: {
+        url: 'https://kubik3.site/item/search?query=',
+    },
 };

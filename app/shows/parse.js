@@ -107,11 +107,6 @@ export default async () => {
                                 `(${rutor.search.quality.full}|${rutor.search.quality.back})(.+)`,
                             ), '$1');
 
-                        if (opts.noQuality) {
-                            // console.log(matched.groups.tags);
-                            console.log(matched.groups.quality);
-                        }
-
                         parsed[i].rutor.push({...matched.groups});
                     }
                 }
@@ -147,6 +142,7 @@ export default async () => {
         parsed[i].urls = {
             rutor: rutorUrl,
             rutracker: service.rutracker.url + titleOriginal + rutor.search.quality.full,
+            kinopub: service.kinopub.url + titleOriginal,
             lostfilm: service.lostfilm.url + titleOriginal,
             myshows: service.myshows.url + id,
         };

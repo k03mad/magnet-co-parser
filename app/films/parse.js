@@ -176,6 +176,7 @@ export default async () => {
                     urls: {
                         rutor: rutorUrl,
                         rutracker: service.rutracker.url + title + rutor.search.quality,
+                        kinopub: service.kinopub.url + title,
                     },
                     ...filmdb,
                 };

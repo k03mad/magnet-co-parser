@@ -22,4 +22,7 @@ export default {
     lostfilm: {
         url: 'http://www.lostfilm.tv/search/?q=',
     },
+    kinopub: {
+        url: 'https://kubik3.site/item/search?query=',
+    },
 };
