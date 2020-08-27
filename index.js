@@ -39,7 +39,7 @@ const parsers = [
                 break;
             } catch (err) {
                 error = err;
-                await utils.shell.run('mik-pptp');
+                await utils.shell.run('mad-mik-pptp');
             }
         }
 
