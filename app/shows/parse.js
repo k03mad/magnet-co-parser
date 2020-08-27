@@ -1,4 +1,4 @@
-import * as c from 'chalk';
+import c from 'chalk';
 import cheerio from 'cheerio';
 import countries from 'i18n-iso-countries';
 import ms from 'ms';
