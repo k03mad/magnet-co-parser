@@ -3,7 +3,7 @@ import appRoot from 'app-root-path';
 export default {
     /* eslint-disable jsdoc/require-jsdoc */
     parsed: {
-        folder: `${appRoot}/parsed/`,
+        folder: `${appRoot}/parsed/shows/`,
     },
     templates: {
         font: `${appRoot}/templates/font.fnt`,

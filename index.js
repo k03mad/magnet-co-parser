@@ -53,10 +53,11 @@ const parsers = [
             await utils.folder.erase([
                 elem.paths.www.folder,
                 elem.paths.www.pages,
+                elem.paths.parsed.folder,
             ]);
 
             await fs.promises.writeFile(
-                `${elem.paths.parsed.folder + elem.name}.json`,
+                `${elem.paths.parsed.folder}data.json`,
                 JSON.stringify(data, null, 4),
             );
 
