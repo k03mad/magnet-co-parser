@@ -34,7 +34,7 @@ export default async () => {
 
             const $ = cheerio.load(body);
 
-            if ($(rutor.selectors.td).contents().length !== 0) {
+            if ($(rutor.selectors.td).contents().length > 0) {
                 $(rutor.selectors.td).each((_, elem) => {
                     const td = $(elem)
                         .text()
