@@ -6,7 +6,7 @@
   ],
   "repository": "k03mad/magnet-co-parser",
   "engines": {
-    "node": ">=15"
+    "node": ">=14"
   },
   "type": "module",
   "dependencies": {
@@ -19,7 +19,7 @@
     "moment": "2.29.1",
     "ms": "2.1.2",
     "p-map": "4.0.0",
-    "utils-mad": "9.5.9"
+    "utils-mad": "9.5.10"
   },
   "devDependencies": {
     "eslint": "7.11.0",
