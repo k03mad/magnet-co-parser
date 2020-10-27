@@ -12,7 +12,6 @@ const VPN_TIMEOUT = 6000;
 const VPN_RETRIES = 10;
 
 const parsers = [
-    /* eslint-disable jsdoc/require-jsdoc */
     {
         name: 'films',
         parser: () => filmsParse(),
