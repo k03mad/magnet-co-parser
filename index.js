@@ -8,19 +8,16 @@ import showsGenerator from './app/shows/generator.js';
 import showsParse from './app/shows/parse.js';
 import utils from 'utils-mad';
 
-const VPN_TIMEOUT = 6000;
-const VPN_RETRIES = 10;
-
-const parsers = [
+const parsers = proxy => [
     {
         name: 'films',
-        parser: () => filmsParse(),
+        parser: () => filmsParse(proxy),
         generator: data => filmsGenerator(data),
         paths: pathsFilms,
     },
     {
         name: 'shows',
-        parser: () => showsParse(),
+        parser: () => showsParse(proxy),
         generator: data => showsGenerator(data),
         paths: pathsShows,
     },
@@ -29,24 +26,9 @@ const parsers = [
 (async () => {
     try {
 
-        let available, error;
+        const proxy = await utils.request.proxy({testUrl: rutor.url});
 
-        for (let i = 0; i < VPN_RETRIES; i++) {
-            try {
-                await utils.request.got(rutor.url, {timeout: VPN_TIMEOUT});
-                available = true;
-                break;
-            } catch (err) {
-                error = err;
-                await utils.shell.run('mad-mik-pptp');
-            }
-        }
-
-        if (!available) {
-            throw new Error(`${rutor.url} is not available:\n${error}`);
-        }
-
-        const promises = await Promise.allSettled(parsers.map(async elem => {
+        const promises = await Promise.allSettled(parsers(proxy).map(async elem => {
             const data = await elem.parser();
 
             await utils.folder.erase([
