@@ -33,7 +33,7 @@
   },
   "scripts": {
     "lint": "eslint ./ --report-unused-disable-directives --format=codeframe --ignore-pattern='!.*'",
-    "setup": "npm install",
+    "setup": "npm i",
     "parse": "node index.js",
     "server": "pm2 start pm2.json",
     "start": "npm run parse && npm run server"
