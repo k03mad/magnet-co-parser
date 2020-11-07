@@ -3,21 +3,20 @@ import filmsParse from './app/films/parse.js';
 import fs from 'fs';
 import pathsFilms from './app/films/config/paths.js';
 import pathsShows from './app/shows/config/paths.js';
-import rutor from './app/films/config/rutor.js';
 import showsGenerator from './app/shows/generator.js';
 import showsParse from './app/shows/parse.js';
 import utils from 'utils-mad';
 
-const parsers = proxy => [
+const parsers = [
     {
         name: 'films',
-        parser: () => filmsParse(proxy),
+        parser: () => filmsParse(),
         generator: data => filmsGenerator(data),
         paths: pathsFilms,
     },
     {
         name: 'shows',
-        parser: () => showsParse(proxy),
+        parser: () => showsParse(),
         generator: data => showsGenerator(data),
         paths: pathsShows,
     },
@@ -25,10 +24,7 @@ const parsers = proxy => [
 
 (async () => {
     try {
-
-        const proxy = await utils.request.proxy({testUrl: rutor.url});
-
-        const promises = await Promise.allSettled(parsers(proxy).map(async elem => {
+        const promises = await Promise.allSettled(parsers.map(async elem => {
             const data = await elem.parser();
 
             await utils.folder.erase([
@@ -50,7 +46,6 @@ const parsers = proxy => [
         if (errors.length > 0) {
             throw new Error(errors.join('\n\n'));
         }
-
     } catch (err) {
         utils.print.ex(err, {time: false, exit: true});
     }

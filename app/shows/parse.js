@@ -7,11 +7,8 @@ import rutor from './config/rutor.js';
 import service from './config/service.js';
 import utils from 'utils-mad';
 
-/**
- * @param {string} proxy
- * @returns {Function}
- */
-export default async proxy => {
+/** @returns {Function} */
+export default async () => {
     const date = new Date();
     const startTime = utils.date.now();
 
@@ -28,13 +25,12 @@ export default async proxy => {
      */
     const getRutorElems = async (quality, titleOriginal) => {
         const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
-        const rutorProxyUrl = proxy + encodeURIComponent(rutorUrl);
 
-        const {body} = await utils.request.cache(rutorProxyUrl, {
+        const {body} = await utils.request.cache(rutorUrl, {
             timeout: rutor.timeout,
             headers: {'user-agent': utils.ua.win.chrome},
         }, {expire: '30m'});
-        return {$: cheerio.load(body), rutorUrl, rutorProxyUrl};
+        return {$: cheerio.load(body), rutorUrl};
     };
 
     await pMap(watching.entries(), async ([i, element]) => {
@@ -117,18 +113,18 @@ export default async proxy => {
             });
         };
 
-        let {$, rutorUrl, rutorProxyUrl} = await getRutorElems(rutor.search.quality.full, titleOriginalEscaped);
+        let {$, rutorUrl} = await getRutorElems(rutor.search.quality.full, titleOriginalEscaped);
         parseGroups($);
 
         // если ничего не нашли — пробуем другое качество
         if (parsed[i].rutor.length === 0) {
-            ({$, rutorUrl, rutorProxyUrl} = await getRutorElems(rutor.search.quality.back, titleOriginalEscaped));
+            ({$, rutorUrl} = await getRutorElems(rutor.search.quality.back, titleOriginalEscaped));
             parseGroups($);
         }
 
         // если ничего не нашли — пробуем без качества
         if (parsed[i].rutor.length === 0) {
-            ({$, rutorUrl, rutorProxyUrl} = await getRutorElems('', titleOriginalEscaped));
+            ({$, rutorUrl} = await getRutorElems('', titleOriginalEscaped));
             parseGroups($, {noQuality: true});
         }
 
@@ -144,11 +140,10 @@ export default async proxy => {
 
         parsed[i].id = id;
         parsed[i].urls = {
-            'rutor': rutorUrl,
-            'rutor-proxy': rutorProxyUrl,
-            'rutracker': service.rutracker.url + titleOriginal + rutor.search.quality.full,
-            'kinopub': service.kinopub.url + titleOriginal,
-            'myshows': service.myshows.url + id,
+            rutor: rutorUrl,
+            rutracker: service.rutracker.url + titleOriginal + rutor.search.quality.full,
+            kinopub: service.kinopub.url + titleOriginal,
+            myshows: service.myshows.url + id,
         };
 
         if (kinopoiskId) {
