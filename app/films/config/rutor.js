@@ -50,7 +50,7 @@ export default {
     tagSplit: ' | ',
 
     timeout: 20000,
-    filmsCount: Infinity,
+    filmsCount: Number.POSITIVE_INFINITY,
     concurrency: 5,
     pageCovers: 42,
 };
