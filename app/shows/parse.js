@@ -64,11 +64,7 @@ export default async () => {
 
                 const matched = td.match(rutor.regexp);
 
-                if (
-                    matched
-                    && matched.groups.name
-                    && matched.groups.name.match(rutor.episodes)
-                ) {
+                if (matched?.groups?.name.match(rutor.episodes)) {
                     matched.groups.magnet = decodeURIComponent(
                         $(elem)
                             .find(rutor.selectors.magnet)

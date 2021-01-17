@@ -1,5 +1,6 @@
 export default {
     /* eslint-disable jsdoc/require-jsdoc */
+    /* eslint-disable unicorn/no-new-array */
     placeholder: '{{}}',
 
     date: data => `<div id="date">${data}</div>`,

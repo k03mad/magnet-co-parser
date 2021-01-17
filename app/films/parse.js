@@ -11,6 +11,8 @@ import utils from 'utils-mad';
 
 /** @returns {Function} */
 export default async () => {
+    /* eslint-disable unicorn/no-new-array */
+
     const printDebug = debug('magnet:films:parse');
 
     moment.locale('ru');
@@ -119,7 +121,7 @@ export default async () => {
                 if (imdb && imdb.groups && !filmdb.imdb) {
                     const {id} = imdb.groups;
                     filmdb.imdb = {
-                        id, url: service.imdb.film + imdb.groups.id,
+                        id, url: service.imdb.film + id,
                     };
                 }
 
