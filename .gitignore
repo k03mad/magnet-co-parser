@@ -1,3 +1,4 @@
 /node_modules
 /www/generated
 /parsed
+.DS_Store
