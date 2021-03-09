@@ -5,7 +5,7 @@ import ms from 'ms';
 import pMap from 'p-map';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
-import utils from 'utils-mad';
+import utils from '@k03mad/utils';
 
 /** @returns {Function} */
 export default async () => {

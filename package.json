@@ -5,11 +5,14 @@
     "Kirill Molchanov <k03.mad@gmail.com"
   ],
   "repository": "k03mad/magnet-co-parser",
+  "license": "MIT",
+  "private": true,
   "engines": {
     "node": ">=15"
   },
   "type": "module",
   "dependencies": {
+    "@k03mad/utils": "14.0.0",
     "app-root-path": "3.0.0",
     "chalk": "4.1.0",
     "cheerio": "1.0.0-rc.5",
@@ -18,12 +21,11 @@
     "jimp": "0.16.1",
     "moment": "2.29.1",
     "ms": "2.1.3",
-    "p-map": "4.0.0",
-    "utils-mad": "12.0.1"
+    "p-map": "4.0.0"
   },
   "devDependencies": {
+    "@k03mad/eslint-config": "8.0.0",
     "eslint": "7.19.0",
-    "eslint-config-k03mad": "7.0.3",
     "eslint-plugin-jsdoc": "31.6.1",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.2.1",
@@ -37,6 +39,5 @@
     "parse": "node index.js",
     "server": "pm2 start pm2.json",
     "start": "npm run parse && npm run server"
-  },
-  "license": "Unlicense"
+  }
 }

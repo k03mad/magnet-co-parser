@@ -1,4 +1,4 @@
-import utils from 'utils-mad';
+import utils from '@k03mad/utils';
 
 const currentYear = Number(utils.date.now('YYYY'));
 const prevYear = currentYear - 1;

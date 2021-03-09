@@ -5,7 +5,7 @@ import pathsFilms from './app/films/config/paths.js';
 import pathsShows from './app/shows/config/paths.js';
 import showsGenerator from './app/shows/generator.js';
 import showsParse from './app/shows/parse.js';
-import utils from 'utils-mad';
+import utils from '@k03mad/utils';
 
 const parsers = [
     {
