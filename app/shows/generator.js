@@ -1,5 +1,5 @@
 import Jimp from 'jimp';
-import fs from 'fs';
+import fs from 'node:fs';
 import html from './config/html.js';
 import paths from './config/paths.js';
 import service from './config/service.js';

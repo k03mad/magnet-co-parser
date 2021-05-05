@@ -1,6 +1,6 @@
 import filmsGenerator from './app/films/generator.js';
 import filmsParse from './app/films/parse.js';
-import fs from 'fs';
+import fs from 'node:fs';
 import pathsFilms from './app/films/config/paths.js';
 import pathsShows from './app/shows/config/paths.js';
 import showsGenerator from './app/shows/generator.js';

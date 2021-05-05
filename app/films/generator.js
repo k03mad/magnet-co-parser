@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import html from './config/html.js';
 import paths from './config/paths.js';
 import rutor from './config/rutor.js';
