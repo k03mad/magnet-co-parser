@@ -24,7 +24,7 @@
     "p-map": "5.0.0"
   },
   "devDependencies": {
-    "@k03mad/eslint-config": "8.0.3",
+    "@k03mad/eslint-config": "8.2.0",
     "eslint": "7.25.0",
     "eslint-plugin-jsdoc": "33.1.0",
     "eslint-plugin-node": "11.1.0",
