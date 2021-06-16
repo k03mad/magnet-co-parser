@@ -17,7 +17,7 @@ export default {
     comments: / \d+$/,
     releaseGroup: /\s.+/,
 
-    timeout: 20000,
+    timeout: 20_000,
     concurrency: 5,
     tagSplit: ' | ',
 };
