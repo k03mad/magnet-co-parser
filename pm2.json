@@ -5,6 +5,6 @@
   "exp_backoff_restart_delay": 100,
   "max_memory_restart": "100M",
 
-  "args": "./www -p 3003 -s -c-1",
+  "args": "./www -p 7004 -s -c-1",
   "node_args": "--no-deprecation"
 }
