@@ -2,9 +2,6 @@
   "name": "magnet-co-parser",
   "script": "http-server",
 
-  "exp_backoff_restart_delay": 100,
-  "max_memory_restart": "300M",
-
   "args": "./www -p 7004 -s -c-1",
   "node_args": "--no-deprecation"
 }
