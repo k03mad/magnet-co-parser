@@ -2,5 +2,5 @@
   "name": "magnet-co-parser",
   "script": "http-server",
 
-  "args": "./www -p 8003 -s -c-1"
+  "args": "./www -p 7009 -s -c-1"
 }
