@@ -51,6 +51,6 @@ export default {
 
     timeout: 20_000,
     filmsCount: Number.POSITIVE_INFINITY,
-    concurrency: 5,
+    concurrency: 10,
     pageCovers: 60,
 };
