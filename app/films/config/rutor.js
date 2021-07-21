@@ -34,7 +34,7 @@ export default {
             ].join(' '),
         },
         quality: ' 1080p',
-        pages: 2,
+        pages: 20,
         categories: [1, 5, 6, 7, 10, 12],
     },
     selectors: {
