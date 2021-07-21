@@ -1,3 +1,4 @@
+import env from './env.js';
 import filmsGenerator from './app/films/generator.js';
 import filmsParse from './app/films/parse.js';
 import fs from 'node:fs';
@@ -6,6 +7,7 @@ import pathsShows from './app/shows/config/paths.js';
 import showsGenerator from './app/shows/generator.js';
 import showsParse from './app/shows/parse.js';
 import utils from '@k03mad/utils';
+import writeHosts from './hosts.js';
 
 const parsers = [
     {
@@ -24,6 +26,8 @@ const parsers = [
 
 (async () => {
     try {
+        env.isCloud && await writeHosts();
+
         const promises = await Promise.allSettled(parsers.map(async elem => {
             const data = await elem.parser();
 
