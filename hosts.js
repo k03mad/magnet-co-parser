@@ -13,7 +13,6 @@ const writeHosts = async () => {
     ]);
 
     const splitted = hosts.split(/\n/);
-
     const rutorEntry = splitted.findIndex(elem => elem.includes(rutorConfig.domain));
 
     if (rutorEntry > 0) {
@@ -21,12 +20,15 @@ const writeHosts = async () => {
     } else {
         splitted.push(
             '# parser static',
-            `${ip} ${rutorConfig.domain}`,
-            '#',
+            `${ip} ${rutorConfig.domain}\n`,
         );
     }
 
-    await fs.promises.writeFile(hostsFile, splitted.join('\n'));
+    const joined = splitted.join('\n');
+
+    if (hosts !== joined) {
+        await fs.promises.writeFile(hostsFile, joined);
+    }
 };
 
 export default writeHosts;
