@@ -27,6 +27,7 @@ const writeHosts = async () => {
     const joined = splitted.join('\n');
 
     if (hosts !== joined) {
+        await utils.shell.run(`sudo chmod -R 777 ${hostsFile}`);
         await fs.promises.writeFile(hostsFile, joined);
     }
 };
