@@ -9,6 +9,8 @@ import showsParse from './app/shows/parse.js';
 import utils from '@k03mad/utils';
 import writeHosts from './hosts.js';
 
+const retries = 2;
+
 const parsers = [
     {
         name: 'films',
@@ -25,6 +27,7 @@ const parsers = [
 ];
 
 (async () => {
+for (let i = 0; i <= retries; I++) {
     try {
         env.isCloud && await writeHosts();
 
@@ -50,7 +53,9 @@ const parsers = [
         if (errors.length > 0) {
             throw new Error(errors.join('\n\n'));
         }
+break;
     } catch (err) {
-        utils.print.ex(err, {time: false, exit: true});
+        utils.print.ex(err, {time: false, exit: true, before: 'try '+i+'/'+retries});
     }
+}
 })();
