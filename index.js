@@ -27,35 +27,36 @@ const parsers = [
 ];
 
 (async () => {
-for (let i = 0; i <= retries; I++) {
-    try {
-        env.isCloud && await writeHosts();
+    for (let i = 0; i <= retries; i++) {
+        try {
+            env.isCloud && await writeHosts();
 
-        const promises = await Promise.allSettled(parsers.map(async elem => {
-            const data = await elem.parser();
+            const promises = await Promise.allSettled(parsers.map(async elem => {
+                const data = await elem.parser();
 
-            await utils.folder.erase([
-                elem.paths.www.folder,
-                elem.paths.www.pages,
-                elem.paths.parsed.folder,
-            ]);
+                await utils.folder.erase([
+                    elem.paths.www.folder,
+                    elem.paths.www.pages,
+                    elem.paths.parsed.folder,
+                ]);
 
-            await fs.promises.writeFile(
-                `${elem.paths.parsed.folder}data.json`,
-                JSON.stringify(data, null, 4),
-            );
+                await fs.promises.writeFile(
+                    `${elem.paths.parsed.folder}data.json`,
+                    JSON.stringify(data, null, 4),
+                );
 
-            await elem.generator(data);
-        }));
+                await elem.generator(data);
+            }));
 
-        const errors = promises.map(elem => elem.reason).filter(Boolean);
+            const errors = promises.map(elem => elem.reason).filter(Boolean);
 
-        if (errors.length > 0) {
-            throw new Error(errors.join('\n\n'));
+            if (errors.length > 0) {
+                throw new Error(errors.join('\n\n'));
+            }
+
+            break;
+        } catch (err) {
+            utils.print.ex(err, {time: false, exit: true, before: `try ${i}/${retries}`});
         }
-break;
-    } catch (err) {
-        utils.print.ex(err, {time: false, exit: true, before: 'try '+i+'/'+retries});
     }
-}
 })();
