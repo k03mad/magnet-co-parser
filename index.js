@@ -56,7 +56,7 @@ const parsers = [
 
             break;
         } catch (err) {
-            utils.print.ex(err, {time: false, exit: true, before: `try ${i}/${retries}`});
+            i === retries && utils.print.ex(err, {time: false, exit: true, before: `try ${i}/${retries}`});
         }
     }
 })();
