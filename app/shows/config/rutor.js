@@ -23,5 +23,6 @@ export default {
     releaseGroup: /\s.+/,
 
     timeout: 20_000,
+    concurrency: 5,
     tagSplit: ' | ',
 };

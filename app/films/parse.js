@@ -4,6 +4,7 @@ import countries from 'i18n-iso-countries';
 import debug from 'debug';
 import moment from 'moment';
 import ms from 'ms';
+import pMap from 'p-map';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 import utils from '@k03mad/utils';
@@ -22,7 +23,7 @@ export default async () => {
     const parsed = [];
 
     await Promise.all(rutor.search.categories.map(async cat => {
-        await Promise.all([...new Array(rutor.search.pages).keys()].map(async page => {
+        await pMap([...new Array(rutor.search.pages).keys()], async page => {
 
             const rutorUrl = cat === 5
                 ? rutor.search.url(page, cat) + rutor.search.queries.rus + rutor.search.quality
@@ -78,13 +79,14 @@ export default async () => {
                     }
                 });
             }
-        }));
+
+        }, {concurrency: rutor.concurrency});
     }));
 
     let counter = 0;
     const filmsArr = Object.entries(films);
 
-    await Promise.all(filmsArr.map(async ([key, value]) => {
+    await pMap(filmsArr, async ([key, value]) => {
 
         counter++;
 
@@ -187,7 +189,7 @@ export default async () => {
                 printDebug(c.red('Skipped: %s'), title);
             }
         }
-    }));
+    }, {concurrency: rutor.concurrency});
 
     const deduped = [];
 

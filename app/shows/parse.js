@@ -2,6 +2,7 @@ import c from 'chalk';
 import cheerio from 'cheerio';
 import countries from 'i18n-iso-countries';
 import ms from 'ms';
+import pMap from 'p-map';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 import utils from '@k03mad/utils';
@@ -32,7 +33,7 @@ export default async () => {
         return {$: cheerio.load(body), rutorUrl};
     };
 
-    await Promise.all(watching.entries().map(async ([i, element]) => {
+    await pMap(watching.entries(), async ([i, element]) => {
 
         const {title, titleOriginal, episodesToWatch, id, kinopoiskId, imdbId} = element.show;
         const {seasonNumber} = episodesToWatch[episodesToWatch.length - 1];
@@ -176,7 +177,7 @@ export default async () => {
 
         }
 
-    }));
+    }, {concurrency: rutor.concurrency});
 
     const withMagnet = parsed.filter(elem => elem.rutor.length > 0);
 
