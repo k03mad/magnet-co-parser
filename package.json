@@ -12,7 +12,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@k03mad/utils": "19.2.2",
+    "@k03mad/utils": "19.2.5",
     "app-root-path": "3.0.0",
     "chalk": "4.1.2",
     "cheerio": "1.0.0-rc.10",
@@ -27,10 +27,10 @@
     "eslint": "7.32.0",
     "eslint-plugin-jsdoc": "36.1.1",
     "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-promise": "5.1.0",
+    "eslint-plugin-promise": "5.1.1",
     "eslint-plugin-sort-requires": "2.1.0",
     "eslint-plugin-unicorn": "37.0.1",
-    "husky": "7.0.2"
+    "husky": "7.0.4"
   },
   "scripts": {
     "lint": "eslint ./ --report-unused-disable-directives --format=codeframe --ignore-pattern='!.*'",
