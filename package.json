@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=16"
+    "node": ">=17"
   },
   "type": "module",
   "dependencies": {
