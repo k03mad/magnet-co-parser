@@ -33,7 +33,6 @@ export default async () => {
     };
 
     await Promise.all([...watching.entries()].map(async ([i, element]) => {
-
         const {title, titleOriginal, episodesToWatch, id, kinopoiskId, imdbId} = element.show;
         const {seasonNumber} = episodesToWatch[episodesToWatch.length - 1];
 

@@ -19,14 +19,15 @@ export default async data => {
     const pages = utils.array.chunk(data.items, rutor.pageCovers);
 
     for (const filmsArray of pages) {
-        const pageIndex = [
-            html.date(`${data.timestamp.startTime} - ${data.timestamp.diff}`),
+        const pageIndex = [html.date(`${data.timestamp.startTime} - ${data.timestamp.diff}`)];
+
+        if (pages.length > 1) {
             html.paginator(
                 pages.length,
                 paths.getRel,
                 paths.www.list,
-            ),
-        ];
+            );
+        }
 
         const pageCovers = [];
 
