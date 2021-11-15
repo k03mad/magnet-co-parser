@@ -34,7 +34,7 @@ export default {
             ].join(' '),
         },
         quality: ' 1080p',
-        pages: 20,
+        pages: 1,
         categories: [1, 5, 6, 7, 10, 12],
     },
     selectors: {
@@ -50,7 +50,6 @@ export default {
     tagSplit: ' | ',
 
     timeout: 20_000,
-    filmsCount: Number.POSITIVE_INFINITY,
     concurrency: 5,
-    pageCovers: 60,
+    pageCovers: 300,
 };

@@ -93,100 +93,97 @@ export default async () => {
             printDebug(`FILM ${counter}/${filmsArr.length}`);
         }
 
-        if (parsed.length !== rutor.filmsCount) {
+        const [, originalName] = key.split(' / ');
+        const title = originalName || key;
 
-            const [, originalName] = key.split(' / ');
-            const title = originalName || key;
+        const filmdb = {};
 
-            const filmdb = {};
+        for (const {link} of value.rutor) {
+            const {body} = await utils.request.cache(link, {
+                headers: {'user-agent': utils.ua.win.chrome},
+            });
 
-            for (const {link} of value.rutor) {
-                const {body} = await utils.request.cache(link, {
-                    headers: {'user-agent': utils.ua.win.chrome},
-                });
+            const kp = body.match(service.kp.re);
+            const imdb = body.match(service.imdb.re);
 
-                const kp = body.match(service.kp.re);
-                const imdb = body.match(service.imdb.re);
-
-                if (kp && kp.groups && !filmdb.kp) {
-                    const id = kp.groups.id1 || kp.groups.id2;
-                    filmdb.kp = {
-                        id: Number(id),
-                        url: service.kp.film + id,
-                        rating: service.kp.rating(id),
-                    };
-                }
-
-                if (imdb && imdb.groups && !filmdb.imdb) {
-                    const {id} = imdb.groups;
-                    filmdb.imdb = {
-                        id, url: service.imdb.film + id,
-                    };
-                }
-
-                if (kp && imdb) {
-                    break;
-                }
-            }
-
-            let data;
-
-            // если есть imdb id — используем ручку матчинга по нему
-            if (filmdb.imdb) {
-                ({movie_results: [data]} = await utils.tmdb.get({path: `find/${filmdb.imdb.id}`, params: {external_source: 'imdb_id'}, cache: true}));
-            // иначе — по названию
-            } else {
-                [data] = await utils.tmdb.get({path: 'search/movie', params: {query: title}, cache: true});
-            }
-
-            if (data && data.poster_path) {
-
-                const [movie, {cast, crew}] = await Promise.all([
-                    utils.tmdb.get({path: `movie/${data.id}`, cache: true}),
-                    utils.tmdb.get({path: `movie/${data.id}/credits`, cache: true}),
-                ]);
-
-                // первая страница, без категории, все слова
-                const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;
-
-                const info = {
-                    title,
-                    cover: service.tmdb.cover + data.poster_path,
-                    id: data.id,
-
-                    tagline: movie.tagline,
-                    overview: data.overview,
-                    genres: movie.genres.map(elem => elem.name),
-                    companies: movie.production_companies.map(elem => elem.name),
-                    countries: movie.production_countries.map(elem => countries.getName(elem.iso_3166_1, 'ru')),
-                    director: crew.filter(elem => elem.job === 'Director').map(elem => elem.name),
-
-                    photos: [
-                        ...new Set(cast
-                            .filter(elem => Boolean(elem.profile_path))
-                            .map(elem => ({
-                                id: elem.id,
-                                link: service.tmdb.person + elem.id,
-                                name: elem.name,
-                                cover: service.tmdb.cover + elem.profile_path,
-                            })),
-                        ),
-                    ],
-
-                    rutor: value.rutor,
-                    urls: {
-                        rutor: rutorUrl,
-                        rutracker: service.rutracker.url + title + rutor.search.quality,
-                        kinopub: service.kinopub.url + title,
-                    },
-                    ...filmdb,
+            if (kp && kp.groups && !filmdb.kp) {
+                const id = kp.groups.id1 || kp.groups.id2;
+                filmdb.kp = {
+                    id: Number(id),
+                    url: service.kp.film + id,
+                    rating: service.kp.rating(id),
                 };
-
-                parsed.push(info);
-
-            } else {
-                printDebug(c.red('Skipped: %s'), title);
             }
+
+            if (imdb && imdb.groups && !filmdb.imdb) {
+                const {id} = imdb.groups;
+                filmdb.imdb = {
+                    id, url: service.imdb.film + id,
+                };
+            }
+
+            if (kp && imdb) {
+                break;
+            }
+        }
+
+        let data;
+
+        // если есть imdb id — используем ручку матчинга по нему
+        if (filmdb.imdb) {
+            ({movie_results: [data]} = await utils.tmdb.get({path: `find/${filmdb.imdb.id}`, params: {external_source: 'imdb_id'}, cache: true}));
+            // иначе — по названию
+        } else {
+            [data] = await utils.tmdb.get({path: 'search/movie', params: {query: title}, cache: true});
+        }
+
+        if (data && data.poster_path) {
+
+            const [movie, {cast, crew}] = await Promise.all([
+                utils.tmdb.get({path: `movie/${data.id}`, cache: true}),
+                utils.tmdb.get({path: `movie/${data.id}/credits`, cache: true}),
+            ]);
+
+            // первая страница, без категории, все слова
+            const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;
+
+            const info = {
+                title,
+                cover: service.tmdb.cover + data.poster_path,
+                id: data.id,
+
+                tagline: movie.tagline,
+                overview: data.overview,
+                genres: movie.genres.map(elem => elem.name),
+                companies: movie.production_companies.map(elem => elem.name),
+                countries: movie.production_countries.map(elem => countries.getName(elem.iso_3166_1, 'ru')),
+                director: crew.filter(elem => elem.job === 'Director').map(elem => elem.name),
+
+                photos: [
+                    ...new Set(cast
+                        .filter(elem => Boolean(elem.profile_path))
+                        .map(elem => ({
+                            id: elem.id,
+                            link: service.tmdb.person + elem.id,
+                            name: elem.name,
+                            cover: service.tmdb.cover + elem.profile_path,
+                        })),
+                    ),
+                ],
+
+                rutor: value.rutor,
+                urls: {
+                    rutor: rutorUrl,
+                    rutracker: service.rutracker.url + title + rutor.search.quality,
+                    kinopub: service.kinopub.url + title,
+                },
+                ...filmdb,
+            };
+
+            parsed.push(info);
+
+        } else {
+            printDebug(c.red('Skipped: %s'), title);
         }
     }));
 
