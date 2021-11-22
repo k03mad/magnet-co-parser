@@ -9,20 +9,24 @@ import showsParse from './app/shows/parse.js';
 import utils from '@k03mad/utils';
 import writeHosts from './hosts.js';
 
-const parsers = [
+let parsers = [
     {
-        name: 'films',
+        type: 'films',
         parser: () => filmsParse(),
         generator: data => filmsGenerator(data),
         paths: pathsFilms,
     },
     {
-        name: 'shows',
+        type: 'shows',
         parser: () => showsParse(),
         generator: data => showsGenerator(data),
         paths: pathsShows,
     },
 ];
+
+if (env.parser.type) {
+    parsers = parsers.filter(({type}) => type === env.parser.type);
+}
 
 (async () => {
     try {
