@@ -1,7 +1,0 @@
-{
-  "name": "magnet",
-  "script": "http-server",
-
-  "args": "./www --port 7009 -c-1 --silent --ssl --cert $CERT_PATH/$CLOUD_DOMAIN/cert.pem --key $CERT_PATH/$CLOUD_DOMAIN/privkey.pem --ca $CERT_PATH/$CLOUD_DOMAIN/fullchain.pem --username $MAGNET_USERNAME --password $MAGNET_PASSWORD",
-  "node_args": "--no-deprecation"
-}
