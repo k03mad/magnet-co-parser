@@ -9,6 +9,7 @@ module.exports = {
                 '--port 7009',
 
                 '-c-1',
+                '--cors',
                 '--silent',
 
                 `--username ${process.env.MAGNET_USERNAME}`,
