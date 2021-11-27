@@ -3,6 +3,8 @@ module.exports = {
         {
             name: 'magnet',
             script: './node_modules/.bin/http-server',
+            node_args: '--no-deprecation',
+
             args: [
 
                 './www',
