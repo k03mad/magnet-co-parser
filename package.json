@@ -24,10 +24,12 @@
     "ms": "2.1.3"
   },
   "devDependencies": {
-    "@k03mad/eslint-config": "9.0.0",
-    "eslint": "8.3.0",
-    "eslint-plugin-jsdoc": "37.0.3",
+    "@k03mad/eslint-config": "10.0.2",
+    "eslint": "8.4.0",
+    "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-jsdoc": "37.1.0",
     "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-simple-import-sort": "7.0.0",
     "eslint-plugin-sort-requires": "2.1.0",
     "eslint-plugin-unicorn": "39.0.0",
     "husky": "7.0.4"

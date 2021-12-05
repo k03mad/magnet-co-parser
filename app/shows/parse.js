@@ -1,10 +1,11 @@
+import utils from '@k03mad/utils';
 import c from 'chalk';
 import cheerio from 'cheerio';
 import countries from 'i18n-iso-countries';
 import ms from 'ms';
+
 import rutor from './config/rutor.js';
 import service from './config/service.js';
-import utils from '@k03mad/utils';
 
 /** @returns {Function} */
 export default async () => {

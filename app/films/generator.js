@@ -1,9 +1,10 @@
+import utils from '@k03mad/utils';
 import fs from 'node:fs';
+
 import html from './config/html.js';
 import paths from './config/paths.js';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
-import utils from '@k03mad/utils';
 
 /**
  * @param {object} data

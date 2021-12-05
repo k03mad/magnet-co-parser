@@ -1,7 +1,8 @@
-import env from './env.js';
-import fs from 'node:fs';
-import rutorConfig from './app/films/config/rutor.js';
 import utils from '@k03mad/utils';
+import fs from 'node:fs';
+
+import rutorConfig from './app/films/config/rutor.js';
+import env from './env.js';
 
 /***/
 const writeHosts = async () => {
