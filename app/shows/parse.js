@@ -2,12 +2,13 @@ import utils from '@k03mad/util';
 import c from 'chalk';
 import cheerio from 'cheerio';
 import countries from 'i18n-iso-countries';
+import _ from 'lodash';
 import ms from 'ms';
 
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 
-const {array, myshows, request, tmdb, ua} = utils;
+const {myshows, request, tmdb, ua} = utils;
 
 /**
  * Возвращает элементы на странице поиска со ссылкой
@@ -56,7 +57,7 @@ export default async () => {
          * @param {object} opts
          */
         const parseGroups = ($, opts = {}) => {
-            $(rutor.selectors.td).each((_, elem) => {
+            $(rutor.selectors.td).each((x, elem) => {
 
                 const td = $(elem)
                     .text()
@@ -185,7 +186,7 @@ export default async () => {
     console.log(c.blue(`Сериалов с Myshows: ${watching.length}`));
     console.log(c.blue(`Сериалов найдено на Rutor: ${withMagnet.length}`));
 
-    const notFound = array.diff(seriesList, withMagnet.map(elem => elem.titleGenerated));
+    const notFound = _.xor(seriesList, withMagnet.map(elem => elem.titleGenerated));
 
     console.log(c.cyan(`Сериалов не найдено: ${notFound.length}`));
     console.log(notFound.sort().join('\n'));
