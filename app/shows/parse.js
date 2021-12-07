@@ -1,4 +1,4 @@
-import utils from '@k03mad/utils';
+import utils from '@k03mad/util';
 import c from 'chalk';
 import cheerio from 'cheerio';
 import countries from 'i18n-iso-countries';
@@ -6,6 +6,24 @@ import ms from 'ms';
 
 import rutor from './config/rutor.js';
 import service from './config/service.js';
+
+const {array, myshows, request, tmdb, ua} = utils;
+
+/**
+ * Возвращает элементы на странице поиска со ссылкой
+ * @param {string} quality
+ * @param {string} titleOriginal
+ * @returns {object}
+ */
+const getRutorElems = async (quality, titleOriginal) => {
+    const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
+
+    const {body} = await request.cache(rutorUrl, {
+        timeout: rutor.timeout,
+        headers: {'user-agent': ua.win.chrome},
+    }, {expire: '30m'});
+    return {$: cheerio.load(body), rutorUrl};
+};
 
 /** @returns {Function} */
 export default async () => {
@@ -15,23 +33,7 @@ export default async () => {
     const parsed = [];
     const seriesList = [];
 
-    const watching = await utils.myshows.watch({onlyAired: true, gotOpts: {timeout: 30_000}});
-
-    /**
-     * Возвращает элементы на странице поиска со ссылкой
-     * @param {string} quality
-     * @param {string} titleOriginal
-     * @returns {object}
-     */
-    const getRutorElems = async (quality, titleOriginal) => {
-        const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
-
-        const {body} = await utils.request.cache(rutorUrl, {
-            timeout: rutor.timeout,
-            headers: {'user-agent': utils.ua.win.chrome},
-        }, {expire: '30m'});
-        return {$: cheerio.load(body), rutorUrl};
-    };
+    const watching = await myshows.watch({onlyAired: true, gotOpts: {timeout: 30_000}});
 
     await Promise.all([...watching.entries()].map(async ([i, element]) => {
         const {episodesToWatch, id, imdbId, kinopoiskId, title, titleOriginal} = element.show;
@@ -126,11 +128,11 @@ export default async () => {
         let data;
 
         if (imdbId) {
-            ({tv_results: [data]} = await utils.tmdb.get({path: `find/tt${imdbId}`, params: {external_source: 'imdb_id'}, cache: true}));
+            ({tv_results: [data]} = await tmdb.get({path: `find/tt${imdbId}`, params: {external_source: 'imdb_id'}, cache: true}));
         }
 
         if (!data) {
-            [data] = await utils.tmdb.get({path: 'search/tv', params: {query: titleOriginal}, cache: true});
+            [data] = await tmdb.get({path: 'search/tv', params: {query: titleOriginal}, cache: true});
         }
 
         parsed[i].id = id;
@@ -150,8 +152,8 @@ export default async () => {
         }
 
         if (data) {
-            const show = await utils.tmdb.get({path: `tv/${data.id}`, cache: true});
-            const {cast, crew} = await utils.tmdb.get({path: `tv/${data.id}/credits`, cache: true});
+            const show = await tmdb.get({path: `tv/${data.id}`, cache: true});
+            const {cast, crew} = await tmdb.get({path: `tv/${data.id}/credits`, cache: true});
 
             parsed[i].cover = service.tmdb.cover + data.poster_path;
             parsed[i].networks = show.networks.map(elem => elem.name);
@@ -183,7 +185,7 @@ export default async () => {
     console.log(c.blue(`Сериалов с Myshows: ${watching.length}`));
     console.log(c.blue(`Сериалов найдено на Rutor: ${withMagnet.length}`));
 
-    const notFound = utils.array.diff(seriesList, withMagnet.map(elem => elem.titleGenerated));
+    const notFound = array.diff(seriesList, withMagnet.map(elem => elem.titleGenerated));
 
     console.log(c.cyan(`Сериалов не найдено: ${notFound.length}`));
     console.log(notFound.sort().join('\n'));

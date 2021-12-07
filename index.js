@@ -1,4 +1,4 @@
-import utils from '@k03mad/utils';
+import utils from '@k03mad/util';
 import fs from 'node:fs';
 
 import pathsFilms from './app/films/config/paths.js';
@@ -9,6 +9,8 @@ import showsGenerator from './app/shows/generator.js';
 import showsParse from './app/shows/parse.js';
 import env from './env.js';
 import writeHosts from './hosts.js';
+
+const {folder, print} = utils;
 
 let parsers = [
     {
@@ -36,7 +38,7 @@ if (env.parser.type) {
         const promises = await Promise.allSettled(parsers.map(async elem => {
             const data = await elem.parser();
 
-            await utils.folder.erase([
+            await folder.erase([
                 elem.paths.www.folder,
                 elem.paths.www.pages,
                 elem.paths.parsed.folder,
@@ -56,6 +58,6 @@ if (env.parser.type) {
             throw new Error(errors.join('\n\n'));
         }
     } catch (err) {
-        utils.print.ex(err, {time: false, full: true, exit: true});
+        print.ex(err, {time: false, full: true, exit: true});
     }
 })();

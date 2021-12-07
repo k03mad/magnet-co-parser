@@ -1,8 +1,10 @@
-import utils from '@k03mad/utils';
+import utils from '@k03mad/util';
 import fs from 'node:fs';
 
 import rutorConfig from './app/films/config/rutor.js';
 import env from './env.js';
+
+const {shell} = utils;
 
 /***/
 const writeHosts = async () => {
@@ -10,7 +12,7 @@ const writeHosts = async () => {
 
     const [hosts, ip] = await Promise.all([
         fs.promises.readFile(hostsFile, {encoding: 'utf-8'}),
-        utils.shell.run(`dig +short ${rutorConfig.domain} @${env.mikrotik.host}`),
+        shell.run(`dig +short ${rutorConfig.domain} @${env.mikrotik.host}`),
     ]);
 
     const splitted = hosts.split(/\n/);
@@ -28,7 +30,7 @@ const writeHosts = async () => {
     const joined = splitted.join('\n');
 
     if (hosts !== joined) {
-        await utils.shell.run(`sudo chmod -R 777 ${hostsFile}`);
+        await shell.run(`sudo chmod -R 777 ${hostsFile}`);
         await fs.promises.writeFile(hostsFile, joined);
     }
 };

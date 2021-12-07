@@ -1,10 +1,12 @@
-import utils from '@k03mad/utils';
+import utils from '@k03mad/util';
 import fs from 'node:fs';
 
 import html from './config/html.js';
 import paths from './config/paths.js';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
+
+const {array} = utils;
 
 /**
  * @param {object} data
@@ -17,7 +19,7 @@ export default async data => {
     ]);
 
     const pasteIndex = [];
-    const pages = utils.array.chunk(data.items, rutor.pageCovers);
+    const pages = array.chunk(data.items, rutor.pageCovers);
 
     for (const filmsArray of pages) {
         const pageIndex = [html.date(`${data.timestamp.startTime} - ${data.timestamp.diff}`)];

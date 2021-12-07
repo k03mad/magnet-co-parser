@@ -1,4 +1,4 @@
-import utils from '@k03mad/utils';
+import utils from '@k03mad/util';
 import c from 'chalk';
 import cheerio from 'cheerio';
 import debug from 'debug';
@@ -9,6 +9,8 @@ import ms from 'ms';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 
+const {date, request, tmdb, ua} = utils;
+
 /** @returns {Function} */
 export default async () => {
     /* eslint-disable unicorn/no-new-array */
@@ -16,8 +18,8 @@ export default async () => {
     const printDebug = debug('magnet:films:parse');
 
     moment.locale('ru');
-    const date = new Date();
-    const startTime = utils.date.now();
+    const currentDate = new Date();
+    const startTime = date.now();
 
     const films = {};
     const parsed = [];
@@ -29,9 +31,9 @@ export default async () => {
                 ? rutor.search.url(page, cat) + rutor.search.queries.rus + rutor.search.quality
                 : rutor.search.url(page, cat) + rutor.search.queries.default + rutor.search.quality;
 
-            const {body} = await utils.request.cache(rutorUrl, {
+            const {body} = await request.cache(rutorUrl, {
                 timeout: rutor.timeout,
-                headers: {'user-agent': utils.ua.win.chrome},
+                headers: {'user-agent': ua.win.chrome},
             }, {expire: '30m'});
 
             const $ = cheerio.load(body);
@@ -100,8 +102,8 @@ export default async () => {
         const filmdb = {};
 
         for (const {link} of value.rutor) {
-            const {body} = await utils.request.cache(link, {
-                headers: {'user-agent': utils.ua.win.chrome},
+            const {body} = await request.cache(link, {
+                headers: {'user-agent': ua.win.chrome},
             });
 
             const kp = body.match(service.kp.re);
@@ -132,17 +134,17 @@ export default async () => {
 
         // если есть imdb id — используем ручку матчинга по нему
         if (filmdb.imdb) {
-            ({movie_results: [data]} = await utils.tmdb.get({path: `find/${filmdb.imdb.id}`, params: {external_source: 'imdb_id'}, cache: true}));
+            ({movie_results: [data]} = await tmdb.get({path: `find/${filmdb.imdb.id}`, params: {external_source: 'imdb_id'}, cache: true}));
             // иначе — по названию
         } else {
-            [data] = await utils.tmdb.get({path: 'search/movie', params: {query: title}, cache: true});
+            [data] = await tmdb.get({path: 'search/movie', params: {query: title}, cache: true});
         }
 
         if (data && data.poster_path) {
 
             const [movie, {cast, crew}] = await Promise.all([
-                utils.tmdb.get({path: `movie/${data.id}`, cache: true}),
-                utils.tmdb.get({path: `movie/${data.id}/credits`, cache: true}),
+                tmdb.get({path: `movie/${data.id}`, cache: true}),
+                tmdb.get({path: `movie/${data.id}/credits`, cache: true}),
             ]);
 
             // первая страница, без категории, все слова
@@ -222,7 +224,7 @@ export default async () => {
         });
 
     console.log(c.blue(`Фильмов найдено на Rutor: ${sorted.length}`));
-    const diff = utils.date.diff({date, period: 'milliseconds'});
+    const diff = date.diff({date: currentDate, period: 'milliseconds'});
 
     return {
         timestamp: {

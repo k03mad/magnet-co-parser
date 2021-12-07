@@ -1,6 +1,8 @@
-import utils from '@k03mad/utils';
+import utils from '@k03mad/util';
 
-const currentYear = Number(utils.date.now('YYYY'));
+const {date} = utils;
+
+const currentYear = Number(date.now('YYYY'));
 const prevYear = currentYear - 1;
 
 const RUTOR_DOMAIN = 'rutor.info';
