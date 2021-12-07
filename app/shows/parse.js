@@ -8,7 +8,7 @@ import ms from 'ms';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 
-const {myshows, request, tmdb, ua} = utils;
+const {date, myshows, request, tmdb, ua} = utils;
 
 /**
  * Возвращает элементы на странице поиска со ссылкой
@@ -28,8 +28,8 @@ const getRutorElems = async (quality, titleOriginal) => {
 
 /** @returns {Function} */
 export default async () => {
-    const date = new Date();
-    const startTime = utils.date.now();
+    const currentDate = new Date();
+    const startTime = date.now();
 
     const parsed = [];
     const seriesList = [];
@@ -191,7 +191,7 @@ export default async () => {
     console.log(c.cyan(`Сериалов не найдено: ${notFound.length}`));
     console.log(notFound.sort().join('\n'));
 
-    const diff = utils.date.diff({date, period: 'milliseconds'});
+    const diff = date.diff({date: currentDate, period: 'milliseconds'});
 
     return {
         timestamp: {
