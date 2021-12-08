@@ -20,7 +20,7 @@ const getRutorElems = async (quality, titleOriginal) => {
     const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
 
     const {body} = await request.cache(rutorUrl, {
-        timeout: rutor.timeout,
+        timeout: {request: rutor.timeout},
         headers: {'user-agent': ua.win.chrome},
     }, {expire: '30m'});
     return {$: cheerio.load(body), rutorUrl};
@@ -34,7 +34,7 @@ export default async () => {
     const parsed = [];
     const seriesList = [];
 
-    const watching = await myshows.watch({onlyAired: true, gotOpts: {timeout: 30_000}});
+    const watching = await myshows.watch({onlyAired: true, gotOpts: {timeout: {request: 30_000}}});
 
     await Promise.all([...watching.entries()].map(async ([i, element]) => {
         const {episodesToWatch, id, imdbId, kinopoiskId, title, titleOriginal} = element.show;

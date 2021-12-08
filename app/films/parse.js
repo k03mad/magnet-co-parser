@@ -32,7 +32,7 @@ export default async () => {
                 : rutor.search.url(page, cat) + rutor.search.queries.default + rutor.search.quality;
 
             const {body} = await request.cache(rutorUrl, {
-                timeout: rutor.timeout,
+                timeout: {request: rutor.timeout},
                 headers: {'user-agent': ua.win.chrome},
             }, {expire: '30m'});
 
