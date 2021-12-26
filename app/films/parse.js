@@ -1,4 +1,4 @@
-import utils from '@k03mad/util';
+import {date, request, tmdb, ua} from '@k03mad/util';
 import c from 'chalk';
 import cheerio from 'cheerio';
 import debug from 'debug';
@@ -9,12 +9,8 @@ import ms from 'ms';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 
-const {date, request, tmdb, ua} = utils;
-
 /** @returns {Function} */
 export default async () => {
-    /* eslint-disable unicorn/no-new-array */
-
     const printDebug = debug('magnet:films:parse');
 
     moment.locale('ru');
@@ -25,7 +21,7 @@ export default async () => {
     const parsed = [];
 
     await Promise.all(rutor.search.categories.map(async cat => {
-        await Promise.all([...new Array(rutor.search.pages).keys()].map(async page => {
+        await Promise.all([...Array.from({length: rutor.search.pages}).keys()].map(async page => {
 
             const rutorUrl = cat === 5
                 ? rutor.search.url(page, cat) + rutor.search.queries.rus + rutor.search.quality

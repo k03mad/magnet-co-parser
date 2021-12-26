@@ -1,6 +1,4 @@
-import utils from '@k03mad/util';
-
-const {date} = utils;
+import {date} from '@k03mad/util';
 
 const currentYear = Number(date.now('YYYY'));
 const prevYear = currentYear - 1;
@@ -9,7 +7,6 @@ const RUTOR_DOMAIN = 'rutor.info';
 const rutorUrl = `http://${RUTOR_DOMAIN}`;
 
 export default {
-    /* eslint-disable jsdoc/require-jsdoc */
     url: rutorUrl,
     domain: RUTOR_DOMAIN,
     search: {

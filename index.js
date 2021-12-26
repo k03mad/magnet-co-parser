@@ -1,4 +1,4 @@
-import utils from '@k03mad/util';
+import {folder, print} from '@k03mad/util';
 import fs from 'node:fs';
 
 import pathsFilms from './app/films/config/paths.js';
@@ -9,8 +9,6 @@ import showsGenerator from './app/shows/generator.js';
 import showsParse from './app/shows/parse.js';
 import env from './env.js';
 import writeHosts from './hosts.js';
-
-const {folder, print} = utils;
 
 let parsers = [
     {

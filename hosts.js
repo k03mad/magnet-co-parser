@@ -1,10 +1,8 @@
-import utils from '@k03mad/util';
+import {shell} from '@k03mad/util';
 import fs from 'node:fs';
 
 import rutorConfig from './app/films/config/rutor.js';
 import env from './env.js';
-
-const {shell} = utils;
 
 /***/
 const writeHosts = async () => {

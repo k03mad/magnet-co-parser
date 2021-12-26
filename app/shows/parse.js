@@ -1,4 +1,4 @@
-import utils from '@k03mad/util';
+import {date, myshows, request, tmdb, ua} from '@k03mad/util';
 import c from 'chalk';
 import cheerio from 'cheerio';
 import countries from 'i18n-iso-countries';
@@ -7,8 +7,6 @@ import ms from 'ms';
 
 import rutor from './config/rutor.js';
 import service from './config/service.js';
-
-const {date, myshows, request, tmdb, ua} = utils;
 
 /**
  * Возвращает элементы на странице поиска со ссылкой

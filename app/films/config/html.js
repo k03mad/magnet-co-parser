@@ -1,13 +1,11 @@
 export default {
-    /* eslint-disable jsdoc/require-jsdoc */
-    /* eslint-disable unicorn/no-new-array */
     placeholder: '{{}}',
 
     date: data => `<div id="date">${data}</div>`,
     paginator: (length, rel, path) => `
         <div id="paginator">
             <div class="container" onclick="document.location = '/';">M</div>
-            ${[...new Array(length).keys()].map(elem => ++elem).map(num => `
+            ${[...Array.from({length}).keys()].map(elem => ++elem).map(num => `
                 <div class="container" onclick="document.location = '${rel(path(num))}';">
                     ${num}
                 </div>
