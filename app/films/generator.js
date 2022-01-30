@@ -18,7 +18,6 @@ export default async data => {
 
     const pasteIndex = [];
     const pages = _.chunk(data.items, rutor.pageCovers);
-    console.log('—————————— \n pages', pages);
 
     for (const filmsArray of pages) {
         const pageIndex = [html.date(`${data.timestamp.startTime} - ${data.timestamp.diff}`)];
