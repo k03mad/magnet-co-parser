@@ -55,6 +55,7 @@ export default async () => {
                         );
 
                         const href = $(elem).find(rutor.selectors.link).attr('href');
+
                         matched.groups.link = href.includes(rutor.domain)
                             ? decodeURIComponent(href).replace(new RegExp(`.+${rutor.domain}`), rutor.url)
                             : rutor.url + href;
@@ -107,6 +108,7 @@ export default async () => {
 
             if (kp && kp.groups && !filmdb.kp) {
                 const id = kp.groups.id1 || kp.groups.id2;
+
                 filmdb.kp = {
                     id: Number(id),
                     url: service.kp.film + id,
@@ -116,6 +118,7 @@ export default async () => {
 
             if (imdb && imdb.groups && !filmdb.imdb) {
                 const {id} = imdb.groups;
+
                 filmdb.imdb = {
                     id, url: service.imdb.film + id,
                 };

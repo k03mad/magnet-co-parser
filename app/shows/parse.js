@@ -21,6 +21,7 @@ const getRutorElems = async (quality, titleOriginal) => {
         timeout: {request: rutor.timeout},
         headers: {'user-agent': ua.win.chrome},
     }, {expire: '30m'});
+
     return {$: cheerio.load(body), rutorUrl};
 };
 
@@ -95,6 +96,7 @@ export default async () => {
                         const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
 
                         matched.groups.tags = tags.join(rutor.tagSplit).replace(rutor.comments, '');
+
                         // вырезаем не относящееся к качеству
                         // WEBRip 720p от FilmStudio
                         matched.groups.quality = opts.noQuality
@@ -135,6 +137,7 @@ export default async () => {
         }
 
         parsed[i].id = id;
+
         parsed[i].urls = {
             rutor: rutorUrl,
             rutracker: service.rutracker.url + titleOriginal + rutor.search.quality.full,
