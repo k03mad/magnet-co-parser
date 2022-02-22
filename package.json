@@ -39,7 +39,7 @@
     "lint": "eslint ./ --report-unused-disable-directives --ignore-pattern='!.*'",
     "setup": "npm i",
     "parse": "node index.js",
-    "server": "pm2 start pm2.config.cjs",
+    "server": "pm2 start pm2.json",
     "start": "npm run parse && npm run server",
     "prepare": "husky install"
   }

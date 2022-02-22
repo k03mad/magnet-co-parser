@@ -1,0 +1,8 @@
+{
+  "apps": [
+    {
+      "name": "magnet",
+      "script": "./server.js"
+    }
+  ]
+}
