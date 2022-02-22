@@ -1,6 +1,6 @@
 import {spawn} from 'node:child_process';
 
-const server = spawn('./node_modules/.bin/http-server', [
+const server = spawn('node --no-deprecation ./node_modules/.bin/http-server', [
 
     './www',
     '--port 7009',
