@@ -9,7 +9,7 @@ const writeHosts = async () => {
     const hostsFile = '/etc/hosts';
 
     const [hosts, ip] = await Promise.all([
-        fs.promises.readFile(hostsFile, {encoding: 'utf-8'}),
+        fs.promises.readFile(hostsFile, {encoding: 'utf8'}),
         shell.run(`dig +short ${rutorConfig.domain} @${env.mikrotik.host}`),
     ]);
 
