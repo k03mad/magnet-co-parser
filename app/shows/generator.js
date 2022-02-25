@@ -44,7 +44,7 @@ export default async data => {
 
         const pasteSerial = [
             html.url(show.urls),
-            show?.kp.rating ? html.rating(show.kp.url, show.kp.rating) : '',
+            show.kp?.rating ? html.rating(show.kp.url, show.kp.rating) : '',
             show.photos ? html.photos(show.photos.slice(0, service.tmdb.castCount)) : '',
             html.info([
                 show.countries?.length > 0 ? `Страны: ${show.countries.slice(0, service.tmdb.countriesCount).join(', ')}` : '',

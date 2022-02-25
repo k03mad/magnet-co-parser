@@ -41,7 +41,7 @@ export default async data => {
 
             const pasteFilm = [
                 html.url(film.urls),
-                film.kp && film.kp.rating ? html.rating(film.kp.url, film.kp.rating) : '',
+                film.kp?.rating ? html.rating(film.kp.url, film.kp.rating) : '',
                 html.photos(film.photos.slice(0, service.tmdb.castCount)),
                 html.info([
                     film.countries.length > 0 ? `Страны: ${film.countries.slice(0, service.tmdb.countriesCount).join(', ')}` : '',
