@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import rutorConfig from './app/films/config/rutor.js';
 import env from './env.js';
 
-/***/
+/** */
 const writeHosts = async () => {
     const hostsFile = '/etc/hosts';
 
