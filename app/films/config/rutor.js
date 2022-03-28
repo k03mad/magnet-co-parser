@@ -12,27 +12,8 @@ export default {
     search: {
         // rutor.info/search/страница/категория/логическое выражение/сортировка по дате/
         url: (page, cat, log = 300) => `${rutorUrl}/search/${page}/${cat}/${log}/0/`,
-        queries: {
-            default: [
-                `${currentYear}|${prevYear}`,
-                '(iTunes|Лицензия|Пифагор|Невафильм| D)',
-                '-( BDRemux)',
-                '-( Blu-Ray)',
-                '-( 3D-Video)',
-                '-( 60 fps)',
-                '-( Line)',
-                '-( HDRezka)',
-            ].join(' '),
-            rus: [
-                `${currentYear}|${prevYear}`,
-                '-( BDRemux)',
-                '-( Blu-Ray)',
-                '-( 3D-Video)',
-                '-( 60 fps)',
-                '-( Line)',
-            ].join(' '),
-        },
-        quality: ' 1080p',
+        query: `${currentYear}|${prevYear}`,
+        quality: '1080p',
         pages: 1,
         categories: [1, 5, 6, 7, 10, 12],
     },
@@ -50,5 +31,5 @@ export default {
 
     timeout: 20_000,
     concurrency: 5,
-    pageCovers: 300,
+    pageCovers: Number.POSITIVE_INFINITY,
 };

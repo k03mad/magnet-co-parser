@@ -23,14 +23,16 @@ export default async () => {
     await Promise.all(rutor.search.categories.map(async cat => {
         await Promise.all([...Array.from({length: rutor.search.pages}).keys()].map(async page => {
 
-            const rutorUrl = cat === 5
-                ? rutor.search.url(page, cat) + rutor.search.queries.rus + rutor.search.quality
-                : rutor.search.url(page, cat) + rutor.search.queries.default + rutor.search.quality;
-
-            const {body} = await request.cache(rutorUrl, {
-                timeout: {request: rutor.timeout},
-                headers: {'user-agent': ua.win.chrome},
-            }, {expire: '30m'});
+            const {body} = await request.cache(
+                `${rutor.search.url(page, cat) + rutor.search.query} ${rutor.search.quality || ''}`.trim(),
+                {
+                    timeout: {request: rutor.timeout},
+                    headers: {'user-agent': ua.win.chrome},
+                },
+                {
+                    expire: '30m',
+                },
+            );
 
             const $ = cheerio.load(body);
 
