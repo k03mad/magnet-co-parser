@@ -24,7 +24,7 @@ export default async () => {
         await Promise.all([...Array.from({length: rutor.search.pages}).keys()].map(async page => {
 
             const {body} = await request.cache(
-                `${rutor.search.url(page, cat) + rutor.search.query} ${rutor.search.quality || ''}`.trim(),
+                rutor.search.url(page, cat) + rutor.search.query,
                 {
                     timeout: {request: rutor.timeout},
                     headers: {'user-agent': ua.win.chrome},
@@ -149,7 +149,7 @@ export default async () => {
             ]);
 
             // первая страница, без категории, все слова
-            const rutorUrl = rutor.search.url(0, 0, 100) + title + rutor.search.quality;
+            const rutorUrl = rutor.search.url(0, 0, 100) + title;
 
             const info = {
                 title,
@@ -178,7 +178,7 @@ export default async () => {
                 rutor: value.rutor,
                 urls: {
                     rutor: rutorUrl,
-                    rutracker: service.rutracker.url + title + rutor.search.quality,
+                    rutracker: service.rutracker.url + title,
                     kinopub: service.kinopub.url + title,
                 },
                 ...filmdb,
