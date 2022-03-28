@@ -8,12 +8,6 @@ import ms from 'ms';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 
-/**
- * Возвращает элементы на странице поиска со ссылкой
- * @param {string} quality
- * @param {string} titleOriginal
- * @returns {object}
- */
 const getRutorElems = async (quality, titleOriginal) => {
     const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
 
@@ -25,7 +19,7 @@ const getRutorElems = async (quality, titleOriginal) => {
     return {$: cheerio.load(body), rutorUrl};
 };
 
-/** @returns {Function} */
+/** @returns {Promise<object>} */
 export default async () => {
     const currentDate = new Date();
     const startTime = date.now();

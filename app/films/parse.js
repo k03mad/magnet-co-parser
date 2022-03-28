@@ -9,7 +9,7 @@ import ms from 'ms';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 
-/** @returns {Function} */
+/** @returns {Promise<object>} */
 export default async () => {
     const printDebug = debug('magnet:films:parse');
 

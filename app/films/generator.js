@@ -8,7 +8,7 @@ import service from './config/service.js';
 
 /**
  * @param {object} data
- * @returns {Function}
+ * @returns {Promise}
  */
 export default async data => {
     const [index, page] = await Promise.all([
