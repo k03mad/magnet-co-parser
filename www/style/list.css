@@ -10,7 +10,7 @@ body {
     text-align: center;
 }
 #date {
-    color: #FFFFFF;
+    color: #ffffff;
     padding: 10px;
 }
 #paginator {
@@ -19,7 +19,7 @@ body {
 }
 #paginator .container {
     background-color: #0c1a20;
-    color: #FFFFFF;
+    color: #ffffff;
     cursor: pointer;
     display: inline-block;
     width: 30px;
