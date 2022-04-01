@@ -9,7 +9,7 @@ import rutor from './config/rutor.js';
 import service from './config/service.js';
 
 const getRutorElems = async (quality, titleOriginal) => {
-    const rutorUrl = rutor.search.url + titleOriginal.replace(/'/g, '') + quality;
+    const rutorUrl = rutor.search.url + titleOriginal.replaceAll("'", '') + quality;
 
     const {body} = await request.cache(rutorUrl, {
         timeout: {request: rutor.timeout},
@@ -31,7 +31,7 @@ export default async () => {
 
     await Promise.all([...watching.entries()].map(async ([i, element]) => {
         const {episodesToWatch, id, imdbId, kinopoiskId, title, titleOriginal} = element.show;
-        const {seasonNumber} = episodesToWatch[episodesToWatch.length - 1];
+        const {seasonNumber} = episodesToWatch.at(-1);
 
         const titleOriginalEscaped = titleOriginal
             // The End Of The F***ing World => The End Of The F World
