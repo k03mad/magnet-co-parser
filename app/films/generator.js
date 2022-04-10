@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import fs from 'node:fs';
 
+import {getCover} from '../../utils.js';
 import html from './config/html.js';
 import paths from './config/paths.js';
 import rutor from './config/rutor.js';
@@ -8,9 +9,10 @@ import service from './config/service.js';
 
 /**
  * @param {object} data
+ * @param {string} proxy
  * @returns {Promise}
  */
-export default async data => {
+export default async (data, proxy) => {
     const [index, page] = await Promise.all([
         fs.promises.readFile(paths.templates.list),
         fs.promises.readFile(paths.templates.page),
@@ -37,12 +39,14 @@ export default async data => {
             const pageAbsPath = `${paths.www.pages}/${id}.html`;
             const pageRelPath = `${paths.getRel(paths.www.pages)}/${id}.html`;
 
-            pageCovers.push({href: pageRelPath, src: film.cover});
+            pageCovers.push({href: pageRelPath, src: getCover(film.cover, proxy)});
 
             const pasteFilm = [
                 html.url(film.urls),
                 film.kp?.rating ? html.rating(film.kp.url, film.kp.rating) : '',
-                html.photos(film.photos.slice(0, service.tmdb.castCount)),
+                html.photos(film.photos.slice(0, service.tmdb.castCount).map(elem => ({
+                    ...elem, cover: getCover(elem.cover, proxy),
+                }))),
                 html.info([
                     film.countries.length > 0 ? `Страны: ${film.countries.slice(0, service.tmdb.countriesCount).join(', ')}` : '',
                     film.director.length > 0 ? `Режиссёры: ${film.director.join(', ')}` : '',

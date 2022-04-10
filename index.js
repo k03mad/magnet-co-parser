@@ -8,19 +8,19 @@ import pathsShows from './app/shows/config/paths.js';
 import showsGenerator from './app/shows/generator.js';
 import showsParse from './app/shows/parse.js';
 import env from './env.js';
-import writeHosts from './hosts.js';
+import {writeHosts} from './utils.js';
 
 let parsers = [
     {
         type: 'films',
         parser: proxy => filmsParse(proxy),
-        generator: data => filmsGenerator(data),
+        generator: (data, proxy) => filmsGenerator(data, proxy),
         paths: pathsFilms,
     },
     {
         type: 'shows',
         parser: proxy => showsParse(proxy),
-        generator: data => showsGenerator(data),
+        generator: (data, proxy) => showsGenerator(data, proxy),
         paths: pathsShows,
     },
 ];
@@ -52,7 +52,7 @@ if (env.parser.type) {
                 JSON.stringify(data, null, 4),
             );
 
-            await elem.generator(data);
+            await elem.generator(data, proxy);
         }));
 
         const errors = promises.map(elem => elem.reason).filter(Boolean);

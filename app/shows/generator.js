@@ -1,15 +1,17 @@
 import Jimp from 'jimp';
 import fs from 'node:fs';
 
+import {getCover} from '../../utils.js';
 import html from './config/html.js';
 import paths from './config/paths.js';
 import service from './config/service.js';
 
 /**
  * @param {object} data
+ * @param {string} proxy
  * @returns {Promise}
  */
-export default async data => {
+export default async (data, proxy) => {
     const [index, page] = await Promise.all([
         fs.promises.readFile(paths.templates.list),
         fs.promises.readFile(paths.templates.page),
@@ -24,7 +26,9 @@ export default async data => {
         const pageAbsPath = `${paths.www.pages}/${show.id}.html`;
         const pageRelPath = `${paths.getRel(paths.www.pages)}/${show.id}.html`;
 
-        if (!show.cover) {
+        if (show.cover) {
+            show.cover = getCover(show.cover, proxy);
+        } else {
             const noposter = await Jimp.read(paths.templates.noposter);
             const font = await Jimp.loadFont(paths.templates.font);
 
@@ -44,8 +48,14 @@ export default async data => {
 
         const pasteSerial = [
             html.url(show.urls),
-            show.kp?.rating ? html.rating(show.kp.url, show.kp.rating) : '',
-            show.photos ? html.photos(show.photos.slice(0, service.tmdb.castCount)) : '',
+            show.kp?.rating
+                ? html.rating(show.kp.url, show.kp.rating)
+                : '',
+            show.photos
+                ? html.photos(show.photos.slice(0, service.tmdb.castCount).map(elem => ({
+                    ...elem, cover: getCover(elem.cover, proxy),
+                })))
+                : '',
             html.info([
                 show.countries?.length > 0 ? `Страны: ${show.countries.slice(0, service.tmdb.countriesCount).join(', ')}` : '',
                 show.creator?.length > 0 ? `Создатели: ${show.creator.join(', ')}` : '',
