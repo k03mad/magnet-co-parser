@@ -1,3 +1,4 @@
+import {request} from '@k03mad/util';
 import _ from 'lodash';
 import fs from 'node:fs';
 
@@ -25,28 +26,47 @@ export default async (data, proxy) => {
         const pageIndex = [html.date(`${data.timestamp.startTime} - ${data.timestamp.diff}`)];
 
         if (pages.length > 1) {
-            html.paginator(
-                pages.length,
-                paths.getRel,
-                paths.www.list,
+            pageIndex.push(
+                html.paginator(
+                    pages.length,
+                    paths.getRel,
+                    paths.www.list,
+                ),
             );
         }
 
         const pageCovers = [];
 
-        await Promise.all(filmsArray.map((film, i) => {
+        await Promise.all(filmsArray.map(async (film, i) => {
             const id = `${film.id}-${String(i + 1).padStart(String(filmsArray.length).length, 0)}`;
             const pageAbsPath = `${paths.www.pages}/${id}.html`;
             const pageRelPath = `${paths.getRel(paths.www.pages)}/${id}.html`;
 
-            pageCovers.push({href: pageRelPath, src: getCover(film.cover, proxy)});
+            const {body} = await request.cache(getCover(film.cover, proxy), {
+                encoding: 'base64',
+            }, {expire: '30d'});
+
+            const coverPath = paths.www.covers(id);
+            await fs.promises.writeFile(coverPath, body, {encoding: 'base64'});
+
+            pageCovers[i] = {href: pageRelPath, src: coverPath};
+
+            const photos = await Promise.all(
+                film.photos.slice(0, service.tmdb.castCount).map(async elem => {
+                    const {body: bodyCover} = await request.cache(getCover(elem.cover, proxy), {
+                        encoding: 'base64',
+                    }, {expire: '30d'});
+
+                    const photosPath = paths.www.photos(elem.id);
+                    await fs.promises.writeFile(photosPath, bodyCover, {encoding: 'base64'});
+                    return {...elem, cover: paths.getRel(photosPath.replace('pages/', ''))};
+                }),
+            );
 
             const pasteFilm = [
                 html.url(film.urls),
                 film.kp?.rating ? html.rating(film.kp.url, film.kp.rating) : '',
-                html.photos(film.photos.slice(0, service.tmdb.castCount).map(elem => ({
-                    ...elem, cover: getCover(elem.cover, proxy),
-                }))),
+                html.photos(photos),
                 html.info([
                     film.countries.length > 0 ? `Страны: ${film.countries.slice(0, service.tmdb.countriesCount).join(', ')}` : '',
                     film.director.length > 0 ? `Режиссёры: ${film.director.join(', ')}` : '',

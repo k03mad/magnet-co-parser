@@ -1,5 +1,6 @@
 import {folder, print, request} from '@k03mad/util';
 import fs from 'node:fs';
+import path from 'node:path';
 
 import pathsFilms from './app/films/config/paths.js';
 import filmsGenerator from './app/films/generator.js';
@@ -45,6 +46,8 @@ if (env.parser.type) {
                 elem.paths.www.folder,
                 elem.paths.www.pages,
                 elem.paths.parsed.folder,
+                path.dirname(elem.paths.www.covers()),
+                path.dirname(elem.paths.www.photos()),
             ]);
 
             await fs.promises.writeFile(

@@ -1,3 +1,4 @@
+import {request} from '@k03mad/util';
 import Jimp from 'jimp';
 import fs from 'node:fs';
 
@@ -22,12 +23,18 @@ export default async (data, proxy) => {
     const foundIndex = [];
     const notFoundIndex = [];
 
-    for (const show of data.items) {
+    await Promise.all(data.items.map(async (show, i) => {
         const pageAbsPath = `${paths.www.pages}/${show.id}.html`;
         const pageRelPath = `${paths.getRel(paths.www.pages)}/${show.id}.html`;
 
         if (show.cover) {
-            show.cover = getCover(show.cover, proxy);
+            const {body} = await request.cache(getCover(show.cover, proxy), {
+                encoding: 'base64',
+            }, {expire: '30d'});
+
+            const coverPath = paths.www.covers(show.id);
+            show.cover = paths.getRel(coverPath);
+            await fs.promises.writeFile(coverPath, body, {encoding: 'base64'});
         } else {
             const noposter = await Jimp.read(paths.templates.noposter);
             const font = await Jimp.loadFont(paths.templates.font);
@@ -42,20 +49,28 @@ export default async (data, proxy) => {
             show.cover = paths.getRel(paths.www.noposter(show.id));
         }
 
+        const photos = show.photos
+            ? await Promise.all(
+                show.photos.slice(0, service.tmdb.castCount).map(async elem => {
+                    const {body} = await request.cache(getCover(elem.cover, proxy), {
+                        encoding: 'base64',
+                    }, {expire: '30d'});
+
+                    const photosPath = paths.www.photos(elem.id);
+                    await fs.promises.writeFile(photosPath, body, {encoding: 'base64'});
+                    return {...elem, cover: paths.getRel(photosPath.replace('pages/', ''))};
+                }),
+            )
+            : null;
+
         show.rutor.length > 0
-            ? foundIndex.push({href: pageRelPath, src: show.cover})
-            : notFoundIndex.push({href: pageRelPath, src: show.cover, notfound: true});
+            ? foundIndex[i] = {href: pageRelPath, src: show.cover}
+            : notFoundIndex[i] = {href: pageRelPath, src: show.cover, notfound: true};
 
         const pasteSerial = [
             html.url(show.urls),
-            show.kp?.rating
-                ? html.rating(show.kp.url, show.kp.rating)
-                : '',
-            show.photos
-                ? html.photos(show.photos.slice(0, service.tmdb.castCount).map(elem => ({
-                    ...elem, cover: getCover(elem.cover, proxy),
-                })))
-                : '',
+            show.kp?.rating ? html.rating(show.kp.url, show.kp.rating) : '',
+            photos ? html.photos(photos) : '',
             html.info([
                 show.countries?.length > 0 ? `Страны: ${show.countries.slice(0, service.tmdb.countriesCount).join(', ')}` : '',
                 show.creator?.length > 0 ? `Создатели: ${show.creator.join(', ')}` : '',
@@ -70,9 +85,9 @@ export default async (data, proxy) => {
 
         const generatedPage = page.toString().replace(html.placeholder, pasteSerial.join(''));
         await fs.promises.writeFile(pageAbsPath, generatedPage);
-    }
+    }));
 
-    pasteIndex.push(html.cover([...foundIndex, ...notFoundIndex]));
+    pasteIndex.push(html.cover([...foundIndex, ...notFoundIndex].filter(Boolean)));
 
     const generatedIndex = index.toString().replace(html.placeholder, pasteIndex.join(''));
     await fs.promises.writeFile(paths.www.list, generatedIndex);

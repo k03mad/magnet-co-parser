@@ -16,6 +16,8 @@ export default {
         folder: `${appRoot}/www/generated/shows`,
         list: `${appRoot}/www/generated/shows/list.html`,
         pages: `${appRoot}/www/generated/shows/pages`,
+        covers: id => `${appRoot}/www/generated/shows/covers/${id}.jpg`,
+        photos: id => `${appRoot}/www/generated/shows/pages/photos/${id}.jpg`,
     },
 
     getRel: path => path.replace(/.+www\/generated\/shows\//, ''),
