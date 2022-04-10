@@ -47,9 +47,8 @@ export default async (data, proxy) => {
             }, {expire: '30d'});
 
             const coverPath = paths.www.covers(id);
+            pageCovers[i] = {href: pageRelPath, src: paths.getRel(coverPath)};
             await fs.promises.writeFile(coverPath, body, {encoding: 'base64'});
-
-            pageCovers[i] = {href: pageRelPath, src: coverPath};
 
             const photos = await Promise.all(
                 film.photos.slice(0, service.tmdb.castCount).map(async elem => {
