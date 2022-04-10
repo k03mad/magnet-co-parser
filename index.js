@@ -1,4 +1,4 @@
-import {folder, print} from '@k03mad/util';
+import {folder, print, request} from '@k03mad/util';
 import fs from 'node:fs';
 
 import pathsFilms from './app/films/config/paths.js';
@@ -13,13 +13,13 @@ import writeHosts from './hosts.js';
 let parsers = [
     {
         type: 'films',
-        parser: () => filmsParse(),
+        parser: proxy => filmsParse(proxy),
         generator: data => filmsGenerator(data),
         paths: pathsFilms,
     },
     {
         type: 'shows',
-        parser: () => showsParse(),
+        parser: proxy => showsParse(proxy),
         generator: data => showsGenerator(data),
         paths: pathsShows,
     },
@@ -33,8 +33,13 @@ if (env.parser.type) {
     try {
         env.isCloud && await writeHosts();
 
+        const proxy = await request.proxy({
+            testUrl: 'https://api.themoviedb.org/',
+            serial: true,
+        });
+
         const promises = await Promise.allSettled(parsers.map(async elem => {
-            const data = await elem.parser();
+            const data = await elem.parser(proxy);
 
             await folder.erase([
                 elem.paths.www.folder,

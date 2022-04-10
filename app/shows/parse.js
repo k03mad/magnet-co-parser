@@ -19,8 +19,11 @@ const getRutorElems = async (quality, titleOriginal) => {
     return {$: cheerio.load(body), rutorUrl};
 };
 
-/** @returns {Promise<object>} */
-export default async () => {
+/**
+ * @param {string} proxy
+ * @returns {Promise<object>}
+ */
+export default async proxy => {
     const currentDate = new Date();
     const startTime = date.now();
 
@@ -123,11 +126,21 @@ export default async () => {
         let data;
 
         if (imdbId) {
-            ({tv_results: [data]} = await tmdb.get({path: `find/tt${imdbId}`, params: {external_source: 'imdb_id'}, cache: true}));
+            ({tv_results: [data]} = await tmdb.get({
+                path: `find/tt${imdbId}`,
+                params: {external_source: 'imdb_id'},
+                cache: true,
+                proxy,
+            }));
         }
 
         if (!data) {
-            [data] = await tmdb.get({path: 'search/tv', params: {query: titleOriginal}, cache: true});
+            [data] = await tmdb.get({
+                path: 'search/tv',
+                params: {query: titleOriginal},
+                cache: true,
+                proxy,
+            });
         }
 
         parsed[i].id = id;
@@ -148,8 +161,17 @@ export default async () => {
         }
 
         if (data) {
-            const show = await tmdb.get({path: `tv/${data.id}`, cache: true});
-            const {cast, crew} = await tmdb.get({path: `tv/${data.id}/credits`, cache: true});
+            const show = await tmdb.get({
+                path: `tv/${data.id}`,
+                cache: true,
+                proxy,
+            });
+
+            const {cast, crew} = await tmdb.get({
+                path: `tv/${data.id}/credits`,
+                cache: true,
+                proxy,
+            });
 
             parsed[i].cover = service.tmdb.cover + data.poster_path;
             parsed[i].networks = show.networks.map(elem => elem.name);

@@ -9,8 +9,11 @@ import ms from 'ms';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 
-/** @returns {Promise<object>} */
-export default async () => {
+/**
+ * @param {string} proxy
+ * @returns {Promise<object>}
+ */
+export default async proxy => {
     const printDebug = debug('magnet:films:parse');
 
     moment.locale('ru');
@@ -135,17 +138,35 @@ export default async () => {
 
         // если есть imdb id — используем ручку матчинга по нему
         if (filmdb.imdb) {
-            ({movie_results: [data]} = await tmdb.get({path: `find/${filmdb.imdb.id}`, params: {external_source: 'imdb_id'}, cache: true}));
+            ({movie_results: [data]} = await tmdb.get({
+                path: `find/${filmdb.imdb.id}`,
+                params: {external_source: 'imdb_id'},
+                cache: true,
+                proxy,
+            }));
             // иначе — по названию
         } else {
-            [data] = await tmdb.get({path: 'search/movie', params: {query: title}, cache: true});
+            [data] = await tmdb.get({
+                path: 'search/movie',
+                params: {query: title},
+                cache: true,
+                proxy,
+            });
         }
 
         if (data && data.poster_path) {
 
             const [movie, {cast, crew}] = await Promise.all([
-                tmdb.get({path: `movie/${data.id}`, cache: true}),
-                tmdb.get({path: `movie/${data.id}/credits`, cache: true}),
+                tmdb.get({
+                    path: `movie/${data.id}`,
+                    cache: true,
+                    proxy,
+                }),
+                tmdb.get({
+                    path: `movie/${data.id}/credits`,
+                    cache: true,
+                    proxy,
+                }),
             ]);
 
             // первая страница, без категории, все слова
