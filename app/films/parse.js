@@ -40,45 +40,47 @@ export default async proxy => {
             const $ = cheerio.load(body);
 
             if ($(rutor.selectors.td).contents().length > 0) {
-                $(rutor.selectors.td).each((_, elem) => {
-                    const td = $(elem)
-                        .text()
-                        .replace(/\s+/g, ' ')
-                        .trim();
+                $(rutor.selectors.td).each((i, elem) => {
+                    if (rutor.search.pages > 1 || i <= rutor.filmsPerCat) {
+                        const td = $(elem)
+                            .text()
+                            .replace(/\s+/g, ' ')
+                            .trim();
 
-                    const matched = td.match(rutor.regexp);
+                        const matched = td.match(rutor.regexp);
 
-                    if (
-                        matched
+                        if (
+                            matched
                         && matched.groups.name
-                    ) {
-                        matched.groups.magnet = decodeURIComponent(
-                            $(elem)
-                                .find(rutor.selectors.magnet)
-                                .attr('href')
-                                .replace(/.+magnet/, 'magnet'),
-                        );
+                        ) {
+                            matched.groups.magnet = decodeURIComponent(
+                                $(elem)
+                                    .find(rutor.selectors.magnet)
+                                    .attr('href')
+                                    .replace(/.+magnet/, 'magnet'),
+                            );
 
-                        const href = $(elem).find(rutor.selectors.link).attr('href');
+                            const href = $(elem).find(rutor.selectors.link).attr('href');
 
-                        matched.groups.link = href.includes(rutor.domain)
-                            ? decodeURIComponent(href).replace(new RegExp(`.+${rutor.domain}`), rutor.url)
-                            : rutor.url + href;
+                            matched.groups.link = href.includes(rutor.domain)
+                                ? decodeURIComponent(href).replace(new RegExp(`.+${rutor.domain}`), rutor.url)
+                                : rutor.url + href;
 
-                        const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
+                            const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
 
-                        matched.groups.quality = quality
-                            .replace(/ от .+/, '')
-                            .replace(rutor.comments, '');
+                            matched.groups.quality = quality
+                                .replace(/ от .+/, '')
+                                .replace(rutor.comments, '');
 
-                        matched.groups.tags = tags
-                            .join(rutor.tagSplit)
-                            .replace(rutor.comments, '');
+                            matched.groups.tags = tags
+                                .join(rutor.tagSplit)
+                                .replace(rutor.comments, '');
 
-                        if (films[matched.groups.name]) {
-                            films[matched.groups.name].rutor.push({...matched.groups});
-                        } else {
-                            films[matched.groups.name] = {rutor: [{...matched.groups}]};
+                            if (films[matched.groups.name]) {
+                                films[matched.groups.name].rutor.push({...matched.groups});
+                            } else {
+                                films[matched.groups.name] = {rutor: [{...matched.groups}]};
+                            }
                         }
                     }
                 });
@@ -89,6 +91,7 @@ export default async proxy => {
 
     let counter = 0;
     const filmsArr = Object.entries(films);
+    console.log('—————————— \n films', films);
 
     await Promise.all(filmsArr.map(async ([key, value]) => {
 
@@ -246,6 +249,9 @@ export default async proxy => {
         });
 
     console.log(c.blue(`Фильмов найдено на Rutor: ${sorted.length}`));
+    const sliced = sorted.slice(0, rutor.filmsSliceCount);
+    console.log(c.blue(`Фильмов оставлено для показа: ${sliced.length}`));
+
     const diff = date.diff({date: currentDate, period: 'milliseconds'});
 
     return {
@@ -254,6 +260,6 @@ export default async proxy => {
             diff: ms(diff),
             diffRaw: diff,
         },
-        items: sorted,
+        items: sliced,
     };
 };
