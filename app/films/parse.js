@@ -91,7 +91,6 @@ export default async proxy => {
 
     let counter = 0;
     const filmsArr = Object.entries(films);
-    console.log('—————————— \n films', films);
 
     await Promise.all(filmsArr.map(async ([key, value]) => {
 
