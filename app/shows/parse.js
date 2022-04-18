@@ -181,7 +181,7 @@ export default async proxy => {
                         proxy,
                     });
 
-                    cast[j] = {...person, ...cast[i]};
+                    cast[j] = {...person, ...cast[j]};
                 }
             }));
 
