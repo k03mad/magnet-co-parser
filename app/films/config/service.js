@@ -15,6 +15,7 @@ export default {
     imdb: {
         re: /imdb\.com(%2F|\/)title(%2F|\/)(?<id>tt\d+)(%2F|\/)/,
         film: 'https://www.imdb.com/title/',
+        person: 'https://www.imdb.com/name/',
     },
     rutracker: {
         url: 'https://rutracker.org/forum/tracker.php?nm=',

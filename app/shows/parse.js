@@ -173,6 +173,18 @@ export default async proxy => {
                 proxy,
             });
 
+            await Promise.all(cast.map(async (elem, j) => {
+                if (j < service.tmdb.castCount) {
+                    const person = await tmdb.get({
+                        path: `person/${elem.id}`,
+                        cache: true,
+                        proxy,
+                    });
+
+                    cast[j] = {...person, ...cast[i]};
+                }
+            }));
+
             parsed[i].cover = service.tmdb.cover + data.poster_path;
             parsed[i].networks = show.networks.map(elem => elem.name);
             parsed[i].genres = show.genres.map(elem => elem.name);
@@ -187,7 +199,7 @@ export default async proxy => {
                     .filter(elem => Boolean(elem.profile_path))
                     .map(elem => ({
                         id: elem.id,
-                        link: service.tmdb.person + elem.id,
+                        link: service.imdb.person + (elem.imdb_id || elem.id),
                         name: elem.name,
                         cover: service.tmdb.cover + elem.profile_path,
                     })),

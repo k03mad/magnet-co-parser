@@ -11,6 +11,9 @@ export default {
     myshows: {
         url: 'https://myshows.me/view/',
     },
+    imdb: {
+        person: 'https://www.imdb.com/name/',
+    },
     kp: {
         url: 'https://www.kinopoisk.ru/film/',
         rating: id => `https://rating.kinopoisk.ru/${id}.gif`,

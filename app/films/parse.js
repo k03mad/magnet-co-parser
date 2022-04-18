@@ -171,6 +171,18 @@ export default async proxy => {
                 }),
             ]);
 
+            await Promise.all(cast.map(async (elem, j) => {
+                if (j < service.tmdb.castCount) {
+                    const person = await tmdb.get({
+                        path: `person/${elem.id}`,
+                        cache: true,
+                        proxy,
+                    });
+
+                    cast[j] = {...person, ...cast[j]};
+                }
+            }));
+
             // первая страница, без категории, все слова
             const rutorUrl = rutor.search.url(0, 0, 100) + title;
 
@@ -191,7 +203,7 @@ export default async proxy => {
                         .filter(elem => Boolean(elem.profile_path))
                         .map(elem => ({
                             id: elem.id,
-                            link: service.tmdb.person + elem.id,
+                            link: service.imdb.person + elem.imdb_id,
                             name: elem.name,
                             cover: service.tmdb.cover + elem.profile_path,
                         })),
