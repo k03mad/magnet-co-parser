@@ -8,7 +8,7 @@ export default {
         // rutor.info/search/страница/категория/все слова/сортировка по сидам/
         url: `${rutorUrl}/search/0/0/100/2/`,
         quality: {
-            full: ' 1080p',
+            full: ' 1080p|2160p',
             back: ' 720p',
         },
     },

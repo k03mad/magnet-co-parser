@@ -147,7 +147,7 @@ export default async proxy => {
 
         parsed[i].urls = {
             rutor: rutorUrl,
-            rutracker: service.rutracker.url + titleOriginal + rutor.search.quality.full,
+            rutracker: service.rutracker.url + titleOriginal + rutor.search.quality.full.split('|')[0],
             kinopub: service.kinopub.url + titleOriginal,
             myshows: service.myshows.url + id,
         };
