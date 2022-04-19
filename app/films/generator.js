@@ -38,15 +38,14 @@ export default async (data, proxy) => {
         const pageCovers = [];
 
         await Promise.all(filmsArray.map(async (film, i) => {
-            const id = `${film.id}-${String(i + 1).padStart(String(filmsArray.length).length, 0)}`;
-            const pageAbsPath = `${paths.www.pages}/${id}.html`;
-            const pageRelPath = `${paths.getRel(paths.www.pages)}/${id}.html`;
+            const pageAbsPath = `${paths.www.pages}/${film.id}.html`;
+            const pageRelPath = `${paths.getRel(paths.www.pages)}/${film.id}.html`;
 
             const {body} = await request.cache(getCover(film.cover, proxy), {
                 encoding: 'base64',
             }, {expire: '30d'});
 
-            const coverPath = paths.www.covers(id);
+            const coverPath = paths.www.covers(film.id);
             pageCovers[i] = {href: pageRelPath, src: paths.getRel(coverPath)};
             await fs.promises.writeFile(coverPath, body, {encoding: 'base64'});
 

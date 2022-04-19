@@ -199,7 +199,7 @@ export default async proxy => {
                     .filter(elem => Boolean(elem.profile_path))
                     .map(elem => ({
                         id: elem.id,
-                        link: service.imdb.person + (elem.imdb_id || elem.id),
+                        link: service.imdb.person + elem.imdb_id,
                         name: elem.name,
                         cover: service.tmdb.cover + elem.profile_path,
                     })),
