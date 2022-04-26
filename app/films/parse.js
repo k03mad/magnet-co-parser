@@ -6,6 +6,7 @@ import countries from 'i18n-iso-countries';
 import moment from 'moment';
 import ms from 'ms';
 
+import {getExpire} from '../../utils.js';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 
@@ -32,9 +33,7 @@ export default async proxy => {
                     timeout: {request: rutor.timeout},
                     headers: {'user-agent': ua.win.chrome},
                 },
-                {
-                    expire: '30m',
-                },
+                getExpire('rutor-search'),
             );
 
             const $ = cheerio.load(body);
@@ -108,7 +107,7 @@ export default async proxy => {
         for (const {link} of value.rutor) {
             const {body} = await request.cache(link, {
                 headers: {'user-agent': ua.win.chrome},
-            });
+            }, getExpire('rutor-page'));
 
             const kp = body.match(service.kp.re);
             const imdb = body.match(service.imdb.re);
@@ -145,6 +144,7 @@ export default async proxy => {
                 params: {external_source: 'imdb_id'},
                 cache: true,
                 proxy,
+                ...getExpire('tmdb-api'),
             }));
             // иначе — по названию
         } else {
@@ -153,6 +153,7 @@ export default async proxy => {
                 params: {query: title},
                 cache: true,
                 proxy,
+                ...getExpire('tmdb-api'),
             });
         }
 
@@ -163,11 +164,13 @@ export default async proxy => {
                     path: `movie/${data.id}`,
                     cache: true,
                     proxy,
+                    ...getExpire('tmdb-api'),
                 }),
                 tmdb.get({
                     path: `movie/${data.id}/credits`,
                     cache: true,
                     proxy,
+                    ...getExpire('tmdb-api'),
                 }),
             ]);
 
@@ -177,6 +180,7 @@ export default async proxy => {
                         path: `person/${elem.id}`,
                         cache: true,
                         proxy,
+                        ...getExpire('tmdb-api'),
                     });
 
                     cast[j] = {...person, ...cast[j]};

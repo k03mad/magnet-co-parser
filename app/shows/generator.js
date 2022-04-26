@@ -2,7 +2,7 @@ import {request} from '@k03mad/util';
 import Jimp from 'jimp';
 import fs from 'node:fs';
 
-import {getCover} from '../../utils.js';
+import {getCover, getExpire} from '../../utils.js';
 import html from './config/html.js';
 import paths from './config/paths.js';
 import service from './config/service.js';
@@ -30,7 +30,7 @@ export default async (data, proxy) => {
         if (show.cover) {
             const {body} = await request.cache(getCover(show.cover, proxy), {
                 encoding: 'base64',
-            }, {expire: '30d'});
+            }, getExpire('tmdb-img'));
 
             const coverPath = paths.www.covers(show.id);
             show.cover = paths.getRel(coverPath);
@@ -54,7 +54,7 @@ export default async (data, proxy) => {
                 show.photos.slice(0, service.tmdb.castCount).map(async elem => {
                     const {body} = await request.cache(getCover(elem.cover, proxy), {
                         encoding: 'base64',
-                    }, {expire: '30d'});
+                    }, getExpire('tmdb-img'));
 
                     const photosPath = paths.www.photos(elem.id);
                     await fs.promises.writeFile(photosPath, body, {encoding: 'base64'});

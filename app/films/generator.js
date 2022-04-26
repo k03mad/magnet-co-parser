@@ -2,7 +2,7 @@ import {request} from '@k03mad/util';
 import _ from 'lodash';
 import fs from 'node:fs';
 
-import {getCover} from '../../utils.js';
+import {getCover, getExpire} from '../../utils.js';
 import html from './config/html.js';
 import paths from './config/paths.js';
 import rutor from './config/rutor.js';
@@ -43,7 +43,7 @@ export default async (data, proxy) => {
 
             const {body} = await request.cache(getCover(film.cover, proxy), {
                 encoding: 'base64',
-            }, {expire: '30d'});
+            }, getExpire('tmdb-img'));
 
             const coverPath = paths.www.covers(film.id);
             pageCovers[i] = {href: pageRelPath, src: paths.getRel(coverPath)};
@@ -53,7 +53,7 @@ export default async (data, proxy) => {
                 film.photos.slice(0, service.tmdb.castCount).map(async elem => {
                     const {body: bodyCover} = await request.cache(getCover(elem.cover, proxy), {
                         encoding: 'base64',
-                    }, {expire: '30d'});
+                    }, getExpire('tmdb-img'));
 
                     const photosPath = paths.www.photos(elem.id);
                     await fs.promises.writeFile(photosPath, bodyCover, {encoding: 'base64'});

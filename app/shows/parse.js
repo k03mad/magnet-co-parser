@@ -5,6 +5,7 @@ import countries from 'i18n-iso-countries';
 import _ from 'lodash';
 import ms from 'ms';
 
+import {getExpire} from '../../utils.js';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 
@@ -132,6 +133,7 @@ export default async proxy => {
                 params: {external_source: 'imdb_id'},
                 cache: true,
                 proxy,
+                ...getExpire('tmdb-api'),
             }));
         }
 
@@ -141,6 +143,7 @@ export default async proxy => {
                 params: {query: titleOriginal},
                 cache: true,
                 proxy,
+                ...getExpire('tmdb-api'),
             });
         }
 
@@ -166,12 +169,14 @@ export default async proxy => {
                 path: `tv/${data.id}`,
                 cache: true,
                 proxy,
+                ...getExpire('tmdb-api'),
             });
 
             const {cast, crew} = await tmdb.get({
                 path: `tv/${data.id}/credits`,
                 cache: true,
                 proxy,
+                ...getExpire('tmdb-api'),
             });
 
             await Promise.all(cast.map(async (elem, j) => {
@@ -180,6 +185,7 @@ export default async proxy => {
                         path: `person/${elem.id}`,
                         cache: true,
                         proxy,
+                        ...getExpire('tmdb-api'),
                     });
 
                     cast[j] = {...person, ...cast[j]};
