@@ -9,7 +9,6 @@ import pathsShows from './app/shows/config/paths.js';
 import showsGenerator from './app/shows/generator.js';
 import showsParse from './app/shows/parse.js';
 import env from './env.js';
-import {writeHosts} from './utils.js';
 
 let parsers = [
     {
@@ -32,8 +31,6 @@ if (env.parser.type) {
 
 (async () => {
     try {
-        env.isCloud && await writeHosts();
-
         const proxy = await request.proxy({
             testUrl: 'https://api.themoviedb.org/',
             serial: true,

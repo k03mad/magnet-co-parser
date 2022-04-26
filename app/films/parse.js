@@ -27,7 +27,7 @@ export default async proxy => {
         await Promise.all([...Array.from({length: rutor.search.pages}).keys()].map(async page => {
 
             const {body} = await request.cache(
-                rutor.search.url(page, cat) + rutor.search.query,
+                proxy + rutor.search.url(page, cat) + rutor.search.query,
                 {
                     timeout: {request: rutor.timeout},
                     headers: {'user-agent': ua.win.chrome},
@@ -51,7 +51,7 @@ export default async proxy => {
 
                         if (
                             matched
-                        && matched.groups.name
+                            && matched.groups.name
                         ) {
                             matched.groups.magnet = decodeURIComponent(
                                 $(elem)

@@ -8,27 +8,28 @@ import ms from 'ms';
 import rutor from './config/rutor.js';
 import service from './config/service.js';
 
-const getRutorElems = async (quality, titleOriginal) => {
-    const rutorUrl = rutor.search.url + titleOriginal.replaceAll("'", '') + quality;
-
-    const {body} = await request.cache(rutorUrl, {
-        timeout: {request: rutor.timeout},
-        headers: {'user-agent': ua.win.chrome},
-    }, {expire: '30m'});
-
-    return {$: cheerio.load(body), rutorUrl};
-};
-
 /**
  * @param {string} proxy
  * @returns {Promise<object>}
  */
 export default async proxy => {
+
     const currentDate = new Date();
     const startTime = date.now();
 
     const parsed = [];
     const seriesList = [];
+
+    const getRutorElems = async (quality, titleOriginal) => {
+        const rutorUrl = rutor.search.url + titleOriginal.replaceAll("'", '') + quality;
+
+        const {body} = await request.cache(proxy + rutorUrl, {
+            timeout: {request: rutor.timeout},
+            headers: {'user-agent': ua.win.chrome},
+        }, {expire: '30m'});
+
+        return {$: cheerio.load(body), rutorUrl};
+    };
 
     const watching = await myshows.watch({onlyAired: true, gotOpts: {timeout: {request: 30_000}}});
 
