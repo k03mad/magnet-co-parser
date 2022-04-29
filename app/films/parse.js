@@ -8,7 +8,7 @@ import moment from 'moment';
 import ms from 'ms';
 
 import config from '../common/config.js';
-import {getExpire} from '../common/utils.js';
+import {getExpire, log} from '../common/utils.js';
 import rutor from './config/rutor.js';
 
 /**
@@ -269,9 +269,9 @@ export default async proxy => {
             return elem;
         });
 
-    console.log(c.blue(`Фильмов найдено на Rutor: ${sorted.length}`));
+    log(c.blue(`Фильмов найдено на Rutor: ${sorted.length}`));
     const sliced = sorted.slice(0, rutor.filmsSliceCount);
-    console.log(c.blue(`Фильмов оставлено для показа: ${sliced.length}`));
+    log(c.blue(`Фильмов оставлено для показа: ${sliced.length}`));
 
     const diff = date.diff({date: currentDate, period: 'milliseconds'});
 

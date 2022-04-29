@@ -1,6 +1,15 @@
 const expire = time => ({expire: time});
 
 /**
+ * @param {*} msg
+ * @param {string} type
+ */
+export const log = (msg, type = 'log') => {
+    // eslint-disable-next-line no-console
+    console[type](msg);
+};
+
+/**
  * @param {string} src
  * @param {string} proxy
  * @returns {string}

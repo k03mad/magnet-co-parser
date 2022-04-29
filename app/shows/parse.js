@@ -7,7 +7,7 @@ import _ from 'lodash';
 import ms from 'ms';
 
 import config from '../common/config.js';
-import {getExpire} from '../common/utils.js';
+import {getExpire, log} from '../common/utils.js';
 import rutor from './config/rutor.js';
 
 /**
@@ -181,8 +181,6 @@ export default async proxy => {
                 }),
             ]);
 
-            console.log('—————————— \n show', show);
-
             await Promise.all(cast.map(async (elem, j) => {
                 if (j < config.service.tmdb.castCount) {
                     const person = await tmdb.get({
@@ -237,13 +235,13 @@ export default async proxy => {
 
     const withMagnet = parsed.filter(elem => elem.rutor.length > 0);
 
-    console.log(c.blue(`Сериалов с Myshows: ${watching.length}`));
-    console.log(c.blue(`Сериалов найдено на Rutor: ${withMagnet.length}`));
+    log(c.blue(`Сериалов с Myshows: ${watching.length}`));
+    log(c.blue(`Сериалов найдено на Rutor: ${withMagnet.length}`));
 
     const notFound = _.xor(seriesList, withMagnet.map(elem => elem.titleGenerated));
 
-    console.log(c.cyan(`Сериалов не найдено: ${notFound.length}`));
-    console.log(notFound.sort().join('\n'));
+    log(c.cyan(`Сериалов не найдено: ${notFound.length}`));
+    log(notFound.sort().join('\n'));
 
     const diff = date.diff({date: currentDate, period: 'milliseconds'});
 

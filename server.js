@@ -1,5 +1,7 @@
 import {spawn} from 'node:child_process';
 
+import {log} from './app/common/utils.js';
+
 const server = spawn('node --no-deprecation ./node_modules/.bin/http-server', [
 
     './www',
@@ -20,13 +22,13 @@ const server = spawn('node --no-deprecation ./node_modules/.bin/http-server', [
 ], {shell: '/usr/bin/zsh'});
 
 server.stdout.on('data', data => {
-    console.log(`stdout: ${data}`);
+    log(`stdout: ${data}`);
 });
 
 server.stderr.on('data', data => {
-    console.error(`stderr: ${data}`);
+    log(`stderr: ${data}`, 'error');
 });
 
 server.on('close', code => {
-    console.log(`server process exited with code ${code}`);
+    log(`exit: ${code}`);
 });
