@@ -73,7 +73,7 @@ export default async (data, proxy) => {
             show.kp?.rating ? html.rating(show.kp.url, show.kp.rating) : '',
             photos ? html.photos(photos) : '',
             html.info([
-                show.countries?.length > 0 ? `Страны: ${show.countries.slice(0, config.service.tmdb.countriesCount).join(' ')}` : '',
+                show.countries?.length > 0 ? show.countries.slice(0, config.service.tmdb.countriesCount).join(' ') : '',
                 show.release ? `Релиз: ${moment(show.release, 'YYYY-MM-DD').format('DD MMMM YYYY')}` : '',
                 show.lastEpisode ? `Актуальная серия: ${moment(show.lastEpisode, 'YYYY-MM-DD').format('DD MMMM YYYY')}` : '',
                 show.nextEpisode ? `Следующая серия: ${moment(show.nextEpisode, 'YYYY-MM-DD').format('DD MMMM YYYY')}` : '',

@@ -29,7 +29,7 @@ export default {
 
     info: data => `
         <div id="info">
-            <hr>${data.map(elem => elem.replace(/^([ А-яё]+:)/, '<b>$1</b>')).join('<hr>')}
+            ${data.map(elem => elem.replace(/^([ А-яё]+:)/, '<b>$1</b>')).join('<hr>')}
         </div>
     `,
 

@@ -67,7 +67,7 @@ export default async (data, proxy) => {
                 film.kp?.rating ? html.rating(film.kp.url, film.kp.rating) : '',
                 html.photos(photos),
                 html.info([
-                    film.countries.length > 0 ? `Страны: ${film.countries.slice(0, config.service.tmdb.countriesCount).join(' ')}` : '',
+                    film.countries.length > 0 ? film.countries.slice(0, config.service.tmdb.countriesCount).join(' ') : '',
                     film.release ? `Релиз: ${moment(film.release, 'YYYY-MM-DD').format('DD MMMM YYYY')}` : '',
                     film.director.length > 0 ? `Режиссёры: ${film.director.join(', ')}` : '',
                     film.companies.length > 0 ? `Компании: ${film.companies.slice(0, config.service.tmdb.companiesCount).join(', ')}` : '',
