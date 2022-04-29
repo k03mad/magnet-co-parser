@@ -1,5 +1,6 @@
 import {request} from '@k03mad/util';
 import Jimp from 'jimp';
+import moment from 'moment';
 import fs from 'node:fs';
 
 import config from '../common/config.js';
@@ -72,11 +73,18 @@ export default async (data, proxy) => {
             show.kp?.rating ? html.rating(show.kp.url, show.kp.rating) : '',
             photos ? html.photos(photos) : '',
             html.info([
-                show.countries?.length > 0 ? `Страны: ${show.countries.slice(0, config.service.tmdb.countriesCount).join(', ')}` : '',
+                show.countries?.length > 0 ? `Страны: ${show.countries.slice(0, config.service.tmdb.countriesCount).join(' ')}` : '',
+                show.release ? `Релиз: ${moment(show.release, 'YYYY-MM-DD').format('DD MMMM YYYY')}` : '',
+                show.lastEpisode ? `Актуальная серия: ${moment(show.lastEpisode, 'YYYY-MM-DD').format('DD MMMM YYYY')}` : '',
+                show.nextEpisode ? `Следующая серия: ${moment(show.nextEpisode, 'YYYY-MM-DD').format('DD MMMM YYYY')}` : '',
                 show.creator?.length > 0 ? `Создатели: ${show.creator.join(', ')}` : '',
                 show.director?.length > 0 ? `Режиссёры: ${show.director.join(', ')}` : '',
                 show.companies?.length > 0 ? `Компании: ${show.companies.slice(0, config.service.tmdb.companiesCount).join(', ')}` : '',
-                show.networks?.length > 0 ? `ТВ: ${show.networks.slice(0, config.service.tmdb.networksCount).join(', ')}` : '',
+                show.networks?.length > 0 ? `Сервис: ${show.networks.slice(0, config.service.tmdb.networksCount).join(', ')}` : '',
+                show.status ? `Статус: ${show.status}` : '',
+                show.seasons ? `Сезонов: ${show.seasons}` : '',
+                show.episodes ? `Серий: ${show.episodes}` : '',
+                show.tagline,
                 show.overview,
                 show.genres ? show.genres.slice(0, config.service.tmdb.genresCount).join(', ') : '',
             ].filter(Boolean)),

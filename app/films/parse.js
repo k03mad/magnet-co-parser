@@ -1,6 +1,7 @@
 import {date, request, tmdb, ua} from '@k03mad/util';
 import c from 'chalk';
 import cheerio from 'cheerio';
+import emoji from 'country-code-emoji';
 import debug from 'debug';
 import countries from 'i18n-iso-countries';
 import moment from 'moment';
@@ -158,7 +159,6 @@ export default async proxy => {
         }
 
         if (data && data.poster_path) {
-
             const [movie, {cast, crew}] = await Promise.all([
                 tmdb.get({
                     path: `movie/${data.id}`,
@@ -197,11 +197,15 @@ export default async proxy => {
 
                 tagline: movie.tagline,
                 overview: data.overview,
+                release: movie.release_date,
                 genres: movie.genres.map(elem => elem.name),
                 companies: movie.production_companies.map(elem => elem.name),
-                countries: movie.production_countries.map(elem => countries.getName(elem.iso_3166_1, 'ru')),
+                countries: movie.production_countries.map(
+                    elem => `${emoji(elem.iso_3166_1)} ${countries.getName(elem.iso_3166_1, 'ru')}`,
+                ),
                 director: crew.filter(elem => elem.job === 'Director').map(elem => elem.name),
-
+                budget: movie.budget,
+                revenue: movie.revenue,
                 photos: [
                     ...new Set(cast
                         .filter(elem => Boolean(elem.profile_path))

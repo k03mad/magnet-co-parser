@@ -1,5 +1,6 @@
 import {request} from '@k03mad/util';
 import _ from 'lodash';
+import moment from 'moment';
 import fs from 'node:fs';
 
 import config from '../common/config.js';
@@ -66,9 +67,12 @@ export default async (data, proxy) => {
                 film.kp?.rating ? html.rating(film.kp.url, film.kp.rating) : '',
                 html.photos(photos),
                 html.info([
-                    film.countries.length > 0 ? `Страны: ${film.countries.slice(0, config.service.tmdb.countriesCount).join(', ')}` : '',
+                    film.countries.length > 0 ? `Страны: ${film.countries.slice(0, config.service.tmdb.countriesCount).join(' ')}` : '',
+                    film.release ? `Релиз: ${moment(film.release, 'YYYY-MM-DD').format('DD MMMM YYYY')}` : '',
                     film.director.length > 0 ? `Режиссёры: ${film.director.join(', ')}` : '',
                     film.companies.length > 0 ? `Компании: ${film.companies.slice(0, config.service.tmdb.companiesCount).join(', ')}` : '',
+                    film.budget ? `Бюджет: $${film.budget.toLocaleString()}` : '',
+                    film.revenue ? `Выручка: $${film.revenue.toLocaleString()}` : '',
                     film.tagline,
                     film.overview,
                     film.genres.slice(0, config.service.tmdb.genresCount).join(', '),

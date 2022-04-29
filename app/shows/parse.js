@@ -1,6 +1,7 @@
 import {date, myshows, request, tmdb, ua} from '@k03mad/util';
 import c from 'chalk';
 import cheerio from 'cheerio';
+import emoji from 'country-code-emoji';
 import countries from 'i18n-iso-countries';
 import _ from 'lodash';
 import ms from 'ms';
@@ -165,19 +166,22 @@ export default async proxy => {
         }
 
         if (data) {
-            const show = await tmdb.get({
-                path: `tv/${data.id}`,
-                cache: true,
-                proxy,
-                ...getExpire('tmdb-api'),
-            });
+            const [show, {cast, crew}] = await Promise.all([
+                tmdb.get({
+                    path: `tv/${data.id}`,
+                    cache: true,
+                    proxy,
+                    ...getExpire('tmdb-api'),
+                }),
+                tmdb.get({
+                    path: `tv/${data.id}/credits`,
+                    cache: true,
+                    proxy,
+                    ...getExpire('tmdb-api'),
+                }),
+            ]);
 
-            const {cast, crew} = await tmdb.get({
-                path: `tv/${data.id}/credits`,
-                cache: true,
-                proxy,
-                ...getExpire('tmdb-api'),
-            });
+            console.log('—————————— \n show', show);
 
             await Promise.all(cast.map(async (elem, j) => {
                 if (j < config.service.tmdb.castCount) {
@@ -197,8 +201,20 @@ export default async proxy => {
             parsed[i].genres = show.genres.map(elem => elem.name);
             parsed[i].overview = data.overview;
             parsed[i].companies = show.production_companies.map(elem => elem.name);
-            parsed[i].countries = show.origin_country.map(elem => countries.getName(elem, 'ru'));
+
+            parsed[i].countries = show.origin_country.map(
+                elem => `${emoji(elem)} ${countries.getName(elem, 'ru')}`,
+            );
+
+            parsed[i].release = show.first_air_date;
+            parsed[i].status = show.status;
+            parsed[i].seasons = show.number_of_seasons;
+            parsed[i].episodes = show.number_of_episodes;
+            parsed[i].lastEpisode = show.last_air_date;
+            parsed[i].nextEpisode = show.next_episode_to_air?.air_date;
+            parsed[i].tagline = show.tagline;
             parsed[i].director = crew.filter(elem => elem.job === 'Director').map(elem => elem.name);
+
             parsed[i].creator = show.created_by.map(elem => elem.name);
 
             parsed[i].photos = [
