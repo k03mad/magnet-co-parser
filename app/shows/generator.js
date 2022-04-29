@@ -8,6 +8,8 @@ import {getCover, getExpire} from '../common/utils.js';
 import html from './config/html.js';
 import paths from './config/paths.js';
 
+moment.locale('ru');
+
 /**
  * @param {object} data
  * @param {string} proxy

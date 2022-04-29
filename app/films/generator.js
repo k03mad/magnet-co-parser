@@ -9,6 +9,8 @@ import html from './config/html.js';
 import paths from './config/paths.js';
 import rutor from './config/rutor.js';
 
+moment.locale('ru');
+
 /**
  * @param {object} data
  * @param {string} proxy

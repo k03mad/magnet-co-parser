@@ -11,6 +11,8 @@ import config from '../common/config.js';
 import {getExpire, log} from '../common/utils.js';
 import rutor from './config/rutor.js';
 
+moment.locale('ru');
+
 /**
  * @param {string} proxy
  * @returns {Promise<object>}
@@ -18,7 +20,6 @@ import rutor from './config/rutor.js';
 export default async proxy => {
     const printDebug = debug('magnet:films:parse');
 
-    moment.locale('ru');
     const currentDate = new Date();
     const startTime = date.now();
 
