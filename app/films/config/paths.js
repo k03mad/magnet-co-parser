@@ -4,11 +4,6 @@ export default {
     parsed: {
         folder: `${appRoot}/parsed/films/`,
     },
-    templates: {
-        folder: `${appRoot}/templates/`,
-        list: `${appRoot}/templates/list.html`,
-        page: `${appRoot}/templates/page.html`,
-    },
     www: {
         folder: `${appRoot}/www/generated/films`,
         pages: `${appRoot}/www/generated/films/pages`,

@@ -5,9 +5,9 @@ import countries from 'i18n-iso-countries';
 import _ from 'lodash';
 import ms from 'ms';
 
-import {getExpire} from '../../utils.js';
+import config from '../common/config.js';
+import {getExpire} from '../common/utils.js';
 import rutor from './config/rutor.js';
-import service from './config/service.js';
 
 /**
  * @param {string} proxy
@@ -25,7 +25,7 @@ export default async proxy => {
         const rutorUrl = rutor.search.url + titleOriginal.replaceAll("'", '') + quality;
 
         const {body} = await request.cache(proxy + rutorUrl, {
-            timeout: {request: rutor.timeout},
+            timeout: {request: config.rutor.timeout},
             headers: {'user-agent': ua.win.chrome},
         }, {expire: '30m'});
 
@@ -55,19 +55,19 @@ export default async proxy => {
          * @param {object} opts
          */
         const parseGroups = ($, opts = {}) => {
-            $(rutor.selectors.td).each((x, elem) => {
+            $(config.rutor.selectors.td).each((x, elem) => {
 
                 const td = $(elem)
                     .text()
                     .replace(/\s+/g, ' ')
                     .trim();
 
-                const matched = td.match(rutor.regexp);
+                const matched = td.match(config.rutor.regexp);
 
                 if (matched?.groups?.name.match(rutor.episodes)) {
                     matched.groups.magnet = decodeURIComponent(
                         $(elem)
-                            .find(rutor.selectors.magnet)
+                            .find(config.rutor.selectors.magnet)
                             .attr('href')
                             .replace(/^.+magnet/, 'magnet')
                             .trim(),
@@ -92,9 +92,9 @@ export default async proxy => {
                     ) {
                         matched.groups.name = matched.groups.name.replace(rutor.episodes, '').trim();
 
-                        const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
+                        const [quality, ...tags] = matched.groups.info.split(config.rutor.tagSplit);
 
-                        matched.groups.tags = tags.join(rutor.tagSplit).replace(rutor.comments, '');
+                        matched.groups.tags = tags.join(config.rutor.tagSplit).replace(config.rutor.comments, '');
 
                         // вырезаем не относящееся к качеству
                         // WEBRip 720p от FilmStudio
@@ -151,16 +151,16 @@ export default async proxy => {
 
         parsed[i].urls = {
             rutor: rutorUrl,
-            rutracker: service.rutracker.url + titleOriginal + rutor.search.quality.full.split('|')[0],
-            kinopub: service.kinopub.url + titleOriginal,
-            myshows: service.myshows.url + id,
+            rutracker: config.service.rutracker.url + titleOriginal + rutor.search.quality.full.split('|')[0],
+            kinopub: config.service.kinopub.url + titleOriginal,
+            myshows: config.service.myshows.url + id,
         };
 
         if (kinopoiskId) {
             parsed[i].kp = {
                 id: kinopoiskId,
-                url: service.kp.url + kinopoiskId,
-                rating: service.kp.rating(kinopoiskId),
+                url: config.service.kp.film + kinopoiskId,
+                rating: config.service.kp.rating(kinopoiskId),
             };
         }
 
@@ -180,7 +180,7 @@ export default async proxy => {
             });
 
             await Promise.all(cast.map(async (elem, j) => {
-                if (j < service.tmdb.castCount) {
+                if (j < config.service.tmdb.castCount) {
                     const person = await tmdb.get({
                         path: `person/${elem.id}`,
                         cache: true,
@@ -192,7 +192,7 @@ export default async proxy => {
                 }
             }));
 
-            parsed[i].cover = service.tmdb.cover + data.poster_path;
+            parsed[i].cover = config.service.tmdb.cover + data.poster_path;
             parsed[i].networks = show.networks.map(elem => elem.name);
             parsed[i].genres = show.genres.map(elem => elem.name);
             parsed[i].overview = data.overview;
@@ -207,10 +207,10 @@ export default async proxy => {
                     .map(elem => ({
                         id: elem.id,
                         link: elem.imdb_id
-                            ? service.imdb.person + elem.imdb_id
-                            : service.tmdb.person + elem.id,
+                            ? config.service.imdb.person + elem.imdb_id
+                            : config.service.tmdb.person + elem.id,
                         name: elem.name,
-                        cover: service.tmdb.cover + elem.profile_path,
+                        cover: config.service.tmdb.cover + elem.profile_path,
                     })),
                 ),
             ];

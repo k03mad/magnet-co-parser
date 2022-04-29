@@ -2,10 +2,10 @@ import {request} from '@k03mad/util';
 import Jimp from 'jimp';
 import fs from 'node:fs';
 
-import {getCover, getExpire} from '../../utils.js';
+import config from '../common/config.js';
+import {getCover, getExpire} from '../common/utils.js';
 import html from './config/html.js';
 import paths from './config/paths.js';
-import service from './config/service.js';
 
 /**
  * @param {object} data
@@ -14,8 +14,8 @@ import service from './config/service.js';
  */
 export default async (data, proxy) => {
     const [index, page] = await Promise.all([
-        fs.promises.readFile(paths.templates.list),
-        fs.promises.readFile(paths.templates.page),
+        fs.promises.readFile(config.templates.list),
+        fs.promises.readFile(config.templates.page),
     ]);
 
     const pasteIndex = [html.date(`${data.timestamp.startTime} - ${data.timestamp.diff}`)];
@@ -36,8 +36,8 @@ export default async (data, proxy) => {
             show.cover = paths.getRel(coverPath);
             await fs.promises.writeFile(coverPath, body, {encoding: 'base64'});
         } else {
-            const noposter = await Jimp.read(paths.templates.noposter);
-            const font = await Jimp.loadFont(paths.templates.font);
+            const noposter = await Jimp.read(config.templates.noposter);
+            const font = await Jimp.loadFont(config.templates.font);
 
             const withText = await noposter.print(font, 0, 0, {
                 text: show.title,
@@ -51,7 +51,7 @@ export default async (data, proxy) => {
 
         const photos = show.photos
             ? await Promise.all(
-                show.photos.slice(0, service.tmdb.castCount).map(async elem => {
+                show.photos.slice(0, config.service.tmdb.castCount).map(async elem => {
                     const {body} = await request.cache(getCover(elem.cover, proxy), {
                         encoding: 'base64',
                     }, getExpire('tmdb-img'));
@@ -72,13 +72,13 @@ export default async (data, proxy) => {
             show.kp?.rating ? html.rating(show.kp.url, show.kp.rating) : '',
             photos ? html.photos(photos) : '',
             html.info([
-                show.countries?.length > 0 ? `Страны: ${show.countries.slice(0, service.tmdb.countriesCount).join(', ')}` : '',
+                show.countries?.length > 0 ? `Страны: ${show.countries.slice(0, config.service.tmdb.countriesCount).join(', ')}` : '',
                 show.creator?.length > 0 ? `Создатели: ${show.creator.join(', ')}` : '',
                 show.director?.length > 0 ? `Режиссёры: ${show.director.join(', ')}` : '',
-                show.companies?.length > 0 ? `Компании: ${show.companies.slice(0, service.tmdb.companiesCount).join(', ')}` : '',
-                show.networks?.length > 0 ? `ТВ: ${show.networks.slice(0, service.tmdb.networksCount).join(', ')}` : '',
+                show.companies?.length > 0 ? `Компании: ${show.companies.slice(0, config.service.tmdb.companiesCount).join(', ')}` : '',
+                show.networks?.length > 0 ? `ТВ: ${show.networks.slice(0, config.service.tmdb.networksCount).join(', ')}` : '',
                 show.overview,
-                show.genres ? show.genres.slice(0, service.tmdb.genresCount).join(', ') : '',
+                show.genres ? show.genres.slice(0, config.service.tmdb.genresCount).join(', ') : '',
             ].filter(Boolean)),
             html.table(show.rutor),
         ].filter(Boolean);

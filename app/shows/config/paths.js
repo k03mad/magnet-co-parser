@@ -4,13 +4,6 @@ export default {
     parsed: {
         folder: `${appRoot}/parsed/shows/`,
     },
-    templates: {
-        font: `${appRoot}/templates/font.fnt`,
-        noposter: `${appRoot}/templates/no-poster.png`,
-        folder: `${appRoot}/templates/`,
-        list: `${appRoot}/templates/list.html`,
-        page: `${appRoot}/templates/page.html`,
-    },
     www: {
         noposter: id => `${appRoot}/www/generated/shows/noposter/${id}.png`,
         folder: `${appRoot}/www/generated/shows`,

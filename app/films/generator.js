@@ -2,11 +2,11 @@ import {request} from '@k03mad/util';
 import _ from 'lodash';
 import fs from 'node:fs';
 
-import {getCover, getExpire} from '../../utils.js';
+import config from '../common/config.js';
+import {getCover, getExpire} from '../common/utils.js';
 import html from './config/html.js';
 import paths from './config/paths.js';
 import rutor from './config/rutor.js';
-import service from './config/service.js';
 
 /**
  * @param {object} data
@@ -15,8 +15,8 @@ import service from './config/service.js';
  */
 export default async (data, proxy) => {
     const [index, page] = await Promise.all([
-        fs.promises.readFile(paths.templates.list),
-        fs.promises.readFile(paths.templates.page),
+        fs.promises.readFile(config.templates.list),
+        fs.promises.readFile(config.templates.page),
     ]);
 
     const pasteIndex = [];
@@ -50,7 +50,7 @@ export default async (data, proxy) => {
             await fs.promises.writeFile(coverPath, body, {encoding: 'base64'});
 
             const photos = await Promise.all(
-                film.photos.slice(0, service.tmdb.castCount).map(async elem => {
+                film.photos.slice(0, config.service.tmdb.castCount).map(async elem => {
                     const {body: bodyCover} = await request.cache(getCover(elem.cover, proxy), {
                         encoding: 'base64',
                     }, getExpire('tmdb-img'));
@@ -66,12 +66,12 @@ export default async (data, proxy) => {
                 film.kp?.rating ? html.rating(film.kp.url, film.kp.rating) : '',
                 html.photos(photos),
                 html.info([
-                    film.countries.length > 0 ? `Страны: ${film.countries.slice(0, service.tmdb.countriesCount).join(', ')}` : '',
+                    film.countries.length > 0 ? `Страны: ${film.countries.slice(0, config.service.tmdb.countriesCount).join(', ')}` : '',
                     film.director.length > 0 ? `Режиссёры: ${film.director.join(', ')}` : '',
-                    film.companies.length > 0 ? `Компании: ${film.companies.slice(0, service.tmdb.companiesCount).join(', ')}` : '',
+                    film.companies.length > 0 ? `Компании: ${film.companies.slice(0, config.service.tmdb.companiesCount).join(', ')}` : '',
                     film.tagline,
                     film.overview,
-                    film.genres.slice(0, service.tmdb.genresCount).join(', '),
+                    film.genres.slice(0, config.service.tmdb.genresCount).join(', '),
                 ].filter(Boolean)),
                 html.table(film.rutor),
             ];

@@ -6,9 +6,9 @@ import countries from 'i18n-iso-countries';
 import moment from 'moment';
 import ms from 'ms';
 
-import {getExpire} from '../../utils.js';
+import config from '../common/config.js';
+import {getExpire} from '../common/utils.js';
 import rutor from './config/rutor.js';
-import service from './config/service.js';
 
 /**
  * @param {string} proxy
@@ -30,7 +30,7 @@ export default async proxy => {
             const {body} = await request.cache(
                 proxy + rutor.search.url(page, cat) + rutor.search.query,
                 {
-                    timeout: {request: rutor.timeout},
+                    timeout: {request: config.rutor.timeout},
                     headers: {'user-agent': ua.win.chrome},
                 },
                 getExpire('rutor-search'),
@@ -38,15 +38,15 @@ export default async proxy => {
 
             const $ = cheerio.load(body);
 
-            if ($(rutor.selectors.td).contents().length > 0) {
-                $(rutor.selectors.td).each((i, elem) => {
+            if ($(config.rutor.selectors.td).contents().length > 0) {
+                $(config.rutor.selectors.td).each((i, elem) => {
                     if (rutor.search.pages > 1 || i <= rutor.filmsPerCat) {
                         const td = $(elem)
                             .text()
                             .replace(/\s+/g, ' ')
                             .trim();
 
-                        const matched = td.match(rutor.regexp);
+                        const matched = td.match(config.rutor.regexp);
 
                         if (
                             matched
@@ -54,26 +54,26 @@ export default async proxy => {
                         ) {
                             matched.groups.magnet = decodeURIComponent(
                                 $(elem)
-                                    .find(rutor.selectors.magnet)
+                                    .find(config.rutor.selectors.magnet)
                                     .attr('href')
                                     .replace(/.+magnet/, 'magnet'),
                             );
 
-                            const href = $(elem).find(rutor.selectors.link).attr('href');
+                            const href = $(elem).find(config.rutor.selectors.link).attr('href');
 
-                            matched.groups.link = href.includes(rutor.domain)
-                                ? decodeURIComponent(href).replace(new RegExp(`.+${rutor.domain}`), rutor.url)
-                                : rutor.url + href;
+                            matched.groups.link = href.includes(config.rutor.domain)
+                                ? decodeURIComponent(href).replace(new RegExp(`.+${config.rutor.domain}`), config.rutor.url)
+                                : config.rutor.url + href;
 
-                            const [quality, ...tags] = matched.groups.info.split(rutor.tagSplit);
+                            const [quality, ...tags] = matched.groups.info.split(config.rutor.tagSplit);
 
                             matched.groups.quality = quality
                                 .replace(/ от .+/, '')
-                                .replace(rutor.comments, '');
+                                .replace(config.rutor.comments, '');
 
                             matched.groups.tags = tags
-                                .join(rutor.tagSplit)
-                                .replace(rutor.comments, '');
+                                .join(config.rutor.tagSplit)
+                                .replace(config.rutor.comments, '');
 
                             if (films[matched.groups.name]) {
                                 films[matched.groups.name].rutor.push({...matched.groups});
@@ -105,20 +105,20 @@ export default async proxy => {
         const filmdb = {};
 
         for (const {link} of value.rutor) {
-            const {body} = await request.cache(link, {
+            const {body} = await request.cache(proxy + link, {
                 headers: {'user-agent': ua.win.chrome},
             }, getExpire('rutor-page'));
 
-            const kp = body.match(service.kp.re);
-            const imdb = body.match(service.imdb.re);
+            const kp = body.match(config.service.kp.re);
+            const imdb = body.match(config.service.imdb.re);
 
             if (kp && kp.groups && !filmdb.kp) {
                 const id = kp.groups.id1 || kp.groups.id2;
 
                 filmdb.kp = {
                     id: Number(id),
-                    url: service.kp.film + id,
-                    rating: service.kp.rating(id),
+                    url: config.service.kp.film + id,
+                    rating: config.service.kp.rating(id),
                 };
             }
 
@@ -126,7 +126,7 @@ export default async proxy => {
                 const {id} = imdb.groups;
 
                 filmdb.imdb = {
-                    id, url: service.imdb.film + id,
+                    id, url: config.service.imdb.film + id,
                 };
             }
 
@@ -175,7 +175,7 @@ export default async proxy => {
             ]);
 
             await Promise.all(cast.map(async (elem, j) => {
-                if (j < service.tmdb.castCount) {
+                if (j < config.service.tmdb.castCount) {
                     const person = await tmdb.get({
                         path: `person/${elem.id}`,
                         cache: true,
@@ -192,7 +192,7 @@ export default async proxy => {
 
             const info = {
                 title,
-                cover: service.tmdb.cover + data.poster_path,
+                cover: config.service.tmdb.cover + data.poster_path,
                 id: data.id,
 
                 tagline: movie.tagline,
@@ -208,10 +208,10 @@ export default async proxy => {
                         .map(elem => ({
                             id: elem.id,
                             link: elem.imdb_id
-                                ? service.imdb.person + elem.imdb_id
-                                : service.tmdb.person + elem.id,
+                                ? config.service.imdb.person + elem.imdb_id
+                                : config.service.tmdb.person + elem.id,
                             name: elem.name,
-                            cover: service.tmdb.cover + elem.profile_path,
+                            cover: config.service.tmdb.cover + elem.profile_path,
                         })),
                     ),
                 ],
@@ -219,8 +219,8 @@ export default async proxy => {
                 rutor: value.rutor,
                 urls: {
                     rutor: rutorUrl,
-                    rutracker: service.rutracker.url + title,
-                    kinopub: service.kinopub.url + title,
+                    rutracker: config.service.rutracker.url + title,
+                    kinopub: config.service.kinopub.url + title,
                 },
                 ...filmdb,
             };
