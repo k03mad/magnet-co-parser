@@ -220,9 +220,10 @@ export default async proxy => {
                     .filter(elem => Boolean(elem.profile_path))
                     .map(elem => ({
                         id: elem.id,
-                        link: elem.imdb_id
-                            ? config.service.imdb.person + elem.imdb_id
-                            : config.service.tmdb.person + elem.id,
+                        link:
+                            // elem.imdb_id
+                            // ? config.service.imdb.person + elem.imdb_id
+                            config.service.tmdb.person + elem.id,
                         name: elem.name,
                         cover: config.service.tmdb.cover + elem.profile_path,
                     })),
