@@ -36,7 +36,7 @@ if (env.parser.type) {
         const proxies = {
             'rutor': httpProxy,
             'tmdb-api': '',
-            'tmdb-img': httpProxy,
+            'tmdb-img': '',
         };
 
         const promises = await Promise.allSettled(parsers.map(async elem => {
