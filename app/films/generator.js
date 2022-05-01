@@ -53,7 +53,7 @@ export default async (data, proxy) => {
             await fs.promises.writeFile(coverPath, body, {encoding: 'base64'});
 
             const photos = await Promise.all(
-                film.photos.slice(0, config.service.tmdb.castCount).map(async elem => {
+                film.photos.map(async elem => {
                     const {body: bodyCover} = await request.cache(getCover(elem.cover, proxy), {
                         encoding: 'base64',
                     }, getExpire('tmdb-img'));

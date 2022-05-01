@@ -5,7 +5,7 @@ export default {
         // rutor.info/search/страница/категория/все слова/сортировка по сидам/
         url: `${config.rutor.url}/search/0/0/300/2/`,
         quality: {
-            full: ' 1080p|2160p',
+            full: ' 1080p',
             back: ' 720p',
         },
     },

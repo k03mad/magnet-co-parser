@@ -227,7 +227,7 @@ export default async proxy => {
                         cover: config.service.tmdb.cover + elem.profile_path,
                     })),
                 ),
-            ];
+            ].slice(0, config.service.tmdb.castCount);
 
         }
 

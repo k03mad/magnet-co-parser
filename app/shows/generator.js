@@ -54,7 +54,7 @@ export default async (data, proxy) => {
 
         const photos = show.photos
             ? await Promise.all(
-                show.photos.slice(0, config.service.tmdb.castCount).map(async elem => {
+                show.photos.map(async elem => {
                     const {body} = await request.cache(getCover(elem.cover, proxy), {
                         encoding: 'base64',
                     }, getExpire('tmdb-img'));

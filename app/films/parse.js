@@ -2,7 +2,6 @@ import {date, request, tmdb, ua} from '@k03mad/util';
 import c from 'chalk';
 import cheerio from 'cheerio';
 import emoji from 'country-code-emoji';
-import debug from 'debug';
 import countries from 'i18n-iso-countries';
 import moment from 'moment';
 import ms from 'ms';
@@ -18,8 +17,6 @@ moment.locale('ru');
  * @returns {Promise<object>}
  */
 export default async proxy => {
-    const printDebug = debug('magnet:films:parse');
-
     const currentDate = new Date();
     const startTime = date.now();
 
@@ -41,8 +38,8 @@ export default async proxy => {
             const $ = cheerio.load(body);
 
             if ($(config.rutor.selectors.td).contents().length > 0) {
-                $(config.rutor.selectors.td).each((i, elem) => {
-                    if (rutor.search.pages > 1 || i <= rutor.filmsPerCat) {
+                $(config.rutor.selectors.td).each((_, elem) => {
+                    if (rutor.search.pages > 1) {
                         const td = $(elem)
                             .text()
                             .replace(/\s+/g, ' ')
@@ -90,16 +87,9 @@ export default async proxy => {
         }));
     }));
 
-    let counter = 0;
     const filmsArr = Object.entries(films);
 
     await Promise.all(filmsArr.map(async ([key, value]) => {
-
-        counter++;
-
-        if (counter % 30 === 0 || counter === filmsArr.length) {
-            printDebug(`FILM ${counter}/${filmsArr.length}`);
-        }
 
         const [, originalName] = key.split(' / ');
         const title = originalName || key;
@@ -219,7 +209,7 @@ export default async proxy => {
                             cover: config.service.tmdb.cover + elem.profile_path,
                         })),
                     ),
-                ],
+                ].slice(0, config.service.tmdb.castCount),
 
                 rutor: value.rutor,
                 urls: {
@@ -231,9 +221,6 @@ export default async proxy => {
             };
 
             parsed.push(info);
-
-        } else {
-            printDebug(c.red('Skipped: %s'), title);
         }
     }));
 
@@ -271,8 +258,6 @@ export default async proxy => {
         });
 
     log(c.blue(`Фильмов найдено на Rutor: ${sorted.length}`));
-    const sliced = sorted.slice(0, rutor.filmsSliceCount);
-    log(c.blue(`Фильмов оставлено для показа: ${sliced.length}`));
 
     const diff = date.diff({date: currentDate, period: 'milliseconds'});
 
@@ -282,6 +267,6 @@ export default async proxy => {
             diff: ms(diff),
             diffRaw: diff,
         },
-        items: sliced,
+        items: sorted,
     };
 };
