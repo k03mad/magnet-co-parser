@@ -135,7 +135,7 @@ export default async proxy => {
                 path: `find/${filmdb.imdb.id}`,
                 params: {external_source: 'imdb_id'},
                 cache: true,
-                // proxy,
+                proxy,
                 ...getExpire('tmdb-api'),
             }));
             // иначе — по названию
@@ -144,7 +144,7 @@ export default async proxy => {
                 path: 'search/movie',
                 params: {query: title},
                 cache: true,
-                // proxy,
+                proxy,
                 ...getExpire('tmdb-api'),
             });
         }
@@ -154,13 +154,13 @@ export default async proxy => {
                 tmdb.get({
                     path: `movie/${data.id}`,
                     cache: true,
-                    // proxy,
+                    proxy,
                     ...getExpire('tmdb-api'),
                 }),
                 tmdb.get({
                     path: `movie/${data.id}/credits`,
                     cache: true,
-                    // proxy,
+                    proxy,
                     ...getExpire('tmdb-api'),
                 }),
             ]);
@@ -170,7 +170,7 @@ export default async proxy => {
                     const person = await tmdb.get({
                         path: `person/${elem.id}`,
                         cache: true,
-                        // proxy,
+                        proxy,
                         ...getExpire('tmdb-api'),
                     });
 

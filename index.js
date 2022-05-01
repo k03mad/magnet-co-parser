@@ -1,4 +1,4 @@
-import {folder, print, request} from '@k03mad/util';
+import {folder, print} from '@k03mad/util';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -31,10 +31,11 @@ if (env.parser.type) {
 
 (async () => {
     try {
-        const proxy = await request.proxy({
-            testUrl: 'https://api.themoviedb.org/',
-            serial: true,
-        });
+        const proxy = '';
+        // const proxy = await request.proxy({
+        //     testUrl: 'https://api.themoviedb.org/',
+        //     serial: true,
+        // });
 
         const promises = await Promise.allSettled(parsers.map(async elem => {
             const data = await elem.parser(proxy);

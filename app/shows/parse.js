@@ -133,7 +133,7 @@ export default async proxy => {
                 path: `find/tt${imdbId}`,
                 params: {external_source: 'imdb_id'},
                 cache: true,
-                // proxy,
+                proxy,
                 ...getExpire('tmdb-api'),
             }));
         }
@@ -143,7 +143,7 @@ export default async proxy => {
                 path: 'search/tv',
                 params: {query: titleOriginal},
                 cache: true,
-                // proxy,
+                proxy,
                 ...getExpire('tmdb-api'),
             });
         }
@@ -170,13 +170,13 @@ export default async proxy => {
                 tmdb.get({
                     path: `tv/${data.id}`,
                     cache: true,
-                    // proxy,
+                    proxy,
                     ...getExpire('tmdb-api'),
                 }),
                 tmdb.get({
                     path: `tv/${data.id}/credits`,
                     cache: true,
-                    // proxy,
+                    proxy,
                     ...getExpire('tmdb-api'),
                 }),
             ]);
@@ -186,7 +186,7 @@ export default async proxy => {
                     const person = await tmdb.get({
                         path: `person/${elem.id}`,
                         cache: true,
-                        // proxy,
+                        proxy,
                         ...getExpire('tmdb-api'),
                     });
 
