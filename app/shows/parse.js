@@ -205,11 +205,11 @@ export default async proxy => {
             );
 
             parsed[i].release = show.first_air_date;
-            parsed[i].status = show.status;
+            // parsed[i].status = show.status;
             parsed[i].seasons = show.number_of_seasons;
             parsed[i].episodes = show.number_of_episodes;
-            parsed[i].lastEpisode = show.last_air_date;
-            parsed[i].nextEpisode = show.next_episode_to_air?.air_date;
+            // parsed[i].lastEpisode = show.last_air_date;
+            // parsed[i].nextEpisode = show.next_episode_to_air?.air_date;
             parsed[i].tagline = show.tagline;
             parsed[i].director = crew.filter(elem => elem.job === 'Director').map(elem => elem.name);
 
