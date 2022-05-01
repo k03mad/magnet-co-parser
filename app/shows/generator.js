@@ -31,7 +31,7 @@ export default async (data, proxies) => {
         const pageRelPath = `${paths.getRel(paths.www.pages)}/${show.id}.html`;
 
         if (show.cover) {
-            const {body} = await request.cache(getCover(show.cover, proxies.tmdb), {
+            const {body} = await request.cache(getCover(show.cover, proxies['tmdb-img']), {
                 encoding: 'base64',
             }, getExpire('tmdb-img'));
 
@@ -55,7 +55,7 @@ export default async (data, proxies) => {
         const photos = show.photos
             ? await Promise.all(
                 show.photos.map(async elem => {
-                    const {body} = await request.cache(getCover(elem.cover, proxies.tmdb), {
+                    const {body} = await request.cache(getCover(elem.cover, proxies['tmdb-img']), {
                         encoding: 'base64',
                     }, getExpire('tmdb-img'));
 

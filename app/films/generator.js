@@ -44,7 +44,7 @@ export default async (data, proxies) => {
             const pageAbsPath = `${paths.www.pages}/${film.id}.html`;
             const pageRelPath = `${paths.getRel(paths.www.pages)}/${film.id}.html`;
 
-            const {body} = await request.cache(getCover(film.cover, proxies.tmdb), {
+            const {body} = await request.cache(getCover(film.cover, proxies['tmdb-img']), {
                 encoding: 'base64',
             }, getExpire('tmdb-img'));
 
@@ -54,7 +54,7 @@ export default async (data, proxies) => {
 
             const photos = await Promise.all(
                 film.photos.map(async elem => {
-                    const {body: bodyCover} = await request.cache(getCover(elem.cover, proxies.tmdb), {
+                    const {body: bodyCover} = await request.cache(getCover(elem.cover, proxies['tmdb-img']), {
                         encoding: 'base64',
                     }, getExpire('tmdb-img'));
 
