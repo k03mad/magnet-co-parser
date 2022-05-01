@@ -31,12 +31,12 @@ if (env.parser.type) {
 
 (async () => {
     try {
-        const httpProxy = await request.proxy({testUrl: 'http://rutor.info', serial: true});
+        const proxy = await request.proxy({testUrl: 'http://rutor.info', serial: true});
 
         const proxies = {
-            'rutor': httpProxy,
+            'rutor': proxy,
             'tmdb-api': '',
-            'tmdb-img': '',
+            'tmdb-img': proxy,
         };
 
         const promises = await Promise.allSettled(parsers.map(async elem => {
