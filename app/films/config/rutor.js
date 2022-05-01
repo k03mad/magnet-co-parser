@@ -9,7 +9,7 @@ export default {
     search: {
         // rutor.info/search/страница/категория/логическое выражение/сортировка по дате/
         url: (page, cat, log = 300) => `${config.rutor.url}/search/${page}/${cat}/${log}/0/`,
-        query: `${currentYear}|${prevYear} 1080p -( Blu-ray) -( BDRemux)`,
+        query: `${currentYear}|${prevYear} 1080p -( Blu-ray) -( BDRemux) -( HDR)`,
         pages: 20,
         categories: [
             // зарубежные
