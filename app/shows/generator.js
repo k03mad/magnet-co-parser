@@ -12,10 +12,10 @@ moment.locale('ru');
 
 /**
  * @param {object} data
- * @param {string} proxy
+ * @param {object} proxies
  * @returns {Promise}
  */
-export default async (data, proxy) => {
+export default async (data, proxies) => {
     const [index, page] = await Promise.all([
         fs.promises.readFile(config.templates.list),
         fs.promises.readFile(config.templates.page),
@@ -31,7 +31,7 @@ export default async (data, proxy) => {
         const pageRelPath = `${paths.getRel(paths.www.pages)}/${show.id}.html`;
 
         if (show.cover) {
-            const {body} = await request.cache(getCover(show.cover, proxy), {
+            const {body} = await request.cache(getCover(show.cover, proxies.tmdb), {
                 encoding: 'base64',
             }, getExpire('tmdb-img'));
 
@@ -55,7 +55,7 @@ export default async (data, proxy) => {
         const photos = show.photos
             ? await Promise.all(
                 show.photos.map(async elem => {
-                    const {body} = await request.cache(getCover(elem.cover, proxy), {
+                    const {body} = await request.cache(getCover(elem.cover, proxies.tmdb), {
                         encoding: 'base64',
                     }, getExpire('tmdb-img'));
 

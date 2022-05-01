@@ -1,4 +1,4 @@
-import {folder, print} from '@k03mad/util';
+import {folder, print, request} from '@k03mad/util';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -13,14 +13,14 @@ import env from './env.js';
 let parsers = [
     {
         type: 'films',
-        parser: proxy => filmsParse(proxy),
-        generator: (data, proxy) => filmsGenerator(data, proxy),
+        parser: proxies => filmsParse(proxies),
+        generator: (data, proxies) => filmsGenerator(data, proxies),
         paths: pathsFilms,
     },
     {
         type: 'shows',
-        parser: proxy => showsParse(proxy),
-        generator: (data, proxy) => showsGenerator(data, proxy),
+        parser: proxies => showsParse(proxies),
+        generator: (data, proxies) => showsGenerator(data, proxies),
         paths: pathsShows,
     },
 ];
@@ -31,14 +31,11 @@ if (env.parser.type) {
 
 (async () => {
     try {
-        const proxy = '';
-        // const proxy = await request.proxy({
-        //     testUrl: 'https://api.themoviedb.org/',
-        //     serial: true,
-        // });
+        const proxies = {rutor: '', tmdb: ''};
+        proxies.rutor = await request.proxy({testUrl: 'http://rutor.info', serial: true});
 
         const promises = await Promise.allSettled(parsers.map(async elem => {
-            const data = await elem.parser(proxy);
+            const data = await elem.parser(proxies);
 
             await folder.erase([
                 elem.paths.www.folder,
@@ -53,7 +50,7 @@ if (env.parser.type) {
                 JSON.stringify(data, null, 4),
             );
 
-            await elem.generator(data, proxy);
+            await elem.generator(data, proxies);
         }));
 
         const errors = promises.map(elem => elem.reason).filter(Boolean);

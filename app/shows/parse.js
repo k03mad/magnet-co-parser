@@ -11,10 +11,10 @@ import {getExpire, log} from '../common/utils.js';
 import rutor from './config/rutor.js';
 
 /**
- * @param {string} proxy
+ * @param {object} proxies
  * @returns {Promise<object>}
  */
-export default async proxy => {
+export default async proxies => {
 
     const currentDate = new Date();
     const startTime = date.now();
@@ -25,7 +25,7 @@ export default async proxy => {
     const getRutorElems = async (quality, titleOriginal) => {
         const rutorUrl = rutor.search.url + titleOriginal.replaceAll("'", '') + quality;
 
-        const {body} = await request.cache(proxy + rutorUrl, {
+        const {body} = await request.cache(proxies.rutor + rutorUrl, {
             timeout: {request: config.rutor.timeout},
             headers: {'user-agent': ua.win.chrome},
         }, {expire: '30m'});
@@ -133,7 +133,7 @@ export default async proxy => {
                 path: `find/tt${imdbId}`,
                 params: {external_source: 'imdb_id'},
                 cache: true,
-                proxy,
+                proxy: proxies.tmdb,
                 ...getExpire('tmdb-api'),
             }));
         }
@@ -143,7 +143,7 @@ export default async proxy => {
                 path: 'search/tv',
                 params: {query: titleOriginal},
                 cache: true,
-                proxy,
+                proxy: proxies.tmdb,
                 ...getExpire('tmdb-api'),
             });
         }
@@ -170,13 +170,13 @@ export default async proxy => {
                 tmdb.get({
                     path: `tv/${data.id}`,
                     cache: true,
-                    proxy,
+                    proxy: proxies.tmdb,
                     ...getExpire('tmdb-api'),
                 }),
                 tmdb.get({
                     path: `tv/${data.id}/credits`,
                     cache: true,
-                    proxy,
+                    proxy: proxies.tmdb,
                     ...getExpire('tmdb-api'),
                 }),
             ]);
@@ -186,7 +186,7 @@ export default async proxy => {
                     const person = await tmdb.get({
                         path: `person/${elem.id}`,
                         cache: true,
-                        proxy,
+                        proxy: proxies.tmdb,
                         ...getExpire('tmdb-api'),
                     });
 
